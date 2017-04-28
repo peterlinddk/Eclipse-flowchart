@@ -1,41 +1,41 @@
+/* SCREEN */
 
-    .off .screen {
-        fill: #4d4d4d;
-        stroke: #000;
-        stroke-miterlimit: 10;
-        stroke-width: 4px;
-      }
+#screens .on rect {
+    stroke: #710000;
+    stroke-miterlimit: 10;
+    stroke-width: 4px;
+    fill: #cc2d00;
+}
 
-        .on .screen {
-           stroke: #710000;
-        stroke-miterlimit: 10;
-        stroke-width: 4px;
-        fill: #cc2d00;
-        }
+#screens .off rect {
+    fill: #4d4d4d;
+    stroke: #000;
+    stroke-miterlimit: 10;
+    stroke-width: 4px;
+}
 
+#screens .on>path:first-of-type {
+    fill: #f7ad8d;
+}
 
-      .off .sc_highlight_top {
-        fill: #666;
-      }
+#screens .off>path:first-of-type {
+    fill: #666;
+}
 
-      .off .sc_highlight_bottom {
-        fill: #333;
-      }
+#screens .on>path:last-of-type {
+    fill: #700;
+}
 
-      .off .textcolor {
-        fill: gray;
-      }
+#screens .off>path:last-of-type {
+    fill: #333;
+}
 
+#screens .on g * {
+    fill: #f7931e;
+}
 
+#screens .off g * {
+    fill: gray;
+}
 
-      .on .sc_highlight_bottom {
-        fill: #700;
-      }
-
-      .on .sc_highlight_top {
-        fill: #f7ad8d;
-      }
-
-      .on .textcolor {
-        fill: #f7931e;
-      }
+/* ARROWS */
