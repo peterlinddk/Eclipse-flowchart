@@ -34,6 +34,8 @@ function whenSVGisLoaded() {
     // prepare the flipper
     prepareFlipper();
 
+    // TODO: Prepare neontexts
+
     // create arrow-ids
     createArrowIDs();
 
@@ -75,11 +77,20 @@ function loadingComplete() {
 
         prepareEffects();
 
+        prepareModifiers();
+
+
         if( !developerMode ) {
+            // Hide navigator and other stuff ...
+            document.querySelector("#navigator").style.display = "none";
+            document.querySelector("#buttongroups").style.display = "none";
+            document.querySelector("#buttons").style.display = "none";
+            document.querySelector("#music").style.display = "none";
+
+
             playback();
         }
 
-        // TODO: Hide navigator and other stuff ...
 
     }
 }
@@ -101,22 +112,17 @@ function keyPressed( event ) {
 
 function prepareEffects() {
 
-    document.querySelector("button.showsecondverse").addEventListener("click", showSecondVerse);
+//    document.querySelector("button.showsecondverse").addEventListener("click", showSecondVerse);
 
-    document.querySelector("button.basskick").addEventListener("click", basskick);
+//    document.querySelector("button.basskick").addEventListener("click", basskick);
 }
 
 function performEffect( timeEvent ) {
-    if( timeEvent.element == "showsecondverse") {
-        showSecondVerse();
-    } else if( timeEvent.element == "basskick") {
+    if( timeEvent.element == "basskick") {
         basskick();
+    } else if( timeEvent.element == "neonhighlight") {
+        neonhighlight();
     }
-}
-
-
-function showSecondVerse() {
-    document.querySelector(".second_verse").style.display = "block";
 }
 
 function basskick() {
@@ -125,6 +131,42 @@ function basskick() {
     document.querySelector("#scene").classList.add("basskick");
 }
 
+function neonhighlight() {
+    var neontext2 = document.querySelector("#htmlneontext2");
+
+
+
+    var highlight = document.querySelector("#neonhighlighter");
+    highlight.classList.remove("on");
+    highlight.classList.remove("off");
+    highlight.offsetHeight;
+    highlight.classList.add("on");
+
+    // if neontext2 has two on-elements, turn them both off
+    var neontexts = document.querySelectorAll("#htmlneontext2 span.on");
+    if( neontexts.length > 1 ) {
+        neontexts.forEach( nt=>{nt.classList.remove("on"); nt.classList.add("off");});
+    }
+
+}
+
+
+
+/***************************************************************
+
+                    MODIFIERS
+
+ ***************************************************************/
+
+function prepareModifiers() {
+
+}
+
+function performModifier( timeEvent ) {
+    if( timeEvent.element == "showsecondverse" ) {
+        document.querySelector(".second_verse").style.display = "block";
+    }
+}
 
 /*************** RECORDER *****************/
 
@@ -133,7 +175,7 @@ var timeEvents = [];
 
 function startRecording() {
     // register event-listeners on screens and flipboxes in the flipper
-    document.querySelectorAll("svg #screens>g, #htmlflipper .flipbox").forEach( element => element.addEventListener("click", clickOnScreen));
+    document.querySelectorAll("svg #screens>g, #htmlflipper .flipbox, .neontext, #effects button, #modifiers button").forEach( element => element.addEventListener("click", clickOnScreen));
 
     // start music
     player.play();
@@ -155,6 +197,14 @@ function clickOnScreen( event ) {
     }
     var id = target.id;
 
+    // find parentId
+    var parent = target.parentNode;
+    while( parent.id == null || parent.id == "" ) {
+        parent = parent.parentNode;
+    }
+    var parentId = parent.id;
+
+
     // register the object as clicked!
     target.classList.add("on");
 
@@ -164,11 +214,23 @@ function clickOnScreen( event ) {
     }
     lastObject = target;
 
+    // find the type: screen, flipper, or neontext
+
     var type = "flipper";
 
     // check the type - screen or flip
-    if( target.parentNode.id == "screens" ) {
+    if( parentId == "screens" ) {
         type = "screen";
+    } else if( parentId == "htmlflipper") {
+        type = "flipper";
+    } else if( parentId == "htmlneontext1" ) {
+        type = "neontext1";
+    } else if( parentId == "htmlneontext2") {
+        type = "neontext2";
+    } else if( parentId == "effects") {
+        type = "effect";
+    } else if( parentId == "modifiers") {
+        type = "modifier";
     }
 
     // create object
@@ -178,7 +240,11 @@ function clickOnScreen( event ) {
         element: id
     };
 
+    // store object - note that the order may be wrong, must be sorted after recording!
     timeEvents.push( timeEvent );
+
+    // add object to navigator
+    eventNavigator.addTimeEvent( timeEvent );
 
     console.log("logged: ", timeEvent);
 }
@@ -316,7 +382,7 @@ function playing( deltaTime ) {
 
             // find nextEvent
             eventIndex++;
-            if( eventIndex < timeEvents.length-1 ) {
+            if( eventIndex < timeEvents.length ) {
                 nextEvent = timeEvents[eventIndex];
             } else {
                 nextEvent = null;
@@ -337,54 +403,69 @@ function playing( deltaTime ) {
     }
 }
 
+var lastlastElement = null;
+
 function performEvent( timeEvent ) {
 
-    if( timeEvent.type == "screen" || timeEvent.type == "flipper" ) {
+    if( timeEvent.type == "screen" || timeEvent.type == "flipper" || timeEvent.type.startsWith("neontext")) {
         var element = document.querySelector("#"+timeEvent.element);
         element.classList.remove("off");
+        element.offsetHeight; // force reflow
         element.classList.add("on");
-    } else if( timeEvent.type == "effect") {
 
-        performEffect( timeEvent );
+        if( lastEvent != null ) {
+            if(lastEvent.type == "screen" || lastEvent.type=="flipper" || lastEvent.type=="neontext1") {
+                lastEventObject.classList.remove("on");
+                lastEventObject.offsetLeft;
+                lastEventObject.classList.add("off");
 
-    }
+            } else if( lastEvent.type == "neontext2" ) {
+              // NOTE: Handled by the neonhighlighter effect
+            }
 
+            if( lastEvent.type == "flipper" ) {
+                // wait for off-animation to finish
+                lastEventObject.addEventListener("animationend", scrollFlipper);
+            }
+        }
 
-    if( lastEvent != null ) {
-        if( lastEvent.type == "screen" || lastEvent.type == "flipper" ) {
-            lastEventObject.classList.remove("on");
-            lastEventObject.classList.add("off");
-//            lastEventObject.classList.add("turnoff");
-
-            /*
-            let obj = lastEventObject;
-
-            // wait 400ms - change class to off
+        // if this event has a hold - then don't let the next event turn it off
+        if( timeEvent.hold ) {
             setTimeout( function() {
-                obj.classList.add("off");
-                obj.classList.remove("turnoff");
-            }, 250);
+                console.log("delayed off on ", timeEvent);
+                element.classList.remove("on");
+                element.offsetHeight; // force reflow
+                element.classList.add("off");
 
-            // find animation - and run it
-            var anim = document.querySelector("#redfade animate");
-            anim.beginElement();
-            */
+            }, timeEvent.hold * 1000);
+
+            lastEvent = null;
+            lastEventObject = null;
+        } else {
+            lastEvent = timeEvent;
+            lastEventObject = element;
         }
 
-        if( lastEvent.type == "flipper" ) {
-            // wait for off-animation to finish
-            lastEventObject.addEventListener("animationend", scrollFlipper);
-//            scrollFlipper();
-        }
+
+
+
+    } else if( timeEvent.type == "effect") {
+        performEffect( timeEvent );
+    } else if( timeEvent.type == "modifier") {
+        performModifier( timeEvent );
     }
 
-    lastEvent = timeEvent;
-    lastEventObject = element;
+
+
 }
 
 function highlightArrow( fromEvent, toEvent ) {
     var fromId = fromEvent.element;
     var toId = toEvent.element;
+
+    console.log("Arrow from: ", fromEvent, "to:", toEvent);
+
+    // if either event was of type flipper, then arrow directly to the flipper!
     if( fromEvent.type == "flipper" ) {
         fromId = "flipper";
     }
@@ -392,19 +473,41 @@ function highlightArrow( fromEvent, toEvent ) {
         toId = "flipper";
     }
 
-    // find the arrow
-    var arrowId = fromId + "2" + toId;
-
-    // Figure how long the animation should run!
-    var time = toEvent.time - fromEvent.time;
-
-    var arrow = document.querySelector("#" + arrowId);
-    if( arrow == null ) {
-        console.warn("No arrow with id: " + arrowId);
-        console.warn("Used from " , fromEvent, " to ", toEvent);
+    // if either event was of type neontext, then arrow directly to the neontext
+    if( fromEvent.type.startsWith("neontext") ) {
+        fromId = fromEvent.type;
     }
 
-    animateLine( arrow, time );
+    if( toEvent.type.startsWith("neontext") ) {
+        toId = toEvent.type;
+    }
+
+
+    // if both events are the same neontext, then don't bother with an arrow!
+    if( fromEvent.type == toEvent.type && (fromEvent == "neontext1" || fromEvent == "neontext2") ) {
+        console.log("NO ARROW! - don't bother");
+    } else {
+
+
+
+
+        // find the arrow
+        var arrowId = fromId + "2" + toId;
+
+        // Figure how long the animation should run!
+        var time = toEvent.time - fromEvent.time;
+
+        var arrow = document.querySelector("#" + arrowId);
+        if( arrow == null ) {
+            console.warn("No arrow with id: " + arrowId);
+            console.warn("Used from " , fromEvent, " to ", toEvent);
+        } else {
+            animateLine( arrow, time );
+        }
+
+
+
+    }
 }
 
 
@@ -596,6 +699,7 @@ function prepareFlipper() {
 }
 
 // HMMM ... this doesn't always look right ... wonder why ...
+// TODO: Change flipper to modify classes, but keep object order - change CSS aswell
 function scrollFlipper( event ) {
     console.log("scroll on "+ event.target.id);
     event.target.removeEventListener("animationend", scrollFlipper);
@@ -632,7 +736,7 @@ function scrollFlipper( event ) {
 
 /************** ARROWS *************/
 
-// NOTE: Since the arrows don't have IDs in the SVG
+// NOTE: Since the arrows don't (always) have IDs in the SVG
 // (the reason being that  Illustrator is weird)
 // they are expected to come in this order, and get the IDs
 // manually
@@ -644,9 +748,29 @@ var arrowIDs = [
     "turnaround2brighteyes",
     "brighteyes2everynow",
     "everynow2fallapart",
-    "fallapart2turnaround"]
+    "fallapart2turnaround",
+    "fallapart2andineedyou",
+    "andineedyou2nowtonight",
+    "nowtonight2andineedyou",
+    "andineedyou2morethanever",
+    "morethanever2neontext1",
+    "neontext12neontext2",
+    "neontext22ireallyneedyou",
+    "ireallyneedyou2tonight",
+    "tonight2foreversgonnastart",
+    "foreversgonnastart2tonight"
+]
 
 function createArrowIDs() {
+    // GRRR: The wondrous world of Illustrator export, sometimes creates an ID for arrows,
+    // sometimes it doesn't ... It isn't the same every time I export, so it doesn't seem
+    // like it is a setting I can change - rather an obscure error in Illustrator ...
+
+    // FIX: Find every arrow with an id, and replace the element with it's child.
+    var arrowsWithId = document.querySelectorAll("#arrows>g[id]");
+    arrowsWithId.forEach(elm=>elm.replaceWith(elm.firstElementChild));
+    // Then re-add IDs for everything ...
+
     // find all the arrow-elements (g with a path or line)
     var arrows = document.querySelectorAll("#arrows g path, #arrows g line");
     arrows.forEach( (arrow,index) => arrow.id = arrowIDs[index]);
@@ -667,7 +791,7 @@ function prepareNavigator() {
         start: 0,
         end: player.duration,
         length: 0, // length of timeline in pixels
-        zoomFactor: 14, // number of pixels pr. second
+        zoomFactor: 32, // number of pixels pr. second
         display: null,
         container: null,
         timeline: null,
@@ -744,7 +868,7 @@ function navEventSelect( evt ) {
 //    console.log("klik på ", evt);
     eventNavigator.container.addEventListener("mousemove", navEventMove);
 
-    // TODO: Store in navigator
+    // remember the selected event's offset (to avoid jumping a few pixels)
     eventNavigator.selectedEventOffset = evt.offsetX;
 
     eventNavigator.selectedEvent = evt.target;

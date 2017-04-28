@@ -194,18 +194,15 @@ body {
 }
 
 
-/* ARROWS */
 
 
-/* flipper */
+
+/* FLIPPER */
 
 #htmlflipper {
     position: absolute;
 
-    /* x="705.36" y="254.05" width="581.73" height="212.68"  */
-
-
-    /* TODO: Find these positions from the SVG */
+    /* Find these positions from the SVG */
     /*
     top: 254.05px;
     left:705.36px;
@@ -233,7 +230,7 @@ body {
 
 
     transform-origin: bottom center;
-/* */
+
 /*    backface-visibility: hidden;*/
     transform: rotateX(0deg);
 
@@ -246,8 +243,6 @@ body {
     color: gray;
 
     border-radius: 12px;
-    /*
-    <rect class="cls-10" x="714.05" y="264.54" width="564" height="44" rx="12" ry="12"/> */
 
     font-family: "HelveticaRounded";
     font-weight: bold;
@@ -367,6 +362,252 @@ body {
         transform: translateY(-47px) rotateX(90deg);
     }
 }
+
+/**** NEONTEXT ****/
+
+#htmlneontext1 {
+    position: absolute;
+/*    outline: 3px dashed red;*/
+    /* TODO: Find positions from SVG */
+    left: 1018px;
+    top: 561px;
+    width: 520px;
+    height: 174px;
+
+    padding: 8px 14px;
+
+    font-size: 30px;
+}
+
+.neontext {
+    font-family: "HelveticaRounded";
+
+}
+
+#htmlneontext2 {
+    position: absolute;
+
+    left: 1018px;
+    top: 790px;
+    width: 520px;
+
+    padding: 8px 14px;
+
+    font-size: 21px;
+}
+
+#htmlneontext1 div, #htmlneontext2 div {
+    margin-bottom: 10px;
+}
+
+#htmlneontext1 .neontext.on {
+/*
+    color: #fff;
+    text-shadow: 0 0 20px #ff0080;
+*/
+
+    animation-name: neon_turn_on;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes neon_turn_on {
+    0% {
+       color: #55002b;
+       text-shadow: 0 0 5px #444, 0 0 15px #333
+    }
+
+    10% {
+
+    }
+
+    20% {
+        color: #ff0080;
+        text-shadow: 0 0 5px #ff0080;
+    }
+
+    30% {
+        text-shadow: 0 0 10px #ff0080;
+    }
+
+    40% {
+        color: #fff;
+    text-shadow: 0 0 20px #ff0080;
+    }
+    50% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 20px #ff0080;
+    }
+    60% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080;
+    }
+    70% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080;
+        }
+    80% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080;
+    }
+    90% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080;
+    }
+
+
+    100% {
+        color: #fff;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
+    }
+}
+
+#htmlneontext1 .neontext.off {
+    color: #55002b;
+    text-shadow: 0 0 5px #444, 0 0 15px #333;
+
+    animation-name: neon_turn_on;
+    animation-duration: .7s;
+    animation-iteration-count: 1;
+    animation-direction: reverse;
+
+}
+
+#htmlneontext2 .neontext.on {
+
+    animation: neon2_turn_on 1s 1 forwards, neon2_on 0.001s 1s infinite alternate;
+
+    /*
+     animation-name: neon_turn_on;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+
+    animation-name: neon2_on;
+    animation-duration: .01s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    */
+}
+
+@keyframes neon2_on {
+    0% {
+        color: #fff;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff;
+        }
+
+    100% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff, 0 0 40px #0080ff;
+    }
+
+
+
+}
+
+#htmlneontext2 .neontext.off {
+    color: #002b55;
+    text-shadow: 0 0 5px #444, 0 0 15px #333;
+
+    animation-name: neon2_turn_on;
+    animation-duration: .7s;
+    animation-iteration-count: 1;
+    animation-direction: reverse;
+
+}
+
+@keyframes neon2_turn_on {
+    0% {
+       color: #002b55;
+       text-shadow: 0 0 5px #444, 0 0 15px #333
+    }
+
+    10% {
+
+    }
+
+    20% {
+        color: #0080ff;
+        text-shadow: 0 0 5px #0080ff;
+    }
+
+    30% {
+        text-shadow: 0 0 10px #0080ff;
+    }
+
+    40% {
+        color: #fff;
+    text-shadow: 0 0 20px #0080ff;
+    }
+    50% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 20px #0080ff;
+    }
+    60% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff;
+    }
+    70% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff;
+        }
+    80% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff, 0 0 40px #0080ff;
+    }
+    90% {
+        color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff, 0 0 40px #0080ff, 0 0 55px #0080ff;
+    }
+
+
+    100% {
+        color: #fff;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff, 0 0 40px #0080ff, 0 0 55px #0080ff, 0 0 75px #0080ff;
+    }
+}
+
+#neonhighlighter {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    /* TODO: Get size from SVG */
+    width: 543px;
+    height: 185px;
+
+    background-color: rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    border-radius: 12px;
+}
+
+#neonhighlighter.on {
+    animation-name: highlight;
+    animation-duration: .4s;
+    animation-iteration-count: 1;
+}
+
+@keyframes highlight {
+    0% {
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100 % {
+        opacity: 0;
+    }
+}
+
+/*
+
+
+
+*/
 
 /****** BUTTONGROUPS ******/
 #buttongroups {
@@ -560,6 +801,18 @@ audio {
     background-color: #a0e8e8;
 }
 
+#timeline_container .event.modifier {
+    background-color: #a0e8a0
+}
+
+#timeline_container .event.neontext1 {
+    background-color: #ff0080;
+}
+
+#timeline_container .event.neontext2 {
+    background-color: #0080ff;
+}
+
 #timeline #timecursor.paused {
     box-shadow: 0px 0px 0px #000;
 }
@@ -609,13 +862,4 @@ audio {
 
 #eventinfo .data_adjusted {
     color: red;
-}
-
-
-#scroller {
-    display: flex;
-}
-
-#scroller input {
-    flex-grow: 1;
 }

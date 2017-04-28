@@ -78,7 +78,8 @@
     }, {
         "time": 51.258064,
         "type": "screen",
-        "element": "fallapart"
+        "element": "fallapart",
+        "hold": 1.04
     },
     {
         "time": 51.806451,
@@ -95,7 +96,8 @@
     }, {
         "time": 56.6,
         "type": "screen",
-        "element": "fallapart"
+        "element": "fallapart",
+        "hold": 1.5
     },
     {
         "time": 57.2,
@@ -108,7 +110,7 @@
     },
     {
         "time": 58,
-        "type": "effect",
+        "type": "modifier",
         "element": "showsecondverse"
     },
     {
@@ -205,4 +207,6 @@
         "time": 97.497492,
         "type": "screen",
         "element": "fallapart"
-    }]
+    },
+
+ {"time":99.322587,"type":"screen","element":"andineedyou"},{"time":100.46541,"type":"screen","element":"nowtonight"},{"time":102.949832,"type":"screen","element":"andineedyou"},{"time":104.347052,"type":"screen","element":"morethanever"},{"time":106.677164,"type":"neontext1","element":"holdmetight"},{"time":110.135615,"type":"neontext1","element":"onforever"},{"time":113.425103,"type":"neontext1","element":"makingitright"},{"time":116.965146,"type":"neontext1","element":"neverbewrong"},{"time":119.577368,"type":"neontext2","element":"takeit"},{"time":120.680911,"type":"effect","element":"neonhighlight"},{"time":120.944459,"type":"neontext2","element":"endoftheline"},{"time":122.569152,"type":"effect","element":"neonhighlight"},{"time":123.332482,"type":"neontext2","element":"likeashadow"},{"time":124.384213,"type":"effect","element":"neonhighlight"},{"time":124.635409,"type":"neontext2","element":"allthetime"},{"time":125.87878787878788,"type":"effect","element":"neonhighlight"},{"time":128.633541,"type":"neontext2","element":"whattodo"},{"time":129.253183,"type":"effect","element":"neonhighlight"},{"time":130.111844,"type":"neontext2","element":"alwaysinthedark"},{"time":131.24242424242425,"type":"effect","element":"neonhighlight"},{"time":132.147386,"type":"neontext2","element":"powderkeg"},{"time":133.338188,"type":"effect","element":"neonhighlight"},{"time":133.993373,"type":"neontext2","element":"sparks"},{"time":135.105018,"type":"effect","element":"neonhighlight"},{"time":135.85965126439146,"type":"screen","element":"ireallyneedyou"},{"time":137.29060246394232,"type":"screen","element":"tonight"},{"time":139.05983323317307,"type":"screen","element":"foreversgonnastart"},{"time":140.911919,"type":"screen","element":"tonight"},{"time":142.75214092548077,"type":"screen","element":"foreversgonnastart"},{"time":144.725602,"type":"screen","element":"tonight"}]
