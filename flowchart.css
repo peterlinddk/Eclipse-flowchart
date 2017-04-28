@@ -1,0 +1,41 @@
+
+    .off .screen {
+        fill: #4d4d4d;
+        stroke: #000;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+      }
+
+        .on .screen {
+           stroke: #710000;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+        fill: #cc2d00;
+        }
+
+
+      .off .sc_highlight_top {
+        fill: #666;
+      }
+
+      .off .sc_highlight_bottom {
+        fill: #333;
+      }
+
+      .off .textcolor {
+        fill: gray;
+      }
+
+
+
+      .on .sc_highlight_bottom {
+        fill: #700;
+      }
+
+      .on .sc_highlight_top {
+        fill: #f7ad8d;
+      }
+
+      .on .textcolor {
+        fill: #f7931e;
+      }
