@@ -1,5 +1,16 @@
-[{"time":16.197596,"type":"screen","element":"turnaround"},
+[{"time":0,"type":"text","element":"text1"},
+ {"time":2.5,"type":"text","element":"text2"},
+ {"time":5,"type":"text","element":"text3"},
+ {"time":8,"type":"text","element":"text4"},
+ {"time":11,"type":"text","element":"text5"},
+ {"time":12.5,"type":"text","element":"text6"},
+ {"time":14,"type":"text","element":"text7"},
+
+
+    {"time":16.197596,"type":"screen","element":"turnaround"},
+ {"time":17,"type":"text","element":"text8"},
  {"time":17.948048,"type":"screen","element":"everynow"},
+
  {"time":19.488265,"type":"screen","element":"getalittlebit"},
  {"time":20.504807,"type":"flipper","element":"lonely"},
  {"time":23.57961,"type":"screen","element":"turnaround"},
@@ -188,4 +199,5 @@
  {"time":374.55913978494624,"type":"screen","element":"turnaround"},
  {"time":375.4301075268817,"type":"screen","element":"brighteyes"},
  {"time":378.5698924731183,"type":"screen","element":"turnaround","hold":2.4},
- {"time":381,"type":"effect","element":"zoomout"}]
+ {"time":381,"type":"effect","element":"zoomout"},
+{"time":419.5,"type":"text","element":"thankyou"}]

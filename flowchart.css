@@ -1531,3 +1531,35 @@ body.thunder {
 #eventinfo .data_adjusted {
     color: red;
 }
+
+/* TEXTS */
+#texts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+
+    font-family: "HelveticaRounded";
+    font-size: 3vw;
+    color: #78a57e;
+
+}
+
+#texts .text {
+    display: none;
+    position: absolute;
+    top: 50vh;
+    left: 0;
+
+    width: 100%;
+    text-align: center;
+
+
+
+}
+
+#thankyou {
+    display: none;
+}

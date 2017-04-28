@@ -1,7 +1,7 @@
 window.addEventListener("load", sidenVises);
 
 var loading;
-var developerMode = true;
+var developerMode = false;
 
 function sidenVises() {
     loading = {
@@ -719,12 +719,14 @@ function playback() {
     scrollToTopline( true );
 
     // start playing music (from beginning)
-    if( developerMode ) {
+/*    if( developerMode ) {
         // NOTE: Skip first 15 seconds when debugging
         player.currentTime = 15;
     } else {
         player.currentTime = 0;
-    }
+    }*/
+
+    player.currentTime = 0;
 
     player.play();
 
@@ -791,10 +793,10 @@ function playing( deltaTime ) {
             }
 
             // if this event wasn't an effect, then find the next event that isn't an effect, and draw an arrow to it
-            if( thisEvent.type != "effect" && thisEvent.type != "modifier" && nextEvent != null ) {
+            if( thisEvent.type != "effect" && thisEvent.type != "modifier" && thisEvent.type != "text" && nextEvent != null ) {
                 var index = eventIndex;
                 var arrowEvent = nextEvent;
-                while( arrowEvent != null && ( arrowEvent.type == "effect" || arrowEvent.type == "modifier" ) ) {
+                while( arrowEvent != null && ( arrowEvent.type == "effect" || arrowEvent.type == "modifier" || arrowEvent.type == "text") ) {
                     index++;
                     arrowEvent = timeEvents[index];
                 }
@@ -878,6 +880,8 @@ function performEvent( timeEvent ) {
         performEffect( timeEvent );
     } else if( timeEvent.type == "modifier") {
         performModifier( timeEvent );
+    } else if( timeEvent.type == "text") {
+        performTextEvent( timeEvent );
     }
 
 
@@ -1080,6 +1084,23 @@ function runLineAnimations( deltaTime ) {
     }
 
 }
+
+var lastText;
+
+/******** TEXTS ***********/
+function performTextEvent( timeEvent ) {
+
+    if( lastText != null ) {
+        lastText.classList.add("fadeout");
+    }
+
+    var textelement = document.querySelector("#" + timeEvent.element);
+    textelement.style.display = "block";
+    textelement.classList.add("fadein");
+
+    lastText = textelement;
+}
+
 
 /******************** ANIMATIONS ********************/
 

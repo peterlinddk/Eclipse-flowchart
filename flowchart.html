@@ -3,83 +3,97 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Flowchart 9</title>
+    <title>Total Eclipse of the Heart - flowchart</title>
     <link rel="stylesheet" href="flowchart.css">
 </head>
 
 <body>
-   <div id="scaler">
-    <div id="scene">
-        <div id="svg" class="hidebelowthebelt"></div>
-        <div id="svgdefs"></div>
+    <div id="scaler">
+        <div id="scene">
+            <div id="svg" class="hidebelowthebelt"></div>
+            <div id="svgdefs"></div>
 
-        <div id="htmlflipper">
-           <div class="first_verse verse visible">
-            <div class="flipbox first" id="lonely">lonely, and you're never coming round</div>
-            <div class="flipbox" id="tired">tired of listening to the sound of my tears</div>
-            <div class="flipbox" id="nervous">nervous that the best of all the years have gone by</div>
-            <div class="flipbox" id="terrified">terrified and then I see the look in your eyes</div>
+            <div id="htmlflipper">
+                <div class="first_verse verse visible">
+                    <div class="flipbox first" id="lonely">lonely, and you're never coming round</div>
+                    <div class="flipbox" id="tired">tired of listening to the sound of my tears</div>
+                    <div class="flipbox" id="nervous">nervous that the best of all the years have gone by</div>
+                    <div class="flipbox" id="terrified">terrified and then I see the look in your eyes</div>
+                </div>
+
+                <!-- second verse -->
+                <div class="second_verse verse hidden">
+                    <div class="flipbox first" id="restless">restless and I dream of something wild</div>
+                    <div class="flipbox" id="helpless">helpless and I'm lying like a child in your arms</div>
+                    <div class="flipbox" id="angry">angry and I know I've got to get out and cry</div>
+                    <div class="flipbox" id="terrified2">terrified but then I see the look in your eyes</div>
+                </div>
+
+                <!-- third verse - requires change "Get a little bit" to "know" -->
+                <div class="third_verse verse hidden">
+                    <div class="flipbox first" id="alwayswanted">never be the boy you always wanted to be</div>
+                    <div class="flipbox" id="waythatIam">always be the only boy who wanted me the way that I am</div>
+                    <div class="flipbox" id="magical">no one in the universe as magical and wondrous as you</div>
+                    <div class="flipbox" id="nothingbetter">nothing any better - there's nothing that I just wouldn't do</div>
+                </div>
             </div>
 
-            <!-- second verse -->
-            <div class="second_verse verse hidden">
-                <div class="flipbox first" id="restless">restless and I dream of something wild</div>
-                <div class="flipbox" id="helpless">helpless and I'm lying like a child in your arms</div>
-                <div class="flipbox" id="angry">angry and I know I've got to get out and cry</div>
-                <div class="flipbox" id="terrified2">terrified but then I see the look in your eyes</div>
+            <div id="htmlneontext1">
+                <div id="holdmetight" class="neontext">and if you only hold me tight</div>
+                <div id="onforever" class="neontext">we’ll be holding on forever</div>
+                <div id="makingitright" class="neontext">and we’ll only be making it right</div>
+                <div id="neverbewrong" class="neontext">cause we’ll never be wrong</div>
             </div>
 
-            <!-- third verse - requires change "Get a little bit" to "know" -->
-            <div class="third_verse verse hidden">
-                <div class="flipbox first" id="alwayswanted">never be the boy you always wanted to be</div>
-                <div class="flipbox" id="waythatIam">always be the only boy who wanted me the way that I am</div>
-                <div class="flipbox" id="magical">no one in the universe as magical and wondrous as you</div>
-                <div class="flipbox" id="nothingbetter">nothing any better - there's nothing that I just wouldn't do</div>
+            <div id="htmlneontext2">
+                <div id="neonhighlighter"></div>
+                <div><span id="takeit" class="neontext">Together we can take it</span> <span id="endoftheline" class="neontext">to the end of the line</span></div>
+                <div><span id="likeashadow" class="neontext">Your love is like a shadow</span> <span id="allthetime" class="neontext">on me all of the time</span></div>
+                <div><span id="whattodo" class="neontext">I don’t know what to do</span> <span id="alwaysinthedark" class="neontext">and I’m always in the dark</span></div>
+                <div><span id="powderkeg" class="neontext">We’re living in a powder keg</span> <span id="sparks" class="neontext">and giving off sparks</span></div>
             </div>
-        </div>
 
-        <div id="htmlneontext1">
-            <div id="holdmetight" class="neontext">and if you only hold me tight</div>
-            <div id="onforever" class="neontext">we’ll be holding on forever</div>
-            <div id="makingitright" class="neontext">and we’ll only be making it right</div>
-            <div id="neverbewrong" class="neontext">cause we’ll never be wrong</div>
-        </div>
-
-        <div id="htmlneontext2">
-            <div id="neonhighlighter"></div>
-            <div><span id="takeit" class="neontext">Together we can take it</span> <span id="endoftheline" class="neontext">to the end of the line</span></div>
-            <div><span id="likeashadow" class="neontext">Your love is like a shadow</span> <span id="allthetime" class="neontext">on me all of the time</span></div>
-            <div><span id="whattodo" class="neontext">I don’t know what to do</span> <span id="alwaysinthedark" class="neontext">and I’m always in the dark</span></div>
-            <div><span id="powderkeg" class="neontext">We’re living in a powder keg</span> <span id="sparks" class="neontext">and giving off sparks</span></div>
-        </div>
-
-        <div id="htmlturner_once" class="off">
-            <div class="turner">
-                <div class="front">I was falling in love</div>
-                <div class="back">there was light in my life</div>
+            <div id="htmlturner_once" class="off">
+                <div class="turner">
+                    <div class="front">I was falling in love</div>
+                    <div class="back">there was light in my life</div>
+                </div>
             </div>
-        </div>
 
-        <div id="htmlturner_butnow">
-            <div class="turner">
-                <div class="front">I'm only falling apart</div>
-                <div class="back">there's only love in the dark</div>
+            <div id="htmlturner_butnow">
+                <div class="turner">
+                    <div class="front">I'm only falling apart</div>
+                    <div class="back">there's only love in the dark</div>
+                </div>
             </div>
+
+
+            <div id="superhighlighter"></div>
+
         </div>
 
-
-   <div id="superhighlighter"></div>
     </div>
 
+    <div id="texts">
+        <div id="text1" class="text">Easter 2017, after a fun night with impromptu karaokee</div>
+        <div id="text2" class="text">I was reminded that "Total Eclipse of the Heart"</div>
+        <div id="text3" class="text">can be visualized as a fairly simple flowchart.</div>
+        <div id="text4" class="text">So I spent the next couple of days (and nights)</div>
+        <div id="text5" class="text">creating this animated flowchart of the song</div>
+        <div id="text6" class="text">...</div>
+        <div id="text7" class="text">enjoy</div>
+        <div id="text8" class="text"> </div>
+
+        <div id="thankyou" class="text">Thank you</div>
     </div>
 
-   <div id="askforfullscreen">
-      <div class="inner">
-       <p>Please change to fullscreen for full viewing pleasure ...</p>
-       <button class="goFullScreen">OK</button>
+    <div id="askforfullscreen">
+        <div class="inner">
+            <p>Please change to fullscreen for full viewing pleasure ...</p>
+            <button class="goFullScreen">OK</button>
 
-       </div>
-   </div>
+        </div>
+    </div>
 
     <div id="buttongroups">
         <div id="effects">
@@ -87,20 +101,8 @@
             <hr>
             <button id="basskick">Bass kick</button>
             <button id="neonhighlight">Neon highlight</button>
-
-<!--
-            <button id="bassdrum">Bass-drum</button>
-            <button id="snaredrum">Snare-drum</button>
-            <button id="drums">Drums</button>
--->
             <button id="thunder">Thunder</button>
             <button id="organ">Organ</button>
-
-<!--
-            <button id="jinglebells">Jinglebells</button>
-            <button id="wind">Wind</button>
-            <button id="chorus">Chorus</button>
--->
             <button id="zoomout">Zoomout</button>
             <button id="scrolltotopline">Scroll to topline</button>
             <button id="scrolltotop">Scroll to top</button>
@@ -109,8 +111,8 @@
         </div>
 
         <div id="modifiers">
-           <button id="resetmodifiers">Reset</button>
-           <hr>
+            <button id="resetmodifiers">Reset</button>
+            <hr>
             <button id="showfirstverse">Show first verse</button>
             <button id="showsecondverse">Show second verse</button>
             <button id="showthirdverse">Show third verse</button>
@@ -130,7 +132,7 @@
         <button class="endrecord">End record</button>
 
     </div>
-    <audio id="music" src="totaleclipse.mp3" controls ></audio>
+    <audio id="music" src="totaleclipse.mp3" controls></audio>
 
     <div id="navigator">
         <div id="controls">
