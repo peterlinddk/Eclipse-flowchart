@@ -9,6 +9,10 @@ body {
     margin: 8px;
 }
 
+#buttons, audio {
+    display: none;
+}
+
 /* SCREEN */
 
 #screens .on rect {
@@ -88,7 +92,8 @@ body {
 
     border: 3px solid black;
     box-sizing: border-box;
-    background-color: green;
+    background-color: #4d4d4d;
+    color: gray;
 
     border-radius: 12px;
     /*
@@ -98,6 +103,11 @@ body {
     font-weight: bold;
     font-size: 21px;
     padding: 7px;
+}
+
+#htmlflipper>div.on {
+    background-color: #cc2d00;
+    color: #f7931e;
 }
 
 #htmlflipper>div.move {
