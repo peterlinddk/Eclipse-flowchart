@@ -1,3 +1,14 @@
+body {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+#scene {
+    position: relative;
+    margin: 8px;
+}
+
 /* SCREEN */
 
 #screens .on rect {
@@ -39,3 +50,87 @@
 }
 
 /* ARROWS */
+
+
+/* flipper */
+
+#htmlflipper {
+    position: absolute;
+
+    /* x="705.36" y="254.05" width="581.73" height="212.68"  */
+
+
+    /* TODO: Find these positions from the SVG */
+    /*
+    top: 254.05px;
+    left:705.36px;
+    width: 581.73px;
+    height: 212.68px;
+    */
+    padding: 5px 6px;
+
+    perspective: 800px;
+}
+
+#htmlflipper>div {
+    margin-bottom: 2px;
+    margin-top: 2px;
+    transform-style: preserve-3d;
+
+
+    transform-origin: bottom center;
+/* */
+/*    backface-visibility: hidden;*/
+    transform: rotateX(0deg);
+
+    height: 47px;
+    width: 564px;
+
+    border: 3px solid black;
+    box-sizing: border-box;
+    background-color: green;
+
+    border-radius: 12px;
+    /*
+    <rect class="cls-10" x="714.05" y="264.54" width="564" height="44" rx="12" ry="12"/> */
+
+    font-family: "HelveticaRounded";
+    font-weight: bold;
+    font-size: 21px;
+    padding: 7px;
+}
+
+#htmlflipper>div.move {
+/*  background-color: yellow;   */
+
+    animation-name: move_up;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes move_up {
+    0% {
+        transform: translateY(0px);
+    }
+    100% {
+        transform: translateY(-47px);
+    }
+}
+
+#htmlflipper>div.move:first-child {
+/*    background-color: red;*/
+
+    animation-name: move_flip;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+@keyframes move_flip {
+    0% {
+        transform: translateY(0px) rotateX(0deg);
+    }
+    100% {
+        transform: translateY(-47px) rotateX(90deg);
+    }
+}

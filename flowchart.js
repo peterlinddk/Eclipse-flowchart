@@ -2,7 +2,7 @@ $(window).on("load", sidenVises);
 
 function sidenVises() {
     // load SVG
-    $("#svg").load("flowchart.svg");
+    $("#svg").load("flowchart.svg", whenSVGisLoaded);
 
     // activate buttons
     $("button.turnaround").on("click", turnaround);
@@ -10,6 +10,14 @@ function sidenVises() {
     $("button.brighteyes").on("click", brighteyes);
     $("button.toeverynow").on("click", toeverynow);
     $("button.everynow").on("click", everynow);
+
+
+
+}
+
+function whenSVGisLoaded() {
+    // prepare the flipper
+    prepareFlipper();
 }
 
 function turnaround() {
@@ -127,3 +135,62 @@ function drawArrowLine() {
         clearInterval(timer);
     }
 }
+
+/*********** FLIPPER ***********/
+function prepareFlipper() {
+    // find the #flipper rect in the svg
+    var rect = document.querySelector("svg #flipper rect");
+
+    // also find the htmlflipper
+    var htmlflipper = document.querySelector("#htmlflipper");
+
+    // and set all the properties on the html from the SVG
+    htmlflipper.style.top = rect.getAttribute("y") + "px";
+    htmlflipper.style.left = rect.getAttribute("x") + "px";
+
+    htmlflipper.style.width = rect.getAttribute("width") + "px";
+    htmlflipper.style.height = rect.getAttribute("height") + "px";
+}
+
+function scrollFlipper() {
+    // find the first element in the flipper
+    var first = document.querySelector("#htmlflipper div");
+
+    var height = first.offsetHeight;
+
+    document.querySelectorAll("#htmlflipper div").forEach( div => div.classList.add("move"));
+
+    // when done scrolling - remove the first element, and the move-class
+    first.addEventListener("animationend", function() {
+        first.parentNode.removeChild(first);
+
+        // and reset all the animations
+        document.querySelectorAll("#htmlflipper div").forEach( div => div.classList.remove("move") );
+    });
+
+
+/*
+    // flip the first element
+    first.style.transform = "translateY(-"+height+"px) rotateX(90deg)";
+
+    // find all the other elements, and move them up, by height
+    document.querySelectorAll("#htmlflipper div+div").forEach( div => div.style.transform = "translateY(-"+height+"px)");
+
+    // when done scrolling - remove the first element
+    first.addEventListener("transitionend", function() {
+
+        document.querySelector("#htmlflipper").style.transition = "transform 0s";
+
+        first.parentNode.removeChild(first);
+
+
+
+        // reset all the transforms
+        document.querySelectorAll("#htmlflipper div").forEach( div => {
+//            div.style.transition = "";
+            div.style.transform = "";}
+        );
+    })
+  */
+}
+
