@@ -1,40 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Flowchart 5</title>
+    <title>Flowchart 6</title>
     <link rel="stylesheet" href="flowchart.css">
 </head>
+
 <body>
-  <div id="scene">
-   <div id="svg"></div>
+    <div id="scene">
+        <div id="svg"></div>
 
-   <div id="htmlflipper">
-       <div id="lonely">
-           lonely, and you're never coming round
-       </div>
-       <div id="tired">
-           tired of listening to the sound of my tears
-       </div>
-       <div id="nervous">
-           nervous that the best of all the years have gone by
-       </div>
-       <div id="terrified">
-           terrified and then I see the look in your eyes
-       </div>
-   </div>
+        <div id="htmlflipper">
+            <div class="flipbox" id="lonely">
+                lonely, and you're never coming round
+            </div>
+            <div class="flipbox" id="tired">
+                tired of listening to the sound of my tears
+            </div>
+            <div class="flipbox" id="nervous">
+                nervous that the best of all the years have gone by
+            </div>
+            <div class="flipbox" id="terrified">
+                terrified and then I see the look in your eyes
+            </div>
 
-   </div>
-   <p>Inspired by: <a href="http://jeannr.tumblr.com/post/165291081/i-made-a-flow-chart-that-we-might-better">jeannr.tumblr.com</a></p>
+            <!-- second verse -->
+            <div class="second_verse">
+                <div class="flipbox" id="restless">
+                    restless and I dream of something wild
+                </div>
+                <div class="flipbox" id="helpless">
+                    helpless and I'm lying like a child in your arms
+                </div>
+                <div class="flipbox" id="angry">
+                    angry and I know I've got to get out and cry
+                </div>
+                <div class="flipbox" id="terrified2">
+                    terrified and then I see the look in your eyes
+                </div>
+            </div>
 
-   <div id="buttons">
-      <button class="startrecord">Start record</button>
-      <button class="pause">pause</button>
-      <button class="endrecord">End record</button>
-      ...
-      <button class="playback">Play</button>
-      <button class="stop">Stop</button>
-<!--
+        </div>
+
+    </div>
+    <p>Inspired by: <a href="http://jeannr.tumblr.com/post/165291081/i-made-a-flow-chart-that-we-might-better">jeannr.tumblr.com</a></p>
+
+    <div id="effectbuttons">
+        <button class="showsecondverse">Show second verse</button>
+        <button class="basskick">Bass kick</button>
+
+    </div>
+
+    <div id="buttons">
+        <button class="startrecord">Start record</button>
+        <button class="pause">pause</button>
+        <button class="endrecord">End record</button> ...
+        <button class="playback">Play</button>
+        <button class="stop">Stop</button>
+        <!--
 
        <button class="turnaround">Turn around</button>
        <button class="toeverynow">&rarr;Every now ...</button>
@@ -43,10 +67,44 @@
        <button class="tobrighteyes">&rarr;Bright eyes</button>
        <button class="brighteyes">Bright eyes</button>
 -->
-   </div>
-   <audio id="music" src="totaleclipse.mp3" controls></audio>
+    </div>
+    <audio id="music" src="totaleclipse.mp3" controls></audio>
 
-   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-   <script src="flowchart.js"></script>
+    <div id="navigator">
+        <div id="controls">
+            <button class="zoomout">-</button>
+            <button class="zoomin">+</button>
+        </div>
+        <div id="display">
+            <div id="timeline">
+                <div id="eventinfo">
+
+                        type: <span class="data_type">TYPE</span><br>
+                        time: <span class="data_time">TIME</span><br>
+                        <div class="adjusted_time">
+                            adjusted: <span class="data_adjusted">ADJUSTED</span>
+                        </div>
+                        element: <span class="data_element">ELEMENT</span>
+
+
+                </div>
+
+                <div id="timecursor"></div>
+
+                <!-- <div class="event"></div> -->
+            </div>
+            <div id="scroller">
+                <button class="scroll_left">&lt;</button>
+                <input type="range">
+                <button class="scroll_right">&gt;</button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+    <script src="flowchart.js"></script>
 </body>
+
 </html>

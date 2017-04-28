@@ -1,6 +1,22 @@
 $(window).on("load", sidenVises);
 
+var loading;
+
 function sidenVises() {
+    loading = {
+        svg: false,
+        json: false,
+        music: false
+    };
+
+    // get an event when the player is ready
+    player = document.querySelector("#music");
+    if( player.readyState != 4 ) {
+        player.addEventListener("canplay", musicIsLoaded);
+    } else {
+        musicIsLoaded();
+    }
+
     // load SVG
     $("#svg").load("flowchart.svg", whenSVGisLoaded);
 
@@ -11,46 +27,96 @@ function sidenVises() {
 
 function whenSVGisLoaded() {
     console.log("SVG loaded");
+    loading.svg = true;
     // prepare the flipper
     prepareFlipper();
 
     // create arrow-ids
     createArrowIDs();
 
-    // activate buttons
-    $("button.startrecord").on("click", startRecording);
-    $("button.pause").on("click", pause);
-    $("button.endrecord").on("click", endRecording);
-    $("button.playback").on("click", playback);
-    $("button.stop").on("click", stop);
+    loadingComplete();
 }
 
 function loadJSON( data ) {
     console.log("JSON loaded");
+    loading.json = true;
 
     timeEvents = data;
 
-    playback();
+    loadingComplete();
+}
+
+function musicIsLoaded() {
+    console.log("Music loaded");
+    loading.music = true;
+    player.removeEventListener("canplay", musicIsLoaded);
+    loadingComplete();
+}
+
+
+function loadingComplete() {
+    if( loading.svg && loading.json && loading.music ) {
+        console.log("loading complete!");
+
+        prepareNavigator();
+        // playback
+
+        // activate buttons
+        $("button.startrecord").on("click", startRecording);
+        document.querySelector("button.pause").addEventListener("click", pause);
+        $("button.endrecord").on("click", endRecording);
+        $("button.playback").on("click", playback);
+        $("button.stop").on("click", stop);
+
+        document.addEventListener("keydown", keyPressed);
+
+        prepareEffects();
+
+        playback();
+    }
+}
+
+function keyPressed( event ) {
+//    console.log("Key: " , event.key);
+    if( event.key == " " ) {
+        if( isPlaying ) {
+            pause();
+        }
+    }
+}
+
+/************* EFFECTS ****************/
+
+function prepareEffects() {
+    document.querySelector("button.showsecondverse").addEventListener("click", showSecondVerse);
+
+    document.querySelector("button.basskick").addEventListener("click", basskick);
+}
+
+function showSecondVerse() {
+    document.querySelector(".second_verse").style.display = "block";
+}
+
+function basskick() {
+    document.querySelector("#scene").classList.remove("basskick");
+            document.querySelector("#scene").offsetHeight; // force reflow
+            document.querySelector("#scene").classList.add("basskick");
 }
 
 /*************** RECORDER *****************/
 
-var starttime = 0;
 var lastObject = null;
 var timeEvents = [];
 
 function startRecording() {
-    // register event-listeners on screens and divs in the flipper
-    document.querySelectorAll("svg #screens>g, #htmlflipper div").forEach( element => element.addEventListener("click", clickOnScreen));
+    // register event-listeners on screens and flipboxes in the flipper
+    document.querySelectorAll("svg #screens>g, #htmlflipper .flipbox").forEach( element => element.addEventListener("click", clickOnScreen));
 
     // start music
-    document.querySelector("#music").currentTime = 0;
-    document.querySelector("#music").play();
+    player.play();
 
-    starttime = Date.now();
-
-    // clear array
-    timeEvents = [];
+    // No, don't clear array - make the recording add to the array of timeevents!
+//    timeEvents = [];
 }
 
 function clickOnScreen( event ) {
@@ -94,35 +160,57 @@ function clickOnScreen( event ) {
     console.log("logged: ", timeEvent);
 }
 
+var isPlaying = false;
+
 function pause() {
+    console.log("Pause?");
     if( player.paused ) {
         player.play();
+//        isPlaying = true;
     } else {
         player.pause();
+//        isPlaying = false;
     }
-}
-
-function stop() {
-    document.querySelector("#music").pause();
-    player.currentTime = 0;
-
-    player.removeEventListener("timeupdate", playing);
 }
 
 function endRecording() {
     // de-register clicking
-    document.querySelectorAll("svg #screens>g, #htmlflipper div").forEach( element => element.removeEventListener("click", clickOnScreen));
+    document.querySelectorAll("svg #screens>g, #htmlflipper .flipbox").forEach( element => element.removeEventListener("click", clickOnScreen));
 
     // stop the music
-    document.querySelector("#music").pause();
+    player.pause();
+
+    // replace time with adjusted
+    timeEvents.forEach( timeEvent => timeEvent.time = timeEvent.adjusted?timeEvent.adjusted:timeEvent.time );
+
+    // sort the array of timeEvents by timestamp
+    timeEvents.sort( (a,b) => a.time-b.time );
+
+    // remove adjusted and adjusterelement from json
+    function jsonReplacer(key, value) {
+        if( key == "adjusted" || key == "adjusterElement" ) {
+            return undefined;
+        }
+
+        return value;
+    }
 
     // create json-array of timeEvents
-    var jsondata = JSON.stringify( timeEvents );
+    var jsondata = JSON.stringify( timeEvents, jsonReplacer );
 
     // display the jsondata // TODO: Put in a textarea on the screen
     console.log("JSON:");
     console.log(jsondata);
 
+}
+
+
+/************* playback ****************/
+
+function stop() {
+    player.pause();
+    player.currentTime = 0;
+    isPlaying = false;
 }
 
 var player;
@@ -132,17 +220,14 @@ var lastEvent = null;
 var lastEventObject = null;
 
 function playback() {
-    player = document.querySelector("#music");
-
-    // register event
-    player.addEventListener("timeupdate", playing);
 
     // start playing music (from beginning)
     player.currentTime = 0;
-//    player.currentTime = 15; // NOTE: Skip first 15 seconds
+//    player.currentTime = 15; // NOTE: Skip first 15 seconds when debugging
     player.play();
 
     // TODO: Block play-button!
+    isPlaying = true;
 
     // reset event-counter
     eventIndex = 0;
@@ -151,54 +236,97 @@ function playback() {
     lastEventObject = null;
     lastEvent = null;
 
-    prepareLineAnimations();
-
+    prepareAnimations();
 }
 
-function playing( event ) {
+
+function skipTo( newTime ) {
+    console.log("Skip to time: " + newTime);
+
+    player.currentTime = newTime;
+
+    // remove lastevent
+    if( lastEventObject != null ) {
+        lastEventObject.classList.remove("on");
+    }
+    lastEvent = null;
+    lastEventObject = null;
+
+    // find suitable eventindex
+    for( let i=0; i < timeEvents.length; i++ ) {
+        if( timeEvents[i].time > newTime ) {
+            eventIndex = i;
+            nextEvent = timeEvents[i];
+            break;
+        }
+    }
+}
+
+
+function playing( deltaTime ) {
     var curTime = player.currentTime;
 //    console.log("time: " + (nextEvent.time-curTime) );
 
-    // if curtime is within 16ms of nextEvent, perform the next event!
-    if( nextEvent.time-curTime < 0.5 || curTime > nextEvent.time ) {
-        console.log("@" + curTime + " : Perform event ", nextEvent);
-        performEvent( nextEvent );
-
-
-
-        // highlight arrow to nextEvent
-        if( eventIndex < timeEvents.length-1 ) {
-            highlightArrow( nextEvent, timeEvents[eventIndex+1]);
+    if( eventIndex < timeEvents.length && nextEvent != null ) {
+        var nextTime = nextEvent.time;
+        if( nextEvent.adjusted ) {
+            nextTime = nextEvent.adjusted;
         }
 
-        eventIndex++;
-        // TODO: Handle end of events!
-        if( eventIndex >= timeEvents.length ) {
-            // stop playing
-            stop();
-            // TODO: Re-enable play-button
+        // if curtime is within 16ms of nextEvent, perform the next event!
+        if( nextTime-curTime < deltaTime || curTime > nextTime ) {
+            var thisEvent = nextEvent;
 
+            console.log("@" + curTime + " : Perform event ", thisEvent);
+            performEvent( thisEvent );
+
+            // find nextEvent
+            eventIndex++;
+            if( eventIndex < timeEvents.length-1 ) {
+                nextEvent = timeEvents[eventIndex];
+            } else {
+                nextEvent = null;
+            }
+
+            // if this event wasn't an effect, then find the next event that isn't an effect, and draw an arrow to it
+            if( thisEvent.type != "effect" && nextEvent != null ) {
+                var index = eventIndex;
+                var arrowEvent = nextEvent;
+                while( arrowEvent.type == "effect" ) {
+                    index++;
+                    arrowEvent = timeEvents[index];
+                }
+
+                highlightArrow( thisEvent, arrowEvent);
+            }
         }
-        nextEvent = timeEvents[eventIndex];
-
-
-
     }
 }
 
 function performEvent( timeEvent ) {
-    var element = document.querySelector("#"+timeEvent.element);
-    element.classList.remove("off");
-    element.classList.add("on");
+
+    if( timeEvent.type == "screen" || timeEvent.type == "flipper" ) {
+        var element = document.querySelector("#"+timeEvent.element);
+        element.classList.remove("off");
+        element.classList.add("on");
+    } else if( timeEvent.type == "effect") {
+        if( timeEvent.element == "showsecondverse") {
+            showSecondVerse();
+        } else if( timeEvent.element == "basskick") {
+            basskick();
+        }
+    }
+
 
 
     if( lastEvent != null ) {
-        lastEventObject.classList.remove("on");
+        if( lastEvent.type == "screen" || lastEvent.type == "flipper" ) {
+            lastEventObject.classList.remove("on");
+        }
 
         if( lastEvent.type == "flipper" ) {
             scrollFlipper();
         }
-
     }
 
     lastEvent = timeEvent;
@@ -222,19 +350,15 @@ function highlightArrow( fromEvent, toEvent ) {
     var time = toEvent.time - fromEvent.time;
 
     var arrow = document.querySelector("#" + arrowId);
+    if( arrow == null ) {
+        console.warn("No arrow with id: " + arrowId);
+        console.warn("Used from " , fromEvent, " to ", toEvent);
+    }
 
     animateLine( arrow, time );
 }
 
 
-
-
-//var line = null;
-//var arrowhead = null;
-//var drawLength = 0;
-//var timer = null;
-//
-//var highlightLength = 50;
 
 
 
@@ -341,19 +465,13 @@ function animateLine( arrow, time ) {
 
 function prepareLineAnimations() {
     lineAnimations = [];
-    window.requestAnimationFrame( runLineAnimations );
+//    window.requestAnimationFrame( runLineAnimations );
 }
 
 var lineAnimations = [];
 var lasttime;
 
-function runLineAnimations() {
-    window.requestAnimationFrame( runLineAnimations );
-
-    // calculate deltaTime ...
-    var now = Date.now();
-    var deltaTime = (now - (lasttime || now))/1000;
-    lasttime = now;
+function runLineAnimations( deltaTime ) {
 
     lineAnimations.forEach( lineAnimation => {if(lineAnimation.active) {
         lineAnimation.performAnimation(deltaTime)
@@ -365,12 +483,38 @@ function runLineAnimations() {
             if( !lineAnimations[i].active ) {
                 lineAnimations.splice(i,1);
             }
-//            lineAnimations[i].performAnimation(deltaTime);
         }
     }
 
-//    lineAnimations.forEach( lineAnimation => lineAnimation.performAnimation(deltaTime) );
+}
 
+/******************** ANIMATIONS ********************/
+
+function prepareAnimations() {
+    prepareLineAnimations();
+
+    window.requestAnimationFrame( runAnimations );
+}
+
+function runAnimations() {
+    if( isPlaying ) {
+        window.requestAnimationFrame( runAnimations );
+
+        // calculate deltaTime ...
+        var now = Date.now();
+        var deltaTime = (now - (lasttime || now))/1000;
+        lasttime = now;
+
+        runLineAnimations( deltaTime );
+
+        runSoundAnimations( deltaTime );
+
+        navUpdateCursor( deltaTime );
+    }
+}
+
+function runSoundAnimations( deltaTime ) {
+    playing( deltaTime );
 }
 
 
@@ -395,47 +539,31 @@ function prepareFlipper() {
     htmlflipper.style.height = rect.getAttribute("height") + "px";
 }
 
+
 function scrollFlipper() {
     // find the first element in the flipper
-    var first = document.querySelector("#htmlflipper div");
+    var first = document.querySelector("#htmlflipper .flipbox");
 
     var height = first.offsetHeight;
 
-    document.querySelectorAll("#htmlflipper div").forEach( div => div.classList.add("move"));
+    document.querySelectorAll("#htmlflipper .flipbox").forEach( flipbox => flipbox.classList.add("move"));
 
     // when done scrolling - remove the first element, and the move-class
     first.addEventListener("animationend", function() {
-        first.parentNode.removeChild(first);
+        var parentNode = first.parentNode;
+//        first.parentNode.removeChild(first);
+
+        // don't remove, just make it invisible
+        first.classList.add("hide");
+        // and move it to last
+        parentNode.appendChild(first);
+
 
         // and reset all the animations
-        document.querySelectorAll("#htmlflipper div").forEach( div => div.classList.remove("move") );
+        document.querySelectorAll("#htmlflipper .flipbox").forEach( flipbox => flipbox.classList.remove("move") );
     });
-
-
-/*
-    // flip the first element
-    first.style.transform = "translateY(-"+height+"px) rotateX(90deg)";
-
-    // find all the other elements, and move them up, by height
-    document.querySelectorAll("#htmlflipper div+div").forEach( div => div.style.transform = "translateY(-"+height+"px)");
-
-    // when done scrolling - remove the first element
-    first.addEventListener("transitionend", function() {
-
-        document.querySelector("#htmlflipper").style.transition = "transform 0s";
-
-        first.parentNode.removeChild(first);
-
-
-
-        // reset all the transforms
-        document.querySelectorAll("#htmlflipper div").forEach( div => {
-//            div.style.transition = "";
-            div.style.transform = "";}
-        );
-    })
-  */
 }
+
 
 /************** ARROWS *************/
 
@@ -457,4 +585,210 @@ function createArrowIDs() {
     // find all the arrow-elements (g with a path or line)
     var arrows = document.querySelectorAll("#arrows g path, #arrows g line");
     arrows.forEach( (arrow,index) => arrow.id = arrowIDs[index]);
+}
+
+/************** NAVIGATOR ****************/
+// note that "navigator" is an existing object, so we can't use that as a name
+
+var eventNavigator;
+
+function prepareNavigator() {
+    var timeline = document.querySelector("#timeline");
+
+    eventNavigator = {
+        start: 0,
+        end: player.duration,
+        length: timeline.clientWidth,
+        zoomFactor: 14
+    };
+
+//    eventNavigator.zoomFactor = eventNavigator.end / eventNavigator.length;
+
+    // build list of timeEvents
+    timeEvents.forEach( function(timeEvent) {
+       // create element
+        var elm = document.createElement("div");
+        elm.classList.add("event");
+
+        timeline.appendChild(elm);
+
+        // store element with timeEvent
+        timeEvent.adjusterElement = elm;
+
+        // calculate position
+        var pos =  timeEvent.time * eventNavigator.zoomFactor;
+//        console.log("pos: " + pos);
+        elm.style.left = pos + "px";
+
+        elm.addEventListener("mouseover", navEventHover);
+        elm.addEventListener("mouseout", navEventStopHover);
+        elm.addEventListener("mousedown", navEventSelect);
+        elm.addEventListener("mouseup", navEventDeSelect);
+//        elm.addEventListener("mousemove", navEventMove);
+
+
+    });
+
+    document.querySelector("button.zoomin").addEventListener("click", navZoomIn);
+    document.querySelector("button.zoomout").addEventListener("click", navZoomOut);
+    document.querySelector("button.scroll_right").addEventListener("click", navScrollRight);
+    document.querySelector("button.scroll_left").addEventListener("click", navScrollLeft);
+
+    document.querySelector("#timeline").addEventListener("click", navTimelineJump, false);
+}
+
+var selectedNavEvent = null;
+var selectedNavOffset = 0;
+
+function navEventSelect( evt ) {
+//    console.log("klik på ", evt);
+    var timeline = document.querySelector("#timeline");
+    timeline.addEventListener("mousemove", navEventMove);
+
+    selectedNavOffset = evt.offsetX;
+
+    selectedNavEvent = evt.target;
+    selectedNavEvent.removeEventListener("mouseover", navEventHover);
+    selectedNavEvent.removeEventListener("mouseout", navEventStopHover);
+    selectedNavEvent.addEventListener("mouseout", navEventDeSelect);
+}
+
+function navEventDeSelect( evt ) {
+//    console.log("klik af ", evt);
+
+    if( selectedNavEvent != null ) {
+        selectedNavEvent.removeEventListener("mouseout", navEventDeSelect);
+        selectedNavEvent.addEventListener("mouseover", navEventHover);
+        selectedNavEvent.addEventListener("mouseout", navEventStopHover);
+        selectedNavEvent = null;
+    }
+    var timeline = document.querySelector("#timeline");
+    timeline.removeEventListener("mousemove", navEventMove);
+}
+
+function navEventMove( evt ) {
+    if( selectedNavEvent != null ) {
+//        console.log("move ", evt );
+        // move selectedNavEvent
+        var timeline = document.querySelector("#timeline");
+        var xpos = event.clientX - timeline.offsetLeft - selectedNavOffset;
+
+        selectedNavEvent.style.left = xpos + "px";
+
+        var newTime = xpos / eventNavigator.zoomFactor + eventNavigator.start;
+        var tev = timeEvents.find( timeEvent => timeEvent.adjusterElement == selectedNavEvent );
+
+        tev.adjusted = newTime;
+        navShowEventInfo(tev, selectedNavEvent);
+    }
+}
+
+var highlightedEvent = null;
+
+function navUpdateCursor( deltaTime ) {
+    // get time from player
+    var curtime = player.currentTime;
+
+    var cursorpos = (curtime - eventNavigator.start) * eventNavigator.zoomFactor;
+
+    document.querySelector("#timecursor").style.left = cursorpos + "px";
+}
+
+function navTimelineJump( event ) {
+    var timeline = document.querySelector("#timeline");
+    // only accept clicks directly on the timeline (not on the events);
+    if( event.target == timeline && selectedNavEvent == null ) {
+        // find out where we clicked on the timeline
+        var xpos = event.clientX - timeline.offsetLeft;
+
+        // calculate this to a time
+        var newTime = xpos / eventNavigator.zoomFactor + eventNavigator.start;
+
+    //    console.log("click on time: " + newTime)
+        skipTo(newTime);
+    }
+}
+
+function navEventHover( evt ) {
+    // find element
+    if( evt.target != highlightedEvent ) {
+        // det er et nyt element - TODO: Husk at fjerne det gamle
+
+        // find matching timeEvent
+        var tev = timeEvents.find( timeEvent => timeEvent.adjusterElement == evt.target )
+
+        // show eventinfo
+        navShowEventInfo(tev, evt.target);
+
+
+
+        highlightedEvent = evt.target;
+    }
+}
+
+function navShowEventInfo( tev, element ) {
+    var eventinf = document.querySelector("#eventinfo");
+    eventinf.style.display = "block";
+
+    // fill eventinfo with data
+    eventinf.querySelector(".data_type").textContent = tev.type;
+    eventinf.querySelector(".data_time").textContent = tev.time;
+    eventinf.querySelector(".data_element").textContent = tev.element;
+
+    if( tev.adjusted ) {
+        eventinf.querySelector(".data_adjusted").textContent = tev.adjusted;
+        eventinf.querySelector(".adjusted_time").style.display = "block";
+    } else {
+        eventinf.querySelector(".adjusted_time").style.display = "none";
+    }
+
+    // position the eventinfo correctly
+    eventinf.style.left = element.offsetLeft + "px";
+
+}
+
+function navEventStopHover( evt ) {
+
+    console.log("stop hover");
+    var eventinf = document.querySelector("#eventinfo");
+    eventinf.style.display = "none";
+
+    highlightedEvent = null;
+}
+
+
+
+function navScrollLeft() {
+    eventNavigator.start--;
+    if( eventNavigator.start < 0 ) {
+        eventNavigator.start = 0;
+    }
+    navAdjustEvents();
+}
+
+function navScrollRight() {
+    eventNavigator.start++;
+    navAdjustEvents();
+}
+
+function navZoomIn() {
+    eventNavigator.zoomFactor += 1;
+    navAdjustEvents();
+}
+
+function navZoomOut() {
+    eventNavigator.zoomFactor -= 1;
+    navAdjustEvents();
+}
+
+function navAdjustEvents() {
+    timeEvents.forEach( function(timeEvent) {
+       // create element
+        var elm = timeEvent.adjusterElement;
+
+        // calculate position
+        var pos = (timeEvent.time - eventNavigator.start) * eventNavigator.zoomFactor ;
+
+        elm.style.left = pos + "px";
+    });
 }
