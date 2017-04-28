@@ -3,70 +3,69 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Flowchart 6</title>
+    <title>Flowchart 7</title>
     <link rel="stylesheet" href="flowchart.css">
 </head>
 
 <body>
     <div id="scene">
         <div id="svg"></div>
+        <div id="svgdefs"></div>
 
         <div id="htmlflipper">
-            <div class="flipbox" id="lonely">
-                lonely, and you're never coming round
-            </div>
-            <div class="flipbox" id="tired">
-                tired of listening to the sound of my tears
-            </div>
-            <div class="flipbox" id="nervous">
-                nervous that the best of all the years have gone by
-            </div>
-            <div class="flipbox" id="terrified">
-                terrified and then I see the look in your eyes
-            </div>
+            <div class="flipbox" id="lonely">lonely, and you're never coming round</div>
+            <div class="flipbox" id="tired">tired of listening to the sound of my tears</div>
+            <div class="flipbox" id="nervous">nervous that the best of all the years have gone by</div>
+            <div class="flipbox" id="terrified">terrified and then I see the look in your eyes</div>
 
             <!-- second verse -->
             <div class="second_verse">
-                <div class="flipbox" id="restless">
-                    restless and I dream of something wild
-                </div>
-                <div class="flipbox" id="helpless">
-                    helpless and I'm lying like a child in your arms
-                </div>
-                <div class="flipbox" id="angry">
-                    angry and I know I've got to get out and cry
-                </div>
-                <div class="flipbox" id="terrified2">
-                    terrified and then I see the look in your eyes
-                </div>
+                <div class="flipbox" id="restless">restless and I dream of something wild</div>
+                <div class="flipbox" id="helpless">helpless and I'm lying like a child in your arms</div>
+                <div class="flipbox" id="angry">angry and I know I've got to get out and cry</div>
+                <div class="flipbox" id="terrified2">terrified but then I see the look in your eyes</div>
             </div>
 
+            <!-- third verse - requires change "Get a little bit" to "know" -->
+            <div class="third_verse">
+                <div class="flipbox" id="alwayswanted">you'll never be the boy you always wanted to be</div>
+                <div class="flipbox" id="waythatIam">you'll always be the only boy who wanted me the way that I am</div>
+                <div class="flipbox" id="magical">there's no one in the universe as magical and wondrous as you</div>
+                <div class="flipbox" id="nothingbetter">there's nothing any better - there's nothing that I just wouldn't do</div>
+            </div>
         </div>
 
     </div>
-    <p>Inspired by: <a href="http://jeannr.tumblr.com/post/165291081/i-made-a-flow-chart-that-we-might-better">jeannr.tumblr.com</a></p>
 
-    <div id="effectbuttons">
-        <button class="showsecondverse">Show second verse</button>
-        <button class="basskick">Bass kick</button>
 
+    <div id="buttongroups">
+        <div id="effects">
+            <button id="basskick">Bass kick</button>
+            <button id="bassdrum">Bass-drum</button>
+            <button id="snaredrum">Snare-drum</button>
+            <button id="drums">Drums</button>
+            <button id="thunder">Thunder</button>
+            <button id="organ">Organ</button>
+            <button id="jinglebells">Jinglebells</button>
+            <button id="wind">Wind</button>
+            <button id="chorus">Chorus</button>
+        </div>
+
+        <div id="modifiers">
+            <button id="showsecondverse">Show second verse</button>
+            <button id="showthirdverse">Show third verse</button>
+            <button id="breakgetalittle">Break: get a little</button>
+        </div>
     </div>
 
+
     <div id="buttons">
-        <button class="startrecord">Start record</button>
-        <button class="pause">pause</button>
-        <button class="endrecord">End record</button> ...
         <button class="playback">Play</button>
-        <button class="stop">Stop</button>
-        <!--
+        <button class="pause">pause</button>
+        <button class="stop">Stop</button> ...
+        <button class="startrecord"><span class="record"></span>Start record</button>
+        <button class="endrecord">End record</button>
 
-       <button class="turnaround">Turn around</button>
-       <button class="toeverynow">&rarr;Every now ...</button>
-       <button class="everynow">Every now ...</button>
-
-       <button class="tobrighteyes">&rarr;Bright eyes</button>
-       <button class="brighteyes">Bright eyes</button>
--->
     </div>
     <audio id="music" src="totaleclipse.mp3" controls></audio>
 
@@ -75,33 +74,25 @@
             <button class="zoomout">-</button>
             <button class="zoomin">+</button>
         </div>
-        <div id="display">
-            <div id="timeline">
-                <div id="eventinfo">
-
-                        type: <span class="data_type">TYPE</span><br>
-                        time: <span class="data_time">TIME</span><br>
-                        <div class="adjusted_time">
-                            adjusted: <span class="data_adjusted">ADJUSTED</span>
-                        </div>
-                        element: <span class="data_element">ELEMENT</span>
-
-
+        <div id="timedisplay">
+            <div id="eventinfo">
+                type: <span class="data_type">TYPE</span><br> time: <span class="data_time">TIME</span><br>
+                <div class="adjusted_time">
+                    adjusted: <span class="data_adjusted">ADJUSTED</span>
                 </div>
-
-                <div id="timecursor"></div>
-
-                <!-- <div class="event"></div> -->
+                element: <span class="data_element">ELEMENT</span>
             </div>
-            <div id="scroller">
-                <button class="scroll_left">&lt;</button>
-                <input type="range">
-                <button class="scroll_right">&gt;</button>
+            <div id="timeline_container">
+                <div id="timeline">
+                    <div id="timecursor"></div>
+                </div>
             </div>
         </div>
-
     </div>
 
+    <footer>
+        <p>Inspired by: <a href="http://jeannr.tumblr.com/post/165291081/i-made-a-flow-chart-that-we-might-better">jeannr.tumblr.com</a></p>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
     <script src="flowchart.js"></script>

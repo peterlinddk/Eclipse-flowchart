@@ -2,6 +2,9 @@ body {
     margin: 0;
     border: 0;
     padding: 0;
+    background-color: #246d4d;
+/*    overflow: hidden;*/
+    /* TODO: Handle scroll when it comes! */
 }
 
 #scene {
@@ -19,10 +22,70 @@ body {
 /* SCREEN */
 
 #screens .on rect {
-    stroke: #710000;
+/*    stroke: #710000;*/
     stroke-miterlimit: 10;
     stroke-width: 4px;
-    fill: #cc2d00;
+/*    fill: #cc2d00;*/
+/*    fill: url('svgdefs.svg#redfade');*/
+/*    fill: url(#redfade);*/
+
+    /*
+    animation-name: turnon;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in;
+
+
+    animation-name: flicker;
+    animation-duration: .2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-delay: 1s;
+*/
+    animation: turnon .6s 1 ease-in forwards, flicker .2s .6s infinite ease-in-out;
+}
+
+@keyframes turnon {
+    0% {
+        fill: #4d4d4d;
+        stroke: #000000;
+    }
+
+    80% {
+        fill: #d02d00;
+    }
+
+    100% {
+        fill: #cc2d00;
+        stroke: #710000;
+    }
+}
+
+@keyframes flicker {
+    0% {
+        fill: #cc2d00;
+    }
+
+    25% {
+        fill: #ce2d00;
+    }
+
+    50% {
+        fill: #cc2d00;
+    }
+
+    75% {
+        fill: #ca2d01;
+    }
+
+    100% {
+        fill: #cc2d00;
+    }
+}
+
+#screens .turnoff rect {
+    fill: url(#redfade);
 }
 
 #screens .off rect {
@@ -30,18 +93,63 @@ body {
     stroke: #000;
     stroke-miterlimit: 10;
     stroke-width: 4px;
+
+    animation: turnoff .4s 1 ease-in forwards;
 }
 
+@keyframes turnoff {
+    0% {
+        fill: #cc2d00;
+        stroke: #710000;
+    }
+
+    100% {
+        fill: #4d4d4d;
+        stroke: #000000;
+    }
+
+
+
+}
+
+
 #screens .on>path:first-of-type {
-    fill: #f7ad8d;
+    fill: #f7ad8d; /* TODO: fade-in */
+    animation: turnon_topcorner .6s 1 ease-in forwards;
+}
+
+@keyframes turnon_topcorner {
+    0% {
+        fill: #666666;
+    }
+
+    80% {
+        fill: #fab99e;
+    }
+
+
+    100% {
+        fill: #f7ad8d;
+    }
 }
 
 #screens .off>path:first-of-type {
-    fill: #666;
+    fill: #666666;
+    animation: turnoff_topcorner .4s 1 ease-in forwards;
+}
+
+@keyframes turnoff_topcorner {
+    0% {
+        fill: #f7ad8d;
+    }
+
+    100% {
+        fill: #666666;
+    }
 }
 
 #screens .on>path:last-of-type {
-    fill: #700;
+    fill: #700; /* TODO: fade-in */
 }
 
 #screens .off>path:last-of-type {
@@ -50,11 +158,41 @@ body {
 
 #screens .on g * {
     fill: #f7931e;
+    animation: turnon_text .6s 1 ease-in forwards;
 }
 
-#screens .off g * {
-    fill: gray;
+@keyframes turnon_text {
+    0% {
+        fill: #808080;
+    }
+
+    80% {
+        fill: #fca846;
+    }
+
+    100% {
+        fill: #f7931e;
+    }
 }
+
+
+
+
+#screens .off g * {
+    fill: #808080;
+    animation: turnoff_text .4s 1 ease-in forwards;
+}
+
+@keyframes turnoff_text {
+    0% {
+        fill: #f7931e;
+    }
+
+    100% {
+        fill: #808080;
+    }
+}
+
 
 /* ARROWS */
 
@@ -79,7 +217,8 @@ body {
     perspective: 800px;
 }
 
-#htmlflipper .second_verse {
+#htmlflipper .second_verse,
+#htmlflipper .third_verse{
     display: none;
 }
 
@@ -99,7 +238,7 @@ body {
     transform: rotateX(0deg);
 
     height: 47px;
-    width: 564px;
+    width: 634px;
 
     border: 3px solid black;
     box-sizing: border-box;
@@ -116,10 +255,83 @@ body {
     padding: 7px;
 }
 
+#htmlflipper .third_verse .flipbox {
+    font-size: 19px;
+    font-weight: normal;
+}
+
+#htmlflipper .flipbox.off {
+    background-color: #4d4d4d;
+    color: #808080;
+
+    animation: turnoff_flipbox .4s 1 ease-in forwards;
+}
+
+@keyframes turnoff_flipbox {
+    0% {
+        border-color: #710000;
+        background-color: #cc2d00;
+        color: #f7931e;
+    }
+
+    100% {
+        border-color: #000000;
+        background-color: #4d4d4d;
+        color: #808080;
+    }
+
+}
+
+
 #htmlflipper .flipbox.on {
     background-color: #cc2d00;
     color: #f7931e;
+
+    animation: turnon_flipbox .6s 1 ease-in forwards, flicker_flipbox .2s .6s infinite ease-in-out;
 }
+
+@keyframes turnon_flipbox {
+    0% {
+        border-color: #000000;
+        background-color: #4d4d4d;
+        color: #808080;
+    }
+
+    80% {
+        background-color: #d02d00;
+        color: #fca846;
+    }
+
+    100% {
+        border-color: #710000;
+        background-color: #cc2d00;
+        color: #f7931e;
+    }
+}
+
+
+@keyframes flicker_flipbox {
+    0% {
+        background-color: #cc2d00;
+    }
+
+    25% {
+        background-color: #ce2d00;
+    }
+
+    50% {
+        background-color: #cc2d00;
+    }
+
+    75% {
+        background-color: #ca2d01;
+    }
+
+    100% {
+        background-color: #cc2d00;
+    }
+}
+
 
 #htmlflipper .flipbox.move {
 /*  background-color: yellow;   */
@@ -156,11 +368,79 @@ body {
     }
 }
 
-/****** EFFECTS **********/
-#effectbuttons {
-    margin-right: 10px;
-    text-align: right;
+/****** BUTTONGROUPS ******/
+#buttongroups {
+
+
+    margin-bottom: 1em;
+
+    position: absolute;
+    top: 530px;
+
+
+   display: flex;
 }
+
+#buttongroups div {
+    margin-left: 1em;
+}
+
+#buttongroups button {
+    display: block;
+    margin-bottom: 2px;
+}
+
+#buttons, audio {
+    margin-top: 1em;
+    display: inline-block;
+}
+
+#buttons {
+    position: relative;
+    top: -11px;
+}
+
+audio {
+
+}
+
+.record {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 1px solid black;
+    border-radius: 1em;
+    margin-bottom: -2px;
+    margin-left: -2px;
+    margin-right: 2px;
+    background-color: #450210;
+}
+
+.recording {
+    animation-name: rec_pulse;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes rec_pulse {
+    0% {
+        background-color: #450210;
+    }
+
+    40% {
+
+        background-color: #a90329;
+    }
+
+    100% {
+        background-color: #db5e60;
+    }
+}
+
+
+
+/****** EFFECTS **********/
 
 .basskick {
     animation-name: basskick;
@@ -217,59 +497,111 @@ body {
 /****** NAVIGATOR **********/
 
 #navigator {
-/*    display: flex;*/
+    display: flex;
 }
 
-#display {
+#navigator #controls {
+    white-space: nowrap;
+}
+
+#timedisplay {
     flex-grow: 1;
+    width: 90vw; /* NOTE: The exact width isnt' important, any number works */
+    position: relative; /* relative is necessary for the eventinfo popup to work */
+}
+
+
+#timeline_container {
+    position: relative;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    height: 110%;
+    padding-top: 3px;
 }
 
 #timeline {
-    width: 100%;
     height: 22px;
 
     background-color: #94b294;
-    position: relative;
-
-
 }
 
-#timeline .event {
+#timeline_container .event {
     position: absolute;
-    top: -3px;
-/*    left: 30px;*/
-
+    top: 0px;
 
     width: 10px;
     height: 24px;
     border: 2px outset white;
     background-color: gainsboro;
+    cursor: pointer;
+}
+
+#timeline_container .event.dragging {
+    background-color: red;
+    z-index: 1000;
+    cursor:ew-resize;
+}
+
+#timeline_container .event.adjusted {
+/*    background-color: pink;*/
+    border-color: hotpink;
+}
+
+#timeline_container .event.flipper {
+    border-radius: 5px;
+    background-color: #c6c6c6;
+}
+
+#timeline_container .event.screen {
+   background-color: #fdd68f;
+}
+
+#timeline_container .event.effect {
+    background-color: #a0e8e8;
+}
+
+#timeline #timecursor.paused {
+    box-shadow: 0px 0px 0px #000;
+}
+
+#timeline #timecursor.recording {
+    background-color: #ff4ba5;
+    box-shadow: 1px 1px 7px #e00;
 }
 
 #timeline #timecursor {
     position: absolute;
-    width: 2px;
+    width: 1px;
     height: 22px;
-    background-color: aqua;
 
-    left: 30px;
+    background-color: #4bffa5;
+    box-shadow: 1px 1px 4px #0e0;
+
+    pointer-events: none;
+
+/*    left: 30px;*/
     z-index: 3;
 }
+
+
 
 #eventinfo {
     display: none;
     position: absolute;
     z-index: 2;
 
-    bottom: 20px;
+    bottom: 44px;
+/*    top: 0px;*/
     left: 230px;
 
     border: 1px dashed black;
-    padding: 2px;
+    padding: 4px;
     background-color: antiquewhite;
     font-family: arial;
     font-size: 10px;
 }
+
+
 
 #eventinfo .adjusted_time {
     font-style: italic;
