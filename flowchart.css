@@ -1,18 +1,99 @@
+@font-face {
+	font-family: 'HelveticaRounded';
+	src: url('fonts/HelveticaRounded-Bold.woff2') format('woff2'),
+		url('fonts/HelveticaRounded-Bold.woff') format('woff');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'HelveticaRounded';
+	src: url('fonts/HelveticaRounded-Black.woff2') format('woff2'),
+		url('fonts/HelveticaRounded-Black.woff') format('woff');
+	font-weight: 900;
+	font-style: normal;
+}
+
 body {
-    margin: 0;
+    margin: 0px;
     border: 0;
     padding: 0;
-    background-color: #246d4d;
-/*    overflow: hidden;*/
+    background-color: #2c805b;
+    overflow: hidden;
     /* TODO: Handle scroll when it comes! */
+
+    min-height: 300vh;
+
+}
+
+#askforfullscreen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(100, 100, 100, 0.81);
+    z-index: 2000;
+}
+
+#askforfullscreen .inner {
+    position: absolute;
+    width: 50vw;
+    left: 20vw;
+    top: 20vw;
+    height: 20vw;
+
+    background-color: antiquewhite;
+    border: 2px solid black;
+    padding: 1em;
+
+    font-family: "HelveticaRounded";
+    font-size: 3vw;
+}
+
+#askforfullscreen .inner button {
+    font-family: "HelveticaRounded";
+    font-size: 3vw;
+    width: 20vw;
+    height: 6vw;
+    margin-left: 15vw;
+}
+
+#scaler {
+    transform-origin: top left;
+    /* feels odd to set the width and height like this - but otherwise the scene
+    and highlighter might not fill the screen */
+/*
+    width: 200vw;
+    height: 200vw;
+*/
 }
 
 #scene {
     position: relative;
-    margin: 8px;
-
-
 }
+
+#svg.hidebelowthebelt .belowthebelt,
+#svg.hidebelowthebelt .belowthebelt+polygon,
+#svg.hidebelowthebelt ~ .belowthebelt{
+/*    display: none;*/
+    opacity: 0;
+}
+
+#svg.fadeinbelowthebelt .belowthebelt,
+#svg.fadeinbelowthebelt .belowthebelt+polygon,
+#svg.fadeinbelowthebelt ~ .belowthebelt{
+    opacity: 1;
+    animation-name: fadein;
+    animation-duration: 5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in;
+}
+
+
+
 
 
 #effectbuttons, #navigator, #buttons, audio {
@@ -214,14 +295,16 @@ body {
     perspective: 800px;
 }
 
-#htmlflipper .second_verse,
-#htmlflipper .third_verse{
+#htmlflipper .verse.visible {
+    display: block;
+}
+
+#htmlflipper .verse.hidden,
+#htmlflipper .flipbox.hidden
+{
     display: none;
 }
 
-#htmlflipper .flipbox.hide {
-    display: none;
-}
 
 #htmlflipper .flipbox {
     margin-bottom: 2px;
@@ -246,16 +329,18 @@ body {
 
     font-family: "HelveticaRounded";
     font-weight: bold;
-    font-size: 21px;
-    padding: 7px;
+    font-size: 24px;
+    padding-left: 7px;
+    line-height: 45px;
 }
 
 #htmlflipper .third_verse .flipbox {
-    font-size: 19px;
+    font-size: 21.6px;
     font-weight: normal;
+    padding-left: 4px;
 }
 
-#htmlflipper .flipbox.off {
+#htmlflipper .flipbox.off, .off .turner {
     background-color: #4d4d4d;
     color: #808080;
 
@@ -278,7 +363,7 @@ body {
 }
 
 
-#htmlflipper .flipbox.on {
+#htmlflipper .flipbox.on, .on .turner {
     background-color: #cc2d00;
     color: #f7931e;
 
@@ -346,7 +431,7 @@ body {
     }
 }
 
-#htmlflipper .flipbox.move:first-of-type {
+#htmlflipper .flipbox.first.move {
 /*    background-color: red;*/
 
     animation-name: move_flip;
@@ -367,42 +452,45 @@ body {
 
 #htmlneontext1 {
     position: absolute;
-/*    outline: 3px dashed red;*/
-    /* TODO: Find positions from SVG */
-    left: 1018px;
-    top: 561px;
-    width: 520px;
-    height: 174px;
 
+    box-sizing: border-box;
     padding: 8px 14px;
+/*    padding: 20px 14px;*/ /* not sure if this is for mac ... */
 
-    font-size: 30px;
+    font-size: 28px;
 }
 
 .neontext {
     font-family: "HelveticaRounded";
 
+    color: #333;
+    text-shadow: 0 0 30px rgba(203, 203, 203, 0.55);
+
+    margin-bottom: 12px;
 }
 
 #htmlneontext2 {
     position: absolute;
 
-    left: 1018px;
-    top: 790px;
-    width: 520px;
-
-    padding: 8px 14px;
+    padding: 8px 13px;
+    box-sizing: border-box;
 
     font-size: 21px;
 }
 
-#htmlneontext1 div, #htmlneontext2 div {
-    margin-bottom: 10px;
+
+#htmlneontext2 div {
+    margin-top: 12px;
 }
+
+#htmlneontext2 #neonhighlighter {
+    margin-top: 0;
+}
+
 
 #htmlneontext1 .neontext.on {
 /*
-    color: #fff;
+
     text-shadow: 0 0 20px #ff0080;
 */
 
@@ -603,23 +691,221 @@ body {
     }
 }
 
-/*
+/******** TURNERS ********/
+#htmlturner_butnow {
+    position: absolute;
+
+    perspective: 800px;
+}
+
+#htmlturner_once {
+    position: absolute;
+
+    perspective: 800px;
+}
+
+.turner {
+    transform-style: preserve-3d;
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+    border: 4px solid black;
+
+    background-color: #4d4d4d;
+    color: #808080;
+
+    border-radius: 12px;
+
+    font-family: "HelveticaRounded";
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.turner.flip {
+    animation-name: turn_back;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes turn_back {
+   0% {
+        transform: rotateX(0deg);
+    }
+
+    10% {
+        transform: rotateX(153deg);
+    }
+
+    20% {
+        transform: rotateX(198deg);
+    }
+
+    30% {
+        transform: rotateX(165deg);
+    }
+    40% {
+        transform: rotateX(189deg);
+    }
+
+    50% {
+        transform: rotateX(171deg);
+    }
+
+    60% {
+        transform: rotateX(184.5deg);
+    }
+
+    70% {
+        transform: rotateX(174.6deg);
+    }
+
+    80% {
+        transform: rotateX(182.1deg)
+    }
+
+    90% {
+        transform: rotateX(177.3deg)
+    }
+
+    100% {
+        transform: rotateX(180.1deg); /* the .1 is a fix for Chrome on the mac, where 180 makes the text dissappear */
+    }
+}
+
+.turner.unflip {
+    animation-name: turn_front;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes turn_front {
+   0% {
+        transform: rotateX(180deg);
+    }
+
+    10% {
+        transform: rotateX(333deg);
+    }
+
+    20% {
+        transform: rotateX(378deg);
+    }
+
+    30% {
+        transform: rotateX(345deg);
+    }
+    40% {
+        transform: rotateX(369deg);
+    }
+
+    50% {
+        transform: rotateX(351deg);
+    }
+
+    60% {
+        transform: rotateX(364.5deg);
+    }
+
+    70% {
+        transform: rotateX(354.6deg);
+    }
+
+    80% {
+        transform: rotateX(362.1deg);
+    }
+
+    90% {
+        transform: rotateX(357.3deg);
+    }
+
+    100% {
+        transform: rotateX(360deg);
+    }
+}
 
 
 
-*/
+.turner div {
+    display: block;
+    position: absolute;
+    width: calc(100% - 1em);
+    height: calc(100% - 1em);
+    backface-visibility: hidden;
+    padding: .5em;
+}
+
+.turner .front {
+
+    border-radius: 10px;
+}
+
+.turner .back {
+
+    border-radius: 10px;
+    transform: rotateX(180deg);
+}
+
+/***** MODIFIERS *****/
+
+#know {
+    transform: translateY(-700px);
+}
+
+#know.dropped {
+    transform: translateY(0);
+}
+
+#know.drop {
+    transform: translateY(0);
+    animation-name: know_drop;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+
+    transform-origin: bottom center;
+}
+
+@keyframes know_drop {
+    0% {
+        transform: translateY(-700px) scaleY(1);
+    }
+
+    70% {
+        transform: translateY(10px) scaleY(.8);
+    }
+    80% {
+        transform: translateY(-15px) scaleY(1);
+    }
+    87% {
+        transform: translateY(0px) scaleY(.9);
+    }
+    94% {
+        transform: translateY(-7px) scaleY(1);
+    }
+    98% {
+        transform: translateY(0px) scaleY(.95);
+    }
+    99% {
+        transform: translateY(-3px) scaleY(1);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
+
 
 /****** BUTTONGROUPS ******/
 #buttongroups {
-
-
-    margin-bottom: 1em;
-
     position: absolute;
-    top: 530px;
+    top: 770px;
 
-
-   display: flex;
+    display: flex;
 }
 
 #buttongroups div {
@@ -632,7 +918,6 @@ body {
 }
 
 #buttons, audio {
-    margin-top: 1em;
     display: inline-block;
 }
 
@@ -682,6 +967,102 @@ audio {
 
 
 /****** EFFECTS **********/
+
+#scene.zoomout {
+    animation-name: zoomout;
+    animation-duration: 34s; /* not kidding, very slow zoom! */
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+}
+
+@keyframes zoomout {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(.001);
+    }
+}
+
+.fadein {
+    display: block;
+    opacity: 1;
+    animation-name: fadein;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fadeout {
+    display: block;
+    opacity: 0;
+    animation-name: fadeout;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.burnout path {
+    fill: #444;
+    animation-name: burnout;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+@keyframes burnout {
+    0% {
+        fill: #888;
+        opacity: 1;
+    }
+
+    70% {
+        fill: #fff;
+    }
+
+    80% {
+        fill: #888;
+    }
+
+    85% {
+        fill: #fff;
+    }
+
+    90% {
+        fill: #888;
+    }
+
+    95% {
+        fill: #fff;
+        opacity: 1;
+    }
+
+    100% {
+        fill: #444;
+        opacity: 0;
+    }
+}
 
 .basskick {
     animation-name: basskick;
@@ -734,6 +1115,272 @@ audio {
     }
 }
 
+/*
+body.thunder {
+    animation-name: thunder_body_afterglow;
+    animation-duration: 4s;
+    animation-delay: .5s;
+    animation-iteration-count: 1;
+}
+
+@keyframes thunder_body_afterglow {
+    0% {
+         background-color: #36a172;
+    }
+
+    100% {
+         background-color: #246d4d;
+    }
+}
+*/
+
+
+
+#scene.thunder {
+    animation-name: thunder_shake;
+    animation-duration: 1s;
+    animation-delay: .7s;
+    animation-iteration-count: 1;
+    transform-origin: bottom center;
+}
+
+#scene.thunder svg #arrows,
+#scene.thunder svg #screens rect+path {
+    animation-name: thunder_afterglow_fill;
+    animation-duration: 5s;
+    animation-delay: .5s;
+    animation-iteration-count: 1;
+
+}
+
+#scene.thunder svg #screens rect+path {
+    animation-name: thunder_afterglow_fill_screencorner;
+}
+
+
+#scene.thunder svg #arrows path,
+#scene.thunder svg #arrows line,
+#scene.thunder svg rect,
+#scene.thunder .flipbox,
+#scene.thunder .turner {
+/*
+    stroke: #fff;
+    border-color: #fff;
+*/
+
+    animation-name: thunder_afterglow;
+    animation-duration: 5s;
+    animation-delay: .5s;
+    animation-iteration-count: 1;
+}
+
+@keyframes thunder_afterglow {
+    0% {
+        stroke: #fff;
+        border-color: #fff;
+    }
+
+    100% {
+        stroke: #000;
+        border-color: #000;
+    }
+}
+
+@keyframes thunder_afterglow_fill {
+    0% {
+        fill: #fff;
+    }
+
+    100% {
+        fill: #000;
+    }
+}
+
+@keyframes thunder_afterglow_fill_screencorner {
+    0% {
+        fill: #fff;
+    }
+
+    100% {
+        fill: #666666;
+    }
+}
+
+
+
+
+
+
+.thunder #superhighlighter {
+    animation-name: thunder;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+}
+
+@keyframes thunder {
+    0% {
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    60% {
+        opacity: 0;
+
+    }
+    65% {
+        opacity: .9;
+
+    }
+    75% {
+        opacity: .9;
+
+    }
+    100%{
+      opacity: 0;
+
+    }
+}
+
+@keyframes thunder_shake {
+    0% {
+        transform: skewX(0deg);
+    }
+
+    10% {
+        transform: skewX(-2.5deg);
+    }
+
+    20% {
+        transform: skewX(1.65deg);
+    }
+
+    30% {
+        transform: skewX(-1.32deg);
+    }
+    40% {
+        transform: skewX(0.8deg);
+    }
+
+    50% {
+        transform: skewX(-0.8deg);
+    }
+
+    60% {
+        transform: skewX(0.4deg);
+    }
+
+    70% {
+        transform: skewX(-0.4deg);
+    }
+
+    80% {
+        transform: skewX(0.2deg);
+    }
+
+    90% {
+        transform: skewX(-0.2deg);
+    }
+
+    100% {
+        transform: skewX(0deg);
+    }
+}
+
+
+#superhighlighter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%; /* ... hmm - problem with scrolling !! with vh or % - could just make 200vh ... */
+
+    background-color: white;
+    opacity: 0;
+    z-index: 1;
+
+    pointer-events: none;
+}
+
+/* ORGAN: Arrows */
+
+
+
+#arrowsclone path,
+#arrowsclone line,
+#arrowsclone polygon,
+#arrowsblur path,
+#arrowsblur line,
+#arrowsblur polygon {
+    animation-name: glow_arrows;
+    animation-duration: 8s;
+    animation-iteration-count: 1;
+}
+
+#arrowsclone polygon,
+#arrowsblur polygon {
+    animation-name: glow_arrowheads;
+}
+
+@keyframes glow_arrows {
+    0% {
+        stroke: #000
+    }
+
+    25% {
+        stroke: #ffbb33;
+    }
+
+    30% {
+        stroke: #ffeb00;
+    }
+
+    35% {
+        stroke: #ffbb33;
+    }
+
+    45% {
+        stroke: #ffbb33;
+    }
+
+    100% {
+        stroke: #000;
+    }
+}
+
+@keyframes glow_arrowheads {
+   0% {
+        fill: #000
+    }
+
+    25% {
+        fill: #ffbb33;
+    }
+
+    30% {
+        fill: #ffeb00;
+    }
+
+    35% {
+        fill: #ffbb33;
+    }
+
+    45% {
+        fill: #ffbb33;
+    }
+
+    100% {
+        fill: #000;
+    }
+}
+
+
 
 /****** NAVIGATOR **********/
 
@@ -758,6 +1405,7 @@ audio {
     overflow-x: scroll;
     height: 110%;
     padding-top: 3px;
+    margin-bottom: 24px; /* to make room for mac scrollbar */
 }
 
 #timeline {
@@ -813,6 +1461,15 @@ audio {
     background-color: #0080ff;
 }
 
+#timeline_container .event.turner {
+   background-color: #f7931e;
+    border-radius: 0;
+    box-sizing: content-box;
+
+}
+
+
+
 #timeline #timecursor.paused {
     box-shadow: 0px 0px 0px #000;
 }
@@ -836,7 +1493,18 @@ audio {
     z-index: 3;
 }
 
+#timeline #timehover {
+    position: absolute;
+    display: none;
+    pointer-events: none;
+    top: 0px;
+    height: 26px;
+    z-index: 1000;
+    font-family: "Arial";
+    font-size: 12px;
 
+    border-left: 1px solid black;
+}
 
 #eventinfo {
     display: none;

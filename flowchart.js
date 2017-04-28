@@ -1,4 +1,4 @@
-$(window).on("load", sidenVises);
+window.addEventListener("load", sidenVises);
 
 var loading;
 var developerMode = true;
@@ -25,19 +25,20 @@ function sidenVises() {
 
     // load JSON
     $.getJSON("flowchart.json", loadJSON);
-
 }
 
 function whenSVGisLoaded() {
     console.log("SVG loaded");
     loading.svg = true;
-    // prepare the flipper
-    prepareFlipper();
 
-    // TODO: Prepare neontexts
+    // prepare HTML-elements that replaces part of the SVG
+    prepareSVG();
 
     // create arrow-ids
     createArrowIDs();
+
+    // mark everything below the belt with class "belowthebelt"
+    markBelowTheBelt();
 
     loadingComplete();
 }
@@ -63,15 +64,34 @@ function loadingComplete() {
     if( loading.svg && loading.json && loading.music ) {
         console.log("loading complete!");
 
+        // request fullscreen
+        if( !developerMode ) {
+            requestFullscreen();
+
+            // Hide navigator and other stuff ...
+            document.querySelector("#navigator").style.display = "none";
+            document.querySelector("#buttongroups").style.display = "none";
+            document.querySelector("#buttons").style.display = "none";
+            document.querySelector("#music").style.display = "none";
+
+        } else {
+            document.querySelector("#askforfullscreen").style.display = "none";
+            document.querySelector("body").style.overflow = "auto";
+        }
+
+        calculateSize();
+        window.addEventListener("resize", calculateSize);
+
         prepareNavigator();
-        // playback
 
         // activate buttons
-        $("button.startrecord").on("click", startRecording);
-        document.querySelector("button.pause").addEventListener("click", pause);
-        $("button.endrecord").on("click", endRecording);
-        $("button.playback").on("click", playback);
-        $("button.stop").on("click", stop);
+        if(developerMode) {
+            document.querySelector("button.startrecord").addEventListener("click", startRecording);
+            document.querySelector("button.endrecord").addEventListener("click", endRecording);
+            document.querySelector("button.playback").addEventListener("click", playback);
+            document.querySelector("button.stop").addEventListener("click", stop);
+            document.querySelector("button.pause").addEventListener("click", pause);
+        }
 
         document.addEventListener("keydown", keyPressed);
 
@@ -79,30 +99,85 @@ function loadingComplete() {
 
         prepareModifiers();
 
-
-        if( !developerMode ) {
-            // Hide navigator and other stuff ...
-            document.querySelector("#navigator").style.display = "none";
-            document.querySelector("#buttongroups").style.display = "none";
-            document.querySelector("#buttons").style.display = "none";
-            document.querySelector("#music").style.display = "none";
-
-
-            playback();
-        }
-
-
+        // jump to topline-position
+        scrollToTopline( true );
     }
 }
+
 
 function keyPressed( event ) {
 //    console.log("Key: " , event.key);
     if( event.key == " " ) {
         if( isPlaying ) {
             pause();
+            event.preventDefault();
         }
     }
 }
+
+
+function calculateSize() {
+    // get width of body
+    var bo = document.querySelector("body");
+    var w = bo.clientWidth;
+
+    var scaling = w / 1920;
+
+    document.querySelector("#scaler").style.transform = "scale("+scaling+")";
+}
+
+function requestFullscreen() {
+
+    // check if currently in fullscreen - by testing the window-size
+    if( window.innerWidth != screen.width ) {
+        // show fullscreen-request
+        document.querySelector("#askforfullscreen").style.display = "block";
+        document.querySelector("#askforfullscreen .goFullScreen").addEventListener("click", goFullscreen);
+    }
+}
+
+
+
+function goFullscreen() {
+    var elm = document.documentElement;
+
+    if( elm.requestFullscreen ){
+        document.addEventListener("fullscreenchange", goneFullscreen);
+        elm.requestFullscreen();
+    } else if( elm.webkitRequestFullscreen ) {
+        document.addEventListener("webkitfullscreenchange", goneFullscreen);
+        elm.webkitRequestFullscreen();
+    } else if( elm.mozRequestFullScreen) {
+        document.addEventListener("mozfullscreenchange", goneFullscreen);
+        elm.mozRequestFullScreen();
+    } else if( elm.msRequestFullscreen) {
+        document.addEventListener("MSFullscreenChange", goneFullscreen);
+        elm.msRequestFullscreen();
+    }
+}
+
+
+function goneFullscreen( event ) {
+    console.log("Gone fullscreen", event);
+
+    document.removeEventListener("fullscreenchange", goneFullscreen);
+    document.removeEventListener("webkitfullscreenchange", goneFullscreen);
+    document.removeEventListener("mozfullscreenchange", goneFullscreen);
+    document.removeEventListener("MSFullscreenChange", goneFullscreen);
+
+    // hide request for fullscreen
+    document.querySelector("#askforfullscreen").style.display = "none";
+
+    scrollToTopline( true );
+
+    // try again in half a second
+    setTimeout( function() {
+        scrollToTopline(true);
+    }, 500);
+
+    playback();
+}
+
 
 /****************************************************************
 
@@ -111,30 +186,120 @@ function keyPressed( event ) {
  ****************************************************************/
 
 function prepareEffects() {
-
-//    document.querySelector("button.showsecondverse").addEventListener("click", showSecondVerse);
-
-//    document.querySelector("button.basskick").addEventListener("click", basskick);
+    document.querySelectorAll("#effects button").forEach(button=>button.addEventListener("click", function(event) { runEffect(event.target.id);}));
 }
 
 function performEffect( timeEvent ) {
-    if( timeEvent.element == "basskick") {
-        basskick();
-    } else if( timeEvent.element == "neonhighlight") {
-        neonhighlight();
+    runEffect( timeEvent.element );
+}
+
+function runEffect( effectId ) {
+    console.log("Run effect: " + effectId);
+    switch( effectId )
+    {
+        case "reseteffects": resetEffects();
+                        break;
+        case "basskick": basskick();
+                        break;
+        case "neonhighlight": neonhighlight();
+                        break;
+        case "thunder": thunder();
+                        break;
+        case "organ": organStart();
+                        break;
+        case "zoomout": zoomout();
+                        break;
+        case "scrolltotopline": scrollToTopline();
+                        break;
+        case "scrolltotop": scrollToTop();
+                        break;
+        case "movetocenter": moveToCenter();
+                        break;
+
     }
 }
 
+function resetEffects() {
+    // remove all classes from the scene
+    document.querySelector("#scene").className="";
+
+    // remove on or off from everything
+    document.querySelectorAll("#scene .off").forEach(elm=>elm.classList.remove("off"));
+    document.querySelectorAll("#scene .on").forEach(elm=>elm.classList.remove("on"));
+}
+
 function basskick() {
-    document.querySelector("#scene").classList.remove("basskick");
-    document.querySelector("#scene").offsetHeight; // force reflow
-    document.querySelector("#scene").classList.add("basskick");
+    var scene = document.querySelector("#scene");
+    scene.classList.remove("basskick");
+    scene.offsetHeight; // force reflow
+    scene.classList.add("basskick");
+
+    // NOTE: Can't use animationend, since it is triggered by every child-animation in the #scene
+    setTimeout(function() {
+        scene.classList.remove("basskick");
+    },1300);
+}
+
+function zoomout() {
+    var scene = document.querySelector("#scene");
+
+    scene.classList.add("zoomout");
+    scene.offsetHeight; // force reflow
+}
+
+function scrollToTopline( jump ) {
+    var topline_y = parseFloat( document.querySelector("#topline").getAttribute("y1") );
+    var body_elm = document.querySelector("body");
+    var scrollto =  body_elm.clientWidth / 1920 * topline_y;
+
+    console.log("scroll to: " + topline_y);
+    console.log("which is: " + scrollto );
+
+    if( jump ) {
+        console.log("do it!");
+        body_elm.scrollTop = scrollto;
+    }  else {
+        scroller.destination = scrollto;
+        scroller.current = body_elm.scrollTop;
+
+        scroller.animate = true;
+    }
+
+}
+
+function scrollToTop( time ) {
+    var body_elm = document.querySelector("body");
+    if( time ) {
+        // calculate speed
+    } else {
+        scroller.speed = 100;
+    }
+    scroller.destination = 0;
+    scroller.current = body_elm.scrollTop;
+
+    scroller.animate = true;
+}
+
+function moveToCenter() {
+//
+//    var svg = document.querySelector("#svg");
+//    var scale = window.innerWidth / 1920;
+//    var curH = svg.offsetHeight * scale;
+//    var availH = window.innerHeight;
+//
+//    if( availH < curH ) {
+//
+//    }
+
+    var scene = document.querySelector("#scene");
+    scene.style.transformOrigin = "" + window.innerWidth / 2 + "px " + window.innerHeight/2 + "px";
+
+
+
 }
 
 function neonhighlight() {
     var neontext2 = document.querySelector("#htmlneontext2");
-
-
 
     var highlight = document.querySelector("#neonhighlighter");
     highlight.classList.remove("on");
@@ -150,6 +315,125 @@ function neonhighlight() {
 
 }
 
+function thunder(){
+    document.querySelector("#scene").classList.remove("thunder");
+    document.querySelector("#scene").offsetHeight; // force reflow
+    document.querySelector("#scene").classList.add("thunder");
+//    document.querySelector("body").classList.add("thunder");
+
+    // remove every single .off to avoid flash of turn_off animation
+    document.querySelectorAll("#scene .off").forEach(elm=>elm.classList.remove("off"));
+    // and remove flips and unflips as well
+    document.querySelectorAll("#scene .unflip").forEach(elm=>elm.classList.remove("unflip"));
+    document.querySelectorAll("#scene .flip").forEach(elm=>elm.classList.remove("flip"));
+
+
+    // wait five seconds
+    setTimeout(function() {
+        document.querySelector("#scene").classList.remove("thunder");
+  //      document.querySelector("body").classList.remove("thunder");
+    }, 5100);
+
+}
+
+function organStart() {
+    // highlight all the arrows - make them glow orange
+
+    // create clone of arrows
+    var arrows_orig = document.querySelector("#arrows");
+    var arrows_clone = arrows_orig.cloneNode(true);
+    arrows_clone.id = "arrowsclone";
+    var arrows_blur = arrows_orig.cloneNode(true);
+    arrows_blur.id = "arrowsblur";
+
+    arrows_orig.parentElement.insertBefore(arrows_clone, arrows_orig.nextElementSibling);
+    arrows_orig.parentElement.insertBefore(arrows_blur, arrows_orig.nextElementSibling);
+
+    // make the background glow
+    organInfo.bgAlpha = 0;
+    organInfo.bgAlphaGrowth = 1/3;
+    organInfo.blurring = 0;
+    organInfo.blurArrows = arrows_blur;
+    organInfo.animate = true;
+
+
+}
+
+var organInfo = {
+    animate: false,
+    bgAlpha: 0,
+    bgAlphaGrowth: 1/3
+}
+
+var scroller = {
+    current: 0,
+    destination: 0,
+    speed: 100
+}
+
+function runEffectAnimations( deltaTime ) {
+
+    if( organInfo.animate ) {
+
+        organInfo.bgAlpha += organInfo.bgAlphaGrowth * deltaTime;
+        if( organInfo.bgAlpha > 1 && organInfo.bgAlphaGrowth > 0 ) {
+//            console.log("alpha is 1");
+
+            organInfo.bgAlpha = 1;
+            organInfo.bgAlphaGrowth*=-1;
+
+
+
+
+        } else if( organInfo.bgAlpha < 0 ) {
+//            console.log("Alpha is 0");
+            organInfo.bgAlphaGrowth*=-1;
+            document.querySelector("#scene").style.background = undefined;
+
+            // remove arrowsclone and blur
+            var arrows_clone = document.querySelector("#arrowsclone");
+            var arrows_blur = document.querySelector("#arrowsblur");
+
+            arrows_clone.parentNode.removeChild(arrows_clone);
+            arrows_blur.parentNode.removeChild(arrows_blur);
+
+            organInfo.animate = false;
+        }
+
+        if( organInfo.animate ) {
+            var background = "radial-gradient(ellipse at center, rgba(255,187,51,"+ organInfo.bgAlpha+") 0%,rgba(44,128,91,1) 100%)";
+
+            document.querySelector("#scene").style.background = background;
+
+            var blur = Math.ceil(organInfo.bgAlpha * 7);
+            if( organInfo.blurring != blur ) {
+                organInfo.blurring = blur;
+                organInfo.blurArrows.style.filter = "url(#blur" + organInfo.blurring + ")";
+            }
+//            console.log("blurring: " + Math.ceil(blur) );
+        }
+    }
+
+    if( scroller.animate ) {
+        if( scroller.current > scroller.destination ) {
+            scroller.current -= scroller.speed * deltaTime;
+            if( scroller.current <= scroller.destination ) {
+                scroller.current = scroller.destination;
+                scroller.animate = false;
+            }
+        } else {
+            scroller.current += scroller.speed * deltaTime;
+            if( scroller.current >= scroller.destination ) {
+                scroller.current = scroller.destination;
+                scroller.animate = false;
+            }
+        }
+
+        var body_elm = document.querySelector("body");
+
+        body_elm.scrollTop = scroller.current;
+    }
+}
 
 
 /***************************************************************
@@ -159,14 +443,118 @@ function neonhighlight() {
  ***************************************************************/
 
 function prepareModifiers() {
-
+    document.querySelectorAll("#modifiers button").forEach(button=>button.addEventListener("click", function(event) { runModifier(event.target.id);}))
 }
 
 function performModifier( timeEvent ) {
-    if( timeEvent.element == "showsecondverse" ) {
-        document.querySelector(".second_verse").style.display = "block";
+    runModifier( timeEvent.element );
+}
+
+function runModifier( modifierId ) {
+    console.log("running modifier: " + modifierId);
+    switch( modifierId )
+    {
+        case "showfirstverse":
+            document.querySelector(".first_verse").classList.remove("hidden");
+            document.querySelector(".second_verse").classList.add("hidden");
+            document.querySelector(".third_verse").classList.add("hidden");
+
+            document.querySelector(".first_verse").classList.add("visible");
+            document.querySelector(".second_verse").classList.remove("visible");
+            document.querySelector(".third_verse").classList.remove("visible");
+
+            break;
+        case "showsecondverse":
+            document.querySelector(".first_verse").classList.add("hidden");
+            document.querySelector(".second_verse").classList.remove("hidden");
+            document.querySelector(".third_verse").classList.add("hidden");
+
+            document.querySelector(".first_verse").classList.remove("visible");
+            document.querySelector(".second_verse").classList.add("visible");
+            document.querySelector(".third_verse").classList.remove("visible");
+            break;
+        case "showthirdverse":
+            document.querySelector(".first_verse").classList.add("hidden");
+            document.querySelector(".second_verse").classList.add("hidden");
+            document.querySelector(".third_verse").classList.remove("hidden");
+
+            document.querySelector(".first_verse").classList.remove("visible");
+            document.querySelector(".second_verse").classList.remove("visible");
+            document.querySelector(".third_verse").classList.add("visible");
+
+            break;
+        case "notheres":
+            var theres = document.querySelector("svg #theres");
+            document.querySelector("svg #nothingican").classList.remove("off");
+            theres.offsetHeight;
+            theres.classList.add("burnout");
+            theres.addEventListener("animationend", removetheres);
+            function removetheres() {
+                theres.style.display = "none";
+                theres.removeEventListener("animationend", removetheres);
+            }
+            break;
+        case "breakgetalittle":
+            breakGetALittle();
+            break;
+        case "you2there":
+            // remove "know you'll" - replace by "know there's"
+            document.querySelector("svg #knowtheres").style.display = "block";
+            document.querySelector("svg #knowtheres").classList.add("fadein");
+            document.querySelector("svg #knowyoull").classList.add("fadeout");
+
+//            setTimeout( function() {
+//                document.querySelector("svg #knowtheres").style.display = "block";
+//                document.querySelector("svg #knowyoull").style.display = "none";
+//            }, 1000);
+
+            break;
+        case "showbelowthebelt":
+            document.querySelector("#svg").classList.add("fadeinbelowthebelt");
+            document.querySelector("#svg").offsetHeight;
+            document.querySelector("#svg").classList.remove("hidebelowthebelt");
+
+            setTimeout(function() {
+                document.querySelector("#svg").classList.remove("fadeinbelowthebelt");
+            }, 5000);
+
+            break;
+
     }
 }
+
+function breakGetALittle() {
+    // drop know
+    var know = document.querySelector("#know");
+    know.classList.add("drop");
+
+    // when drop is almost complete - break the get a little
+    setTimeout( function() {
+        // show the broken one
+        document.querySelector("svg #broken_getalittle").style.display = "block";
+        // hide the normal one
+        document.querySelector("svg #getalittlebit").style.display = "none";
+
+        // Change the arrows from getalittlebit to know
+        document.querySelector("#everynow2getalittlebit").id = "everynow2know";
+        document.querySelector("#getalittlebit2flipper").id = "know2flipper";
+
+    // hide know-there
+    //document.querySelector("svg #knowtheres").style.display = "none";
+
+        setTimeout( function() {
+            // remove the drop-class, and inset the dropped
+            know.classList.add("dropped");
+            know.classList.remove("drop");
+        }, 600);
+
+
+    }, 1400);
+}
+
+
+
+
 
 /*************** RECORDER *****************/
 
@@ -175,13 +563,20 @@ var timeEvents = [];
 
 function startRecording() {
     // register event-listeners on screens and flipboxes in the flipper
-    document.querySelectorAll("svg #screens>g, #htmlflipper .flipbox, .neontext, #effects button, #modifiers button").forEach( element => element.addEventListener("click", clickOnScreen));
+    document.querySelectorAll("svg #screens>g, #htmlflipper .flipbox, .neontext, #effects button, #modifiers button, .turner").forEach( element => element.addEventListener("click", clickOnScreen));
+
+    // mark as recording
+    document.querySelector(".record").classList.add("recording");
+    document.querySelector("#timecursor").classList.add("recording");
 
     // start music
     player.play();
 
     // No, don't clear array - make the recording add to the array of timeevents!
 //    timeEvents = [];
+
+
+
 }
 
 function clickOnScreen( event ) {
@@ -231,6 +626,8 @@ function clickOnScreen( event ) {
         type = "effect";
     } else if( parentId == "modifiers") {
         type = "modifier";
+    } else if( id.startsWith("turner") ) {
+        type = "turner";
     }
 
     // create object
@@ -269,6 +666,10 @@ function pause() {
 function endRecording() {
     // de-register clicking
     document.querySelectorAll("svg #screens>g, #htmlflipper .flipbox").forEach( element => element.removeEventListener("click", clickOnScreen));
+
+    // don't show as recording anymore
+    document.querySelector(".record").classList.remove("recording");
+    document.querySelector("#timecursor").classList.remove("recording");
 
     // stop the music
     player.pause();
@@ -315,6 +716,7 @@ var lastEventObject = null;
 function playback() {
 
     // TODO: Reset effects ...
+    scrollToTopline( true );
 
     // start playing music (from beginning)
     if( developerMode ) {
@@ -389,15 +791,16 @@ function playing( deltaTime ) {
             }
 
             // if this event wasn't an effect, then find the next event that isn't an effect, and draw an arrow to it
-            if( thisEvent.type != "effect" && nextEvent != null ) {
+            if( thisEvent.type != "effect" && thisEvent.type != "modifier" && nextEvent != null ) {
                 var index = eventIndex;
                 var arrowEvent = nextEvent;
-                while( arrowEvent.type == "effect" ) {
+                while( arrowEvent != null && ( arrowEvent.type == "effect" || arrowEvent.type == "modifier" ) ) {
                     index++;
                     arrowEvent = timeEvents[index];
                 }
-
-                highlightArrow( thisEvent, arrowEvent);
+                if( arrowEvent != null ) {
+                    highlightArrow( thisEvent, arrowEvent);
+                }
             }
         }
     }
@@ -407,14 +810,21 @@ var lastlastElement = null;
 
 function performEvent( timeEvent ) {
 
-    if( timeEvent.type == "screen" || timeEvent.type == "flipper" || timeEvent.type.startsWith("neontext")) {
+    if( timeEvent.type == "screen" || timeEvent.type == "flipper"
+     || timeEvent.type == "turner" || timeEvent.type.startsWith("neontext")) {
         var element = document.querySelector("#"+timeEvent.element);
+
+        if( timeEvent.type == "turner" ) {
+            element = document.querySelector("#html"+timeEvent.element);
+        }
+
         element.classList.remove("off");
         element.offsetHeight; // force reflow
         element.classList.add("on");
 
         if( lastEvent != null ) {
-            if(lastEvent.type == "screen" || lastEvent.type=="flipper" || lastEvent.type=="neontext1") {
+            if(lastEvent.type == "screen" || lastEvent.type=="flipper"
+            || lastEvent.type == "turner" || lastEvent.type=="neontext1") {
                 lastEventObject.classList.remove("on");
                 lastEventObject.offsetLeft;
                 lastEventObject.classList.add("off");
@@ -426,6 +836,21 @@ function performEvent( timeEvent ) {
             if( lastEvent.type == "flipper" ) {
                 // wait for off-animation to finish
                 lastEventObject.addEventListener("animationend", scrollFlipper);
+            }
+
+            if( lastEvent.type == "turner" ) {
+                // the actual turner is inside the event-object with the id
+                var turner = lastEventObject.querySelector(".turner");
+                // flip - or unflip - turner in question
+                if( turner.classList.contains("flip") ) {
+                    turner.classList.remove("flip");
+                    turner.offsetLeft;
+                    turner.classList.add("unflip");
+                } else {
+                    turner.classList.remove("unflip");
+                    turner.offsetLeft;
+                    turner.classList.add("flip");
+                }
             }
         }
 
@@ -484,12 +909,9 @@ function highlightArrow( fromEvent, toEvent ) {
 
 
     // if both events are the same neontext, then don't bother with an arrow!
-    if( fromEvent.type == toEvent.type && (fromEvent == "neontext1" || fromEvent == "neontext2") ) {
+    if( fromEvent.type == toEvent.type && (fromEvent.type == "neontext1" || fromEvent.type == "neontext2") ) {
         console.log("NO ARROW! - don't bother");
     } else {
-
-
-
 
         // find the arrow
         var arrowId = fromId + "2" + toId;
@@ -531,7 +953,7 @@ function animateLine( arrow, time ) {
         totalLength: arrow.getTotalLength(),
         highlightLength: 50,
         drawLength: 0,
-        speed: 100, // in pixels pr. second // TODO: Calculate speed to match distance
+        speed: 100, // in pixels pr. second - recalculated to match distance
 
         performAnimation(deltaTime) {
             this.drawLength += this.speed * deltaTime;
@@ -586,10 +1008,22 @@ function animateLine( arrow, time ) {
         }
     }
 
+
+
     // modify speed, to make it fit the next event
     // speed = pixels pr. second
     // speed = length pr time
     lineAnimation.speed = lineAnimation.totalLength / (time-.4);
+
+    // if speed is very high (5000 is seen, then extend the drawlength)
+    if( lineAnimation.speed > 500 ) {
+        lineAnimation.highlightLength = 50 * (lineAnimation.speed / 500);
+        if( lineAnimation.highlightLength > lineAnimation.totalLength) {
+            lineAnimation.highlightLength = lineAnimation.totalLength
+        }
+    }
+
+    console.log("arrowspeed: " + lineAnimation.speed);
 
     // make it orange ...
     line.style.stroke = "#fb3";
@@ -668,7 +1102,12 @@ function runAnimations() {
 
         runSoundAnimations( deltaTime );
 
-        navUpdateCursor( deltaTime );
+        runEffectAnimations( deltaTime );
+
+        if( developerMode ) {
+            navUpdateCursor( deltaTime );
+        }
+
     }
 }
 
@@ -683,54 +1122,109 @@ function runSoundAnimations( deltaTime ) {
 
 
 
-function prepareFlipper() {
-    // find the #flipper rect in the svg
-    var rect = document.querySelector("svg #flipper rect");
+function prepareSVG() {
+    // Set sizes for HTML-elements to match the SVG-coordinates
 
-    // also find the htmlflipper
-    var htmlflipper = document.querySelector("#htmlflipper");
+    function matchHTML2SVG( htmlselector, svgselector ) {
 
-    // and set all the properties on the html from the SVG
-    htmlflipper.style.top = rect.getAttribute("y") + "px";
-    htmlflipper.style.left = rect.getAttribute("x") + "px";
+        let htmlelement = document.querySelector(htmlselector);
+        let svgelement = document.querySelector(svgselector);
 
-    htmlflipper.style.width = rect.getAttribute("width") + "px";
-    htmlflipper.style.height = rect.getAttribute("height") + "px";
+        // and set all the properties on the html from the SVG
+        htmlelement.style.top = svgelement.getAttribute("y") + "px";
+        htmlelement.style.left = svgelement.getAttribute("x") + "px";
+
+        htmlelement.style.width = svgelement.getAttribute("width") + "px";
+        htmlelement.style.height = svgelement.getAttribute("height") + "px";
+    }
+
+    // first the #flipper
+    matchHTML2SVG("#htmlflipper", "svg #flipper rect" );
+
+    // then the #neontext1
+    matchHTML2SVG("#htmlneontext1", "svg #neontext1 rect" );
+
+    // and neontext2
+    matchHTML2SVG("#htmlneontext2", "svg #neontext2 rect" );
+
+    // the two turners
+    matchHTML2SVG("#htmlturner_once", "svg rect#turner_once");
+    matchHTML2SVG("#htmlturner_butnow", "svg rect#turner_butnow");
+
+    // hide the SVG turners
+    document.querySelector("svg rect#turner_once").style.display = "none";
+    document.querySelector("svg rect#turner_butnow").style.display = "none";
+
+    // hide the broken getalittle
+    document.querySelector("svg #broken_getalittle").style.display = "none";
+
+    // hide know-there
+    document.querySelector("svg #knowtheres").style.display = "none";
 }
 
-// HMMM ... this doesn't always look right ... wonder why ...
-// TODO: Change flipper to modify classes, but keep object order - change CSS aswell
+
+function markBelowTheBelt() {
+    var screens = ["andineedyou", "nowtonight", "morethanever", "ireallyneedyou", "tonight", "foreversgonnastart", "neontext1", "neontext2", "htmlneontext1", "htmlneontext2"];
+    var arrows = ["fallapart2andineedyou", "andineedyou2nowtonight", "andineedyou2morethanever", "nowtonight2andineedyou", "morethanever2neontext1", "neontext12neontext2", "neontext22ireallyneedyou", "ireallyneedyou2tonight", "tonight2foreversgonnastart", "foreversgonnastart2tonight", "tonight2onceupon"];
+
+    // concatenate the arrays
+    var list = screens.concat(arrows);
+
+    // add a class to each element
+    list.forEach(elm => document.querySelector("#"+elm).classList.add("belowthebelt"));
+
+}
+
+
+
 function scrollFlipper( event ) {
-    console.log("scroll on "+ event.target.id);
-    event.target.removeEventListener("animationend", scrollFlipper);
+    if( event ) {
+        console.log("scroll on "+ event.target.id);
+        event.target.removeEventListener("animationend", scrollFlipper);
+    }
 
     // find the first element in the flipper
-    var flipboxes = document.querySelectorAll("#htmlflipper .flipbox");
 
-    var first = flipboxes[0];
-    var second = flipboxes[1];
+    var flipboxes = document.querySelectorAll("#htmlflipper .verse.visible .flipbox");
+
+    var first = document.querySelector("#htmlflipper .verse.visible .flipbox.first");
+    var second = first.nextElementSibling;
 
     var height = first.offsetHeight;
 
-    flipboxes.forEach( flipbox => flipbox.classList.add("move"));
+    flipboxes.forEach( flipbox => {flipbox.classList.add("move");flipbox.classList.remove("off");});
 
     // NOTE: Needs to be a named function, so we can remove it as an event-listener
     function whenDoneScrolling() {
-        second.removeEventListener("animationend", whenDoneScrolling);
-        var parentNode = first.parentNode;
-//        first.parentNode.removeChild(first);
+        console.log("done scrolling!!");
+        first.removeEventListener("animationend", whenDoneScrolling);
 
-        // don't remove, just make it invisible
-        first.classList.add("hide");
-        // and move it to last
-        parentNode.appendChild(first);
+        // make first hidden, and make second, first
+        first.classList.remove("visible");
+        first.classList.add("hidden");
+
+        first.classList.remove("first");
+        if( second != null ) {
+            second.classList.add("first");
+        }
 
         // and reset all the animations
         document.querySelectorAll("#htmlflipper .flipbox").forEach( flipbox => flipbox.classList.remove("move") );
     }
 
     // when done scrolling - remove the first element, and the move-class
-    second.addEventListener("animationend", whenDoneScrolling);
+    first.addEventListener("animationend", whenDoneScrolling);
+}
+
+
+function resetFlipper() {
+    // resets the current flipper
+    var flipboxes = document.querySelectorAll("#htmlflipper .verse.visible .flipbox");
+    flipboxes.forEach(flp=>flp.className="flipbox");
+    flipboxes[0].classList.add("first");
+    flipboxes[flipboxes.length-1].classList.add("hidden");
+
+
 }
 
 
@@ -758,8 +1252,19 @@ var arrowIDs = [
     "neontext22ireallyneedyou",
     "ireallyneedyou2tonight",
     "tonight2foreversgonnastart",
-    "foreversgonnastart2tonight"
-]
+    "foreversgonnastart2tonight",
+    "tonight2onceupon",
+    "onceupon2turner_once",
+    "turner_once2butnow",
+    "butnow2turner_butnow",
+    "turner_butnow2nothingican",
+    "nothingican2do",
+    "nothingican2say",
+    "do2totaleclipse",
+    "say2totaleclipse",
+    "totaleclipse2onceupon",
+    "brighteyes2turnaround",
+    "totaleclipse2totaleclipse"]
 
 function createArrowIDs() {
     // GRRR: The wondrous world of Illustrator export, sometimes creates an ID for arrows,
@@ -861,7 +1366,36 @@ function prepareNavigator() {
 
     // allow direct click on the timeline to skip time
     eventNavigator.timeline.addEventListener("click", navTimelineJump, false);
+    // create timelinecursor
+    eventNavigator.timeline.addEventListener("mousemove", navTimeHover);
+    eventNavigator.timeline.addEventListener("mouseover", navTimeHoverShow);
+    eventNavigator.timeline.addEventListener("mouseout", navTimeHoverHide);
 }
+
+
+function navTimeHoverShow( evt ) {
+    document.querySelector("#timehover").style.display = "block";
+}
+
+function navTimeHoverHide( evt ) {
+    document.querySelector("#timehover").style.display = "none";
+}
+
+function navTimeHover( evt ) {
+    var hoverelm = document.querySelector("#timehover");
+
+    var xpos = eventNavigator.getXpos(evt.clientX);
+
+    hoverelm.style.left  = xpos + "px"
+
+        // calculate this to a time
+    var newTime = eventNavigator.getTimeFromX( xpos );
+
+    hoverelm.textContent = newTime;
+
+}
+
+
 
 
 function navEventSelect( evt ) {
@@ -1003,11 +1537,15 @@ function navEventStopHover( evt ) {
 
 function navZoomIn() {
     eventNavigator.zoomFactor += 1;
+    eventNavigator.length = eventNavigator.end * eventNavigator.zoomFactor;
+    eventNavigator.timeline.style.width = eventNavigator.length + "px";
     navAdjustEvents();
 }
 
 function navZoomOut() {
     eventNavigator.zoomFactor -= 1;
+    eventNavigator.length = eventNavigator.end * eventNavigator.zoomFactor;
+    eventNavigator.timeline.style.width = eventNavigator.length + "px";
     navAdjustEvents();
 }
 

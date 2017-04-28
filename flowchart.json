@@ -1,212 +1,191 @@
-[{
-        "time": 16.197596,
-        "type": "screen",
-        "element": "turnaround"
-    }, {
-        "time": 17.948048,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 19.488265,
-        "type": "screen",
-        "element": "getalittlebit"
-    }, {
-        "time": 20.504807,
-        "type": "flipper",
-        "element": "lonely"
-    }, {
-        "time": 23.57961,
-        "type": "screen",
-        "element": "turnaround"
-    }, {
-        "time": 25.561757,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 26.928571,
-        "type": "screen",
-        "element": "getalittlebit"
-    }, {
-        "time": 28.22451,
-        "type": "flipper",
-        "element": "tired"
-    }, {
-        "time": 31.107142,
-        "type": "screen",
-        "element": "turnaround"
-    }, {
-        "time": 32.980556,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 34.29185,
-        "type": "screen",
-        "element": "getalittlebit"
-    }, {
-        "time": 35.553061,
-        "type": "flipper",
-        "element": "nervous"
-    }, {
-        "time": 38.607142,
-        "type": "screen",
-        "element": "turnaround"
-    }, {
-        "time": 40.469358,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 41.799596,
-        "type": "screen",
-        "element": "getalittlebit"
-    }, {
-        "time": 42.928571,
-        "type": "flipper",
-        "element": "terrified"
-    }, {
-        "time": 46.129032,
-        "type": "screen",
-        "element": "turnaround"
-    },
-    {
-        "time": 47.939138,
-        "type": "screen",
-        "element": "brighteyes"
-    }, {
-        "time": 49.846197,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 51.258064,
-        "type": "screen",
-        "element": "fallapart",
-        "hold": 1.04
-    },
-    {
-        "time": 51.806451,
-        "type": "screen",
-        "element": "turnaround"
-    }, {
-        "time": 53.48387,
-        "type": "screen",
-        "element": "brighteyes"
-    }, {
-        "time": 55.32258,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 56.6,
-        "type": "screen",
-        "element": "fallapart",
-        "hold": 1.5
-    },
-    {
-        "time": 57.2,
-        "type": "effect",
-        "element": "basskick"
-    }, {
-        "time": 57.5,
-        "type": "screen",
-        "element": "turnaround"
-    },
-    {
-        "time": 58,
-        "type": "modifier",
-        "element": "showsecondverse"
-    },
-    {
-        "time": 59.230685,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 60.546934,
-        "type": "screen",
-        "element": "getalittlebit"
-    }, {
-        "time": 61.807077,
-        "type": "flipper",
-        "element": "restless"
-    },
-    {
-        "time": 65.131193,
-        "type": "screen",
-        "element": "turnaround"
-    },
-    {
-        "time": 66.590501,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 68.011692,
-        "type": "screen",
-        "element": "getalittlebit"
-    }, {
-        "time": 69.45842,
-        "type": "flipper",
-        "element": "helpless"
-    }, {
-        "time": 72.218571,
-        "type": "screen",
-        "element": "turnaround"
-    }, {
-        "time": 74.052925,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 75.636995,
-        "type": "screen",
-        "element": "getalittlebit"
-    }, {
-        "time": 76.878263,
-        "type": "flipper",
-        "element": "angry"
-    }, {
-        "time": 79.752605,
-        "type": "screen",
-        "element": "turnaround"
-    }, {
-        "time": 81.473814,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 82.743188,
-        "type": "screen",
-        "element": "getalittlebit"
-    }, {
-        "time": 84.05493,
-        "type": "flipper",
-        "element": "terrified2"
-    }, {
-        "time": 87.105218,
-        "type": "screen",
-        "element": "turnaround"
-    }, {
-        "time": 88.651458,
-        "type": "screen",
-        "element": "brighteyes"
-    }, {
-        "time": 90.628882,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 92.117435,
-        "type": "screen",
-        "element": "fallapart"
-    }, {
-        "time": 92.902145,
-        "type": "screen",
-        "element": "turnaround"
-    }, {
-        "time": 94.212683,
-        "type": "screen",
-        "element": "brighteyes"
-    }, {
-        "time": 95.975608,
-        "type": "screen",
-        "element": "everynow"
-    }, {
-        "time": 97.497492,
-        "type": "screen",
-        "element": "fallapart"
-    },
-
- {"time":99.322587,"type":"screen","element":"andineedyou"},{"time":100.46541,"type":"screen","element":"nowtonight"},{"time":102.949832,"type":"screen","element":"andineedyou"},{"time":104.347052,"type":"screen","element":"morethanever"},{"time":106.677164,"type":"neontext1","element":"holdmetight"},{"time":110.135615,"type":"neontext1","element":"onforever"},{"time":113.425103,"type":"neontext1","element":"makingitright"},{"time":116.965146,"type":"neontext1","element":"neverbewrong"},{"time":119.577368,"type":"neontext2","element":"takeit"},{"time":120.680911,"type":"effect","element":"neonhighlight"},{"time":120.944459,"type":"neontext2","element":"endoftheline"},{"time":122.569152,"type":"effect","element":"neonhighlight"},{"time":123.332482,"type":"neontext2","element":"likeashadow"},{"time":124.384213,"type":"effect","element":"neonhighlight"},{"time":124.635409,"type":"neontext2","element":"allthetime"},{"time":125.87878787878788,"type":"effect","element":"neonhighlight"},{"time":128.633541,"type":"neontext2","element":"whattodo"},{"time":129.253183,"type":"effect","element":"neonhighlight"},{"time":130.111844,"type":"neontext2","element":"alwaysinthedark"},{"time":131.24242424242425,"type":"effect","element":"neonhighlight"},{"time":132.147386,"type":"neontext2","element":"powderkeg"},{"time":133.338188,"type":"effect","element":"neonhighlight"},{"time":133.993373,"type":"neontext2","element":"sparks"},{"time":135.105018,"type":"effect","element":"neonhighlight"},{"time":135.85965126439146,"type":"screen","element":"ireallyneedyou"},{"time":137.29060246394232,"type":"screen","element":"tonight"},{"time":139.05983323317307,"type":"screen","element":"foreversgonnastart"},{"time":140.911919,"type":"screen","element":"tonight"},{"time":142.75214092548077,"type":"screen","element":"foreversgonnastart"},{"time":144.725602,"type":"screen","element":"tonight"}]
+[{"time":16.197596,"type":"screen","element":"turnaround"},
+ {"time":17.948048,"type":"screen","element":"everynow"},
+ {"time":19.488265,"type":"screen","element":"getalittlebit"},
+ {"time":20.504807,"type":"flipper","element":"lonely"},
+ {"time":23.57961,"type":"screen","element":"turnaround"},
+ {"time":25.561757,"type":"screen","element":"everynow"},
+ {"time":26.928571,"type":"screen","element":"getalittlebit"},
+ {"time":28.22451,"type":"flipper","element":"tired"},
+ {"time":31.107142,"type":"screen","element":"turnaround"},
+ {"time":32.980556,"type":"screen","element":"everynow"},
+ {"time":34.29185,"type":"screen","element":"getalittlebit"},
+ {"time":35.553061,"type":"flipper","element":"nervous"},
+ {"time":38.607142,"type":"screen","element":"turnaround"},
+ {"time":40.469358,"type":"screen","element":"everynow"},
+ {"time":41.799596,"type":"screen","element":"getalittlebit"},
+ {"time":42.928571,"type":"flipper","element":"terrified"},
+ {"time":46.129032,"type":"screen","element":"turnaround"},
+ {"time":47.939138,"type":"screen","element":"brighteyes"},
+ {"time":49.846197,"type":"screen","element":"everynow"},
+ {"time":51.258064,"type":"screen","element":"fallapart","hold":1.04},
+ {"time":51.806451,"type":"screen","element":"turnaround"},
+ {"time":53.48387,"type":"screen","element":"brighteyes"},
+ {"time":55.32258,"type":"screen","element":"everynow"},
+ {"time":56.6,"type":"screen","element":"fallapart","hold":1.5},
+ {"time":57.2,"type":"effect","element":"basskick"},
+ {"time":57.5,"type":"screen","element":"turnaround"},
+ {"time":58,"type":"modifier","element":"showsecondverse"},
+ {"time":59.230685,"type":"screen","element":"everynow"},
+ {"time":60.546934,"type":"screen","element":"getalittlebit"},
+ {"time":61.807077,"type":"flipper","element":"restless"},
+ {"time":65.131193,"type":"screen","element":"turnaround"},
+ {"time":66.590501,"type":"screen","element":"everynow"},
+ {"time":68.011692,"type":"screen","element":"getalittlebit"},
+ {"time":69.45842,"type":"flipper","element":"helpless"},
+ {"time":72.218571,"type":"screen","element":"turnaround"},
+ {"time":74.052925,"type":"screen","element":"everynow"},
+ {"time":75.636995,"type":"screen","element":"getalittlebit"},
+ {"time":76.878263,"type":"flipper","element":"angry"},
+ {"time":79.752605,"type":"screen","element":"turnaround"},
+ {"time":81.473814,"type":"screen","element":"everynow"},
+ {"time":82.743188,"type":"screen","element":"getalittlebit"},
+ {"time":84.05493,"type":"flipper","element":"terrified2"},
+ {"time":87.105218,"type":"screen","element":"turnaround"},
+ {"time":88.651458,"type":"screen","element":"brighteyes"},
+ {"time":88.73958206176758,"type":"modifier","element":"showbelowthebelt"},
+ {"time":90.628882,"type":"screen","element":"everynow"},
+ {"time":92.117435,"type":"screen","element":"fallapart"},
+ {"time":92.902145,"type":"screen","element":"turnaround"},
+ {"time":94.212683,"type":"screen","element":"brighteyes"},
+ {"time":95.975608,"type":"screen","element":"everynow"},
+ {"time":97.497492,"type":"screen","element":"fallapart"},
+ {"time":99.322587,"type":"screen","element":"andineedyou"},
+ {"time":100.46541,"type":"screen","element":"nowtonight"},
+ {"time":102.949832,"type":"screen","element":"andineedyou"},
+ {"time":104.347052,"type":"screen","element":"morethanever"},
+ {"time":106.677164,"type":"neontext1","element":"holdmetight"},
+ {"time":110.135615,"type":"neontext1","element":"onforever"},
+ {"time":113.425103,"type":"neontext1","element":"makingitright"},
+ {"time":116.965146,"type":"neontext1","element":"neverbewrong"},
+ {"time":119.577368,"type":"neontext2","element":"takeit"},
+ {"time":120.680911,"type":"effect","element":"neonhighlight"},
+ {"time":120.944459,"type":"neontext2","element":"endoftheline"},
+ {"time":122.569152,"type":"effect","element":"neonhighlight"},
+ {"time":123.332482,"type":"neontext2","element":"likeashadow"},
+ {"time":124.384213,"type":"effect","element":"neonhighlight"},
+ {"time":124.635409,"type":"neontext2","element":"allthetime"},
+ {"time":125.87878787878788,"type":"effect","element":"neonhighlight"},
+ {"time":128.633541,"type":"neontext2","element":"whattodo"},
+ {"time":129.253183,"type":"effect","element":"neonhighlight"},
+ {"time":130.111844,"type":"neontext2","element":"alwaysinthedark"},
+ {"time":131.24242424242425,"type":"effect","element":"neonhighlight"},
+ {"time":132.147386,"type":"neontext2","element":"powderkeg"},
+ {"time":133.338188,"type":"effect","element":"neonhighlight"},
+ {"time":133.993373,"type":"neontext2","element":"sparks"},
+ {"time":135.105018,"type":"effect","element":"neonhighlight"},
+ {"time":135.85965126439146,"type":"screen","element":"ireallyneedyou"},
+ {"time":137.29060246394232,"type":"screen","element":"tonight"},
+ {"time":139.05983323317307,"type":"screen","element":"foreversgonnastart"},
+ {"time":140.911919,"type":"screen","element":"tonight"},
+ {"time":142.030106,"type":"effect","element":"scrolltotop"},
+ {"time":142.75214092548077,"type":"screen","element":"foreversgonnastart"},
+ {"time":144.475,"type":"screen","element":"tonight","hold":2},
+ {"time":145,"type":"screen","element":"onceupon"},
+ {"time":146.175,"type":"turner","element":"turner_once"},
+ {"time":148.325,"type":"screen","element":"butnow"},
+ {"time":148.925,"type":"turner","element":"turner_butnow"},
+ {"time":153.8,"type":"screen","element":"nothingican"},
+ {"time":154.775,"type":"screen","element":"do"},
+ {"time":155.8,"type":"screen","element":"totaleclipse"},
+ {"time":158.3854,"type":"modifier","element":"notheres"},
+ {"time":165.228732,"type":"screen","element":"onceupon"},
+ {"time":166.633517,"type":"turner","element":"turner_once"},
+ {"time":168.658653,"type":"screen","element":"butnow"},
+ {"time":169.369517,"type":"turner","element":"turner_butnow"},
+ {"time":172.575,"type":"screen","element":"nothingican"},
+ {"time":173.575,"type":"screen","element":"say"},
+ {"time":174.45,"type":"screen","element":"totaleclipse","hold":7},
+ {"time":179.635529,"type":"effect","element":"wind"},
+ {"time":187.688175,"type":"effect","element":"organ"},
+ {"time":189.375,"type":"effect","element":"thunder"},
+ {"time":195.245406,"type":"effect","element":"organ"},
+ {"time":196.78125,"type":"effect","element":"thunder"},
+ {"time":202.549991,"type":"effect","element":"organ"},
+ {"time":204,"type":"effect","element":"thunder"},
+ {"time":209.60788,"type":"effect","element":"organ"},
+ {"time":211.125,"type":"effect","element":"thunder"},
+ {"time":216.57370057397958,"type":"modifier","element":"breakgetalittle"},
+ {"time":216.978216,"type":"screen","element":"turnaround"},
+ {"time":218.42307692307693,"type":"screen","element":"brighteyes"},
+ {"time":221.86263736263737,"type":"screen","element":"turnaround"},
+ {"time":223.807882,"type":"screen","element":"brighteyes"},
+ {"time":223.980782,"type":"modifier","element":"showthirdverse"},
+ {"time":227.20054945054946,"type":"screen","element":"turnaround"},
+ {"time":229.184325,"type":"screen","element":"everynow"},
+ {"time":230.236383,"type":"screen","element":"know","hold":1},
+ {"time":230.67032967032966,"type":"flipper","element":"alwayswanted"},
+ {"time":234.45054945054946,"type":"screen","element":"turnaround"},
+ {"time":236.28846153846155,"type":"screen","element":"everynow"},
+ {"time":237.57417582417582,"type":"screen","element":"know","hold":1},
+ {"time":238.01373626373626,"type":"flipper","element":"waythatIam"},
+ {"time":240.888735,"type":"modifier","element":"you2there"},
+ {"time":242.14136,"type":"screen","element":"turnaround"},
+ {"time":243.673267,"type":"screen","element":"everynow"},
+ {"time":244.55769230769232,"type":"screen","element":"know","hold":1},
+ {"time":245.21703296703296,"type":"flipper","element":"magical"},
+ {"time":248.97527472527472,"type":"screen","element":"turnaround"},
+ {"time":250.64285714285714,"type":"screen","element":"everynow"},
+ {"time":251.96153846153845,"type":"screen","element":"know","hold":1},
+ {"time":252.4010989010989,"type":"flipper","element":"nothingbetter"},
+ {"time":256.010989010989,"type":"screen","element":"turnaround"},
+ {"time":256.874649,"type":"effect","element":"scrolltotopline"},
+ {"time":257.7912087912088,"type":"screen","element":"brighteyes"},
+ {"time":259.5357142857143,"type":"screen","element":"everynow"},
+ {"time":260.89835164835165,"type":"screen","element":"fallapart"},
+ {"time":261.3708791208791,"type":"screen","element":"turnaround"},
+ {"time":263.260989010989,"type":"screen","element":"brighteyes"},
+ {"time":265.0302197802198,"type":"screen","element":"everynow"},
+ {"time":266.282967032967,"type":"screen","element":"fallapart"},
+ {"time":268.282967032967,"type":"screen","element":"andineedyou"},
+ {"time":269.282967032967,"type":"screen","element":"nowtonight"},
+ {"time":271.734605,"type":"screen","element":"andineedyou"},
+ {"time":272.7445054945055,"type":"screen","element":"morethanever"},
+ {"time":275.363642,"type":"neontext1","element":"holdmetight"},
+ {"time":279.135494,"type":"neontext1","element":"onforever"},
+ {"time":282.445637,"type":"neontext1","element":"makingitright"},
+ {"time":285.9462365591398,"type":"neontext1","element":"neverbewrong"},
+ {"time":288.02150537634407,"type":"neontext2","element":"takeit"},
+ {"time":289.3333333333333,"type":"neontext2","element":"endoftheline"},
+ {"time":291.007225,"type":"effect","element":"neonhighlight"},
+ {"time":291.5806451612903,"type":"neontext2","element":"likeashadow"},
+ {"time":292.4375,"type":"effect","element":"neonhighlight"},
+ {"time":293.105481,"type":"neontext2","element":"allthetime"},
+ {"time":294.423449,"type":"effect","element":"neonhighlight"},
+ {"time":296.68548387096774,"type":"neontext2","element":"whattodo"},
+ {"time":298.053253,"type":"effect","element":"neonhighlight"},
+ {"time":298.21774193548384,"type":"neontext2","element":"alwaysinthedark"},
+ {"time":299.869576,"type":"effect","element":"neonhighlight"},
+ {"time":300.35752688172045,"type":"neontext2","element":"powderkeg"},
+ {"time":301.735923,"type":"effect","element":"neonhighlight"},
+ {"time":301.8306451612903,"type":"neontext2","element":"sparks"},
+ {"time":303.22331,"type":"effect","element":"neonhighlight"},
+ {"time":305.96505376344084,"type":"screen","element":"ireallyneedyou"},
+ {"time":306.9489247311828,"type":"screen","element":"tonight"},
+ {"time":308.6801075268817,"type":"screen","element":"foreversgonnastart"},
+ {"time":309.3125,"type":"effect","element":"scrolltotop"},
+ {"time":310.5510752688172,"type":"screen","element":"tonight"},
+ {"time":312.3682795698925,"type":"screen","element":"foreversgonnastart"},
+ {"time":313.8790322580645,"type":"screen","element":"tonight"},
+ {"time":314.52150537634407,"type":"screen","element":"onceupon"},
+ {"time":315.7275915658602,"type":"turner","element":"turner_once"},
+ {"time":318.0537634408602,"type":"screen","element":"butnow"},
+ {"time":318.7096774193548,"type":"turner","element":"turner_butnow"},
+ {"time":323.951259,"type":"screen","element":"nothingican"},
+ {"time":324.86847,"type":"screen","element":"do"},
+ {"time":325.743806,"type":"screen","element":"totaleclipse"},
+ {"time":335.118425,"type":"screen","element":"onceupon"},
+ {"time":336.2509030577957,"type":"turner","element":"turner_once"},
+ {"time":338.5770539314516,"type":"screen","element":"butnow"},
+ {"time":338.9641507056452,"type":"turner","element":"turner_butnow"},
+ {"time":342.3512474798387,"type":"screen","element":"nothingican"},
+ {"time":343.36200016801075,"type":"screen","element":"say"},
+ {"time":344.30823672715053,"type":"screen","element":"totaleclipse","hold":5},
+ {"time":347.960249,"type":"effect","element":"movetocenter"},
+ {"time":351.7168388776882,"type":"screen","element":"totaleclipse","hold":5},
+ {"time":359.18995715725805,"type":"screen","element":"totaleclipse","hold":5},
+ {"time":367.3727738575269,"type":"screen","element":"turnaround"},
+ {"time":368.4803007392473,"type":"screen","element":"brighteyes"},
+ {"time":374.55913978494624,"type":"screen","element":"turnaround"},
+ {"time":375.4301075268817,"type":"screen","element":"brighteyes"},
+ {"time":378.5698924731183,"type":"screen","element":"turnaround","hold":2.4},
+ {"time":381,"type":"effect","element":"zoomout"}]

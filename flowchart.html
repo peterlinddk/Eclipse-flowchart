@@ -3,75 +3,121 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Flowchart 8</title>
+    <title>Flowchart 9</title>
     <link rel="stylesheet" href="flowchart.css">
 </head>
 
 <body>
+   <div id="scaler">
     <div id="scene">
-        <div id="svg"></div>
+        <div id="svg" class="hidebelowthebelt"></div>
         <div id="svgdefs"></div>
 
         <div id="htmlflipper">
-            <div class="flipbox" id="lonely">lonely, and you're never coming round</div>
+           <div class="first_verse verse visible">
+            <div class="flipbox first" id="lonely">lonely, and you're never coming round</div>
             <div class="flipbox" id="tired">tired of listening to the sound of my tears</div>
             <div class="flipbox" id="nervous">nervous that the best of all the years have gone by</div>
             <div class="flipbox" id="terrified">terrified and then I see the look in your eyes</div>
+            </div>
 
             <!-- second verse -->
-            <div class="second_verse">
-                <div class="flipbox" id="restless">restless and I dream of something wild</div>
+            <div class="second_verse verse hidden">
+                <div class="flipbox first" id="restless">restless and I dream of something wild</div>
                 <div class="flipbox" id="helpless">helpless and I'm lying like a child in your arms</div>
                 <div class="flipbox" id="angry">angry and I know I've got to get out and cry</div>
                 <div class="flipbox" id="terrified2">terrified but then I see the look in your eyes</div>
             </div>
 
             <!-- third verse - requires change "Get a little bit" to "know" -->
-            <div class="third_verse">
-                <div class="flipbox" id="alwayswanted">you'll never be the boy you always wanted to be</div>
-                <div class="flipbox" id="waythatIam">you'll always be the only boy who wanted me the way that I am</div>
-                <div class="flipbox" id="magical">there's no one in the universe as magical and wondrous as you</div>
-                <div class="flipbox" id="nothingbetter">there's nothing any better - there's nothing that I just wouldn't do</div>
+            <div class="third_verse verse hidden">
+                <div class="flipbox first" id="alwayswanted">never be the boy you always wanted to be</div>
+                <div class="flipbox" id="waythatIam">always be the only boy who wanted me the way that I am</div>
+                <div class="flipbox" id="magical">no one in the universe as magical and wondrous as you</div>
+                <div class="flipbox" id="nothingbetter">nothing any better - there's nothing that I just wouldn't do</div>
             </div>
         </div>
 
         <div id="htmlneontext1">
-            <div id="holdmetight" class="neontext off">and if you only hold me tight</div>
-            <div id="onforever" class="neontext off">we’ll be holding on forever</div>
-            <div id="makingitright" class="neontext off">and we’ll only be making it right</div>
-            <div id="neverbewrong" class="neontext off">cause we’ll never be wrong</div>
+            <div id="holdmetight" class="neontext">and if you only hold me tight</div>
+            <div id="onforever" class="neontext">we’ll be holding on forever</div>
+            <div id="makingitright" class="neontext">and we’ll only be making it right</div>
+            <div id="neverbewrong" class="neontext">cause we’ll never be wrong</div>
         </div>
 
         <div id="htmlneontext2">
             <div id="neonhighlighter"></div>
-            <div><span id="takeit" class="neontext off">Together we can take it</span> <span id="endoftheline" class="neontext off">to the end of the line</span></div>
-            <div><span id="likeashadow" class="neontext off">Your love is like a shadow</span> <span id="allthetime" class="neontext off">on me all of the time</span></div>
-            <div><span id="whattodo" class="neontext off">I don’t know what to do</span> <span id="alwaysinthedark" class="neontext off">and I’m always in the dark</span></div>
-            <div><span id="powderkeg" class="neontext off">We’re living in a powder keg</span> <span id="sparks" class="neontext off">and giving off sparks</span></div>
+            <div><span id="takeit" class="neontext">Together we can take it</span> <span id="endoftheline" class="neontext">to the end of the line</span></div>
+            <div><span id="likeashadow" class="neontext">Your love is like a shadow</span> <span id="allthetime" class="neontext">on me all of the time</span></div>
+            <div><span id="whattodo" class="neontext">I don’t know what to do</span> <span id="alwaysinthedark" class="neontext">and I’m always in the dark</span></div>
+            <div><span id="powderkeg" class="neontext">We’re living in a powder keg</span> <span id="sparks" class="neontext">and giving off sparks</span></div>
         </div>
+
+        <div id="htmlturner_once" class="off">
+            <div class="turner">
+                <div class="front">I was falling in love</div>
+                <div class="back">there was light in my life</div>
+            </div>
+        </div>
+
+        <div id="htmlturner_butnow">
+            <div class="turner">
+                <div class="front">I'm only falling apart</div>
+                <div class="back">there's only love in the dark</div>
+            </div>
+        </div>
+
+
+   <div id="superhighlighter"></div>
+    </div>
 
     </div>
 
+   <div id="askforfullscreen">
+      <div class="inner">
+       <p>Please change to fullscreen for full viewing pleasure ...</p>
+       <button class="goFullScreen">OK</button>
+
+       </div>
+   </div>
 
     <div id="buttongroups">
         <div id="effects">
+            <button id="reseteffects">Reset</button>
+            <hr>
             <button id="basskick">Bass kick</button>
             <button id="neonhighlight">Neon highlight</button>
 
+<!--
             <button id="bassdrum">Bass-drum</button>
             <button id="snaredrum">Snare-drum</button>
             <button id="drums">Drums</button>
+-->
             <button id="thunder">Thunder</button>
             <button id="organ">Organ</button>
+
+<!--
             <button id="jinglebells">Jinglebells</button>
             <button id="wind">Wind</button>
             <button id="chorus">Chorus</button>
+-->
+            <button id="zoomout">Zoomout</button>
+            <button id="scrolltotopline">Scroll to topline</button>
+            <button id="scrolltotop">Scroll to top</button>
+            <button id="movetocenter">Move to center</button>
+
         </div>
 
         <div id="modifiers">
+           <button id="resetmodifiers">Reset</button>
+           <hr>
+            <button id="showfirstverse">Show first verse</button>
             <button id="showsecondverse">Show second verse</button>
             <button id="showthirdverse">Show third verse</button>
+            <button id="notheres">Remove there's</button>
             <button id="breakgetalittle">Break: get a little</button>
+            <button id="you2there">know you'll &gt; know there's</button>
+            <button id="showbelowthebelt">Show below the belt</button>
         </div>
     </div>
 
@@ -84,7 +130,7 @@
         <button class="endrecord">End record</button>
 
     </div>
-    <audio id="music" src="totaleclipse.mp3" controls></audio>
+    <audio id="music" src="totaleclipse.mp3" controls ></audio>
 
     <div id="navigator">
         <div id="controls">
@@ -102,6 +148,7 @@
             <div id="timeline_container">
                 <div id="timeline">
                     <div id="timecursor"></div>
+                    <div id="timehover">174.54</div>
                 </div>
             </div>
         </div>
