@@ -22,42 +22,8 @@ body {
     overflow: hidden;
     /* TODO: Handle scroll when it comes! */
 
-    min-height: 300vh;
+    min-height: 200vh;
 
-}
-
-#askforfullscreen {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(100, 100, 100, 0.81);
-    z-index: 2000;
-}
-
-#askforfullscreen .inner {
-    position: absolute;
-    width: 50vw;
-    left: 20vw;
-    top: 20vw;
-    height: 20vw;
-
-    background-color: antiquewhite;
-    border: 2px solid black;
-    padding: 1em;
-
-    font-family: "HelveticaRounded";
-    font-size: 3vw;
-}
-
-#askforfullscreen .inner button {
-    font-family: "HelveticaRounded";
-    font-size: 3vw;
-    width: 20vw;
-    height: 6vw;
-    margin-left: 15vw;
 }
 
 #scaler {
@@ -90,14 +56,6 @@ body {
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     animation-timing-function: ease-in;
-}
-
-
-
-
-
-#effectbuttons, #navigator, #buttons, audio {
-/*    display: none;*/
 }
 
 /* SCREEN */
@@ -313,8 +271,6 @@ body {
 
 
     transform-origin: bottom center;
-
-/*    backface-visibility: hidden;*/
     transform: rotateX(0deg);
 
     height: 47px;
@@ -340,7 +296,7 @@ body {
     padding-left: 4px;
 }
 
-#htmlflipper .flipbox.off, .off .turner {
+#htmlflipper .flipbox.off, .off .turner div {
     background-color: #4d4d4d;
     color: #808080;
 
@@ -363,7 +319,7 @@ body {
 }
 
 
-#htmlflipper .flipbox.on, .on .turner {
+#htmlflipper .flipbox.on, .on .turner div {
     background-color: #cc2d00;
     color: #f7931e;
 
@@ -455,9 +411,9 @@ body {
 
     box-sizing: border-box;
     padding: 8px 14px;
-/*    padding: 20px 14px;*/ /* not sure if this is for mac ... */
 
     font-size: 28px;
+    line-height: 33.6px /* necessary for Mac Chrome */
 }
 
 .neontext {
@@ -476,6 +432,7 @@ body {
     box-sizing: border-box;
 
     font-size: 21px;
+    line-height: 25.2px; /* necessary for Mac Chrome */
 }
 
 
@@ -712,7 +669,7 @@ body {
     box-sizing: border-box;
     border: 4px solid black;
 
-    background-color: #4d4d4d;
+
     color: #808080;
 
     border-radius: 12px;
@@ -770,7 +727,7 @@ body {
     }
 
     100% {
-        transform: rotateX(180.1deg); /* the .1 is a fix for Chrome on the mac, where 180 makes the text dissappear */
+        transform: rotateX(180deg);
     }
 }
 
@@ -833,7 +790,12 @@ body {
     position: absolute;
     width: calc(100% - 1em);
     height: calc(100% - 1em);
+    /* NOTE: -webkit- still necessary for Safari */
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+
+    background-color: #4d4d4d;
+
     padding: .5em;
 }
 
@@ -852,10 +814,13 @@ body {
 
 #know {
     transform: translateY(-700px);
+    /* NOTE: IE and Edge doesn't support transform on SVG - yet - so hide the element as well */
+    opacity: 0;
 }
 
 #know.dropped {
     transform: translateY(0);
+    opacity: 1;
 }
 
 #know.drop {
@@ -866,6 +831,7 @@ body {
     animation-timing-function: ease-in;
 
     transform-origin: bottom center;
+    opacity: 1;
 }
 
 @keyframes know_drop {
@@ -900,69 +866,6 @@ body {
 
 
 
-/****** BUTTONGROUPS ******/
-#buttongroups {
-    position: absolute;
-    top: 770px;
-
-    display: flex;
-}
-
-#buttongroups div {
-    margin-left: 1em;
-}
-
-#buttongroups button {
-    display: block;
-    margin-bottom: 2px;
-}
-
-#buttons, audio {
-    display: inline-block;
-}
-
-#buttons {
-    position: relative;
-    top: -11px;
-}
-
-audio {
-
-}
-
-.record {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    border: 1px solid black;
-    border-radius: 1em;
-    margin-bottom: -2px;
-    margin-left: -2px;
-    margin-right: 2px;
-    background-color: #450210;
-}
-
-.recording {
-    animation-name: rec_pulse;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
-@keyframes rec_pulse {
-    0% {
-        background-color: #450210;
-    }
-
-    40% {
-
-        background-color: #a90329;
-    }
-
-    100% {
-        background-color: #db5e60;
-    }
-}
 
 
 
@@ -1382,6 +1285,142 @@ body.thunder {
 
 
 
+
+
+/* TEXTS */
+#texts {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    pointer-events: none;
+
+    font-family: "HelveticaRounded";
+    font-size: 3vw;
+    color: #78a57e;
+}
+
+#texts .text {
+    display: none;
+    position: absolute;
+    /* TODO: Calculate position exactly below the line */
+    top: 50vh;
+    left: 0;
+
+    width: 100vw;
+    text-align: center;
+}
+
+
+/* USER INTERFACE */
+
+#askforfullscreen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(100, 100, 100, 0.81);
+    z-index: 2000;
+}
+
+#askforfullscreen .inner {
+    position: absolute;
+    width: 50vw;
+    left: 20vw;
+    top: 20vw;
+    height: 20vw;
+
+    background-color: antiquewhite;
+    border: 2px solid black;
+    padding: 1em;
+
+    font-family: "HelveticaRounded";
+    font-size: 3vw;
+}
+
+#askforfullscreen .inner button {
+    font-family: "HelveticaRounded";
+    font-size: 3vw;
+    width: 20vw;
+    height: 6vw;
+    margin-left: 15vw;
+}
+
+#controlpanel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+
+}
+
+#buttongroups {
+/*
+    position: absolute;
+    top: 770px;
+*/
+
+    display: flex;
+}
+
+#buttongroups div {
+    margin-left: 1em;
+}
+
+#buttongroups button {
+    display: block;
+    margin-bottom: 2px;
+}
+
+#buttons, audio {
+    display: inline-block;
+}
+
+#buttons {
+    position: relative;
+    top: -11px;
+}
+
+audio {
+
+}
+
+.record {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 1px solid black;
+    border-radius: 1em;
+    margin-bottom: -2px;
+    margin-left: -2px;
+    margin-right: 2px;
+    background-color: #450210;
+}
+
+.recording {
+    animation-name: rec_pulse;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes rec_pulse {
+    0% {
+        background-color: #450210;
+    }
+
+    40% {
+
+        background-color: #a90329;
+    }
+
+    100% {
+        background-color: #db5e60;
+    }
+}
+
 /****** NAVIGATOR **********/
 
 #navigator {
@@ -1530,36 +1569,4 @@ body.thunder {
 
 #eventinfo .data_adjusted {
     color: red;
-}
-
-/* TEXTS */
-#texts {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-
-
-    font-family: "HelveticaRounded";
-    font-size: 3vw;
-    color: #78a57e;
-
-}
-
-#texts .text {
-    display: none;
-    position: absolute;
-    top: 50vh;
-    left: 0;
-
-    width: 100%;
-    text-align: center;
-
-
-
-}
-
-#thankyou {
-    display: none;
 }
