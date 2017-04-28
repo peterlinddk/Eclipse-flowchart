@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <filter id="blur1">
+	       <feGaussianBlur stdDeviation="1"></feGaussianBlur>
+        </filter>
+        <filter id="blur2">
+	       <feGaussianBlur stdDeviation="2"></feGaussianBlur>
+        </filter>
+        <filter id="blur3">
+	       <feGaussianBlur stdDeviation="3"></feGaussianBlur>
+        </filter>
+        <filter id="blur4">
+	       <feGaussianBlur stdDeviation="4"></feGaussianBlur>
+        </filter>
+        <filter id="blur5">
+	       <feGaussianBlur stdDeviation="5"></feGaussianBlur>
+        </filter>
+        <filter id="blur6">
+	       <feGaussianBlur stdDeviation="6"></feGaussianBlur>
+        </filter>
+        <filter id="blur7">
+	       <feGaussianBlur stdDeviation="7"></feGaussianBlur>
+        </filter>
+
+        <radialGradient id="redfade" cx=".5" cy=".5" r="0" gradientUnits="objectBoundingBox">
+            <animate attributeType="XML" attributeName="r" from="3" to=".01" dur="250ms" begin="indefinite" repeatCount="1"/>
+            <stop offset="0" stop-color="#d67054"></stop>
+            <stop offset="0.38" stop-color="#cc2d00"></stop>
+            <stop offset="1" stop-color="#4d0c00"></stop>
+        </radialGradient>
+    </defs>
+</svg>
