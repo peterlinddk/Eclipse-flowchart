@@ -6,6 +6,8 @@ var developerMode = true;
 // The array of events (effects)
 var timeEvents = [];
 
+var timelineNavigator;
+
 /**************** LOADER ****************/
 
 function sidenVises() {
@@ -28,12 +30,25 @@ function sidenVises() {
     }
 
     // load SVG
-    $("#svg").load("flowchart.svg", whenSVGisLoaded);
+    fetch("flowchart.svg")
+    .then(response=>response.text())
+    .then(svg => {
+        document.querySelector("#svg").insertAdjacentHTML("afterbegin", svg);
+        whenSVGisLoaded();
+    });
+
     // load SVG defs
-    $("#svgdefs").load("svgdefs.svg");
+    fetch("svgdefs.svg")
+    .then(response=>response.text())
+    .then(svg => {
+        document.querySelector("#svgdefs").insertAdjacentHTML("afterbegin", svg);
+    });
 
     // load JSON
-    $.getJSON("flowchart.json", loadJSON);
+    fetch("flowchart.json")
+    .then(response=>response.json())
+    .then(json=>loadJSON(json ));
+
 }
 
 function whenSVGisLoaded() {
@@ -73,7 +88,7 @@ function loadingComplete() {
             requestFullscreen();
 
             // Hide navigator and other stuff ...
-            document.querySelector("#navigator").style.display = "none";
+            document.querySelector("#timeline_navigator").style.display = "none";
             document.querySelector("#buttongroups").style.display = "none";
             document.querySelector("#buttons").style.display = "none";
             document.querySelector("#music").style.display = "none";
@@ -86,7 +101,9 @@ function loadingComplete() {
         calculateSize();
         window.addEventListener("resize", calculateSize);
 
-        prepareNavigator();
+        timelineNavigator = new TimelineNavigator();
+
+//        prepareNavigator();
 
         // activate buttons
         if(developerMode) {
@@ -328,14 +345,10 @@ function pause() {
     console.log("Pause?");
     if( player.paused ) {
         player.play();
-        eventNavigator.cursor.classList.remove("paused");
-
-//        isPlaying = true;
+        timelineNavigator.play();
     } else {
         player.pause();
-        eventNavigator.cursor.classList.add("paused");
-
-//        isPlaying = false;
+        timelineNavigator.pause();
     }
 }
 
@@ -378,7 +391,7 @@ function startRecording() {
 
     // mark as recording
     document.querySelector(".record").classList.add("recording");
-    document.querySelector("#timecursor").classList.add("recording");
+    timelineNavigator.startRecording();
 
     // start music
     player.play();
@@ -452,7 +465,7 @@ function clickOnScreen( event ) {
     timeEvents.push( timeEvent );
 
     // add object to navigator
-    eventNavigator.addTimeEvent( timeEvent );
+    timelineNavigator.addTimeEvent( timeEvent );
 
     console.log("logged: ", timeEvent);
 }
@@ -463,7 +476,7 @@ function endRecording() {
 
     // don't show as recording anymore
     document.querySelector(".record").classList.remove("recording");
-    document.querySelector("#timecursor").classList.remove("recording");
+    timelineNavigator.endRecording();
 
     // stop the music
     player.pause();
@@ -1324,284 +1337,4 @@ function resetFlipper() {
     flipboxes[flipboxes.length-1].classList.add("hidden");
 
 
-}
-
-
-
-
-/****************************************************************
-
-                        NAVIGATOR
-
- ****************************************************************/
-// NOTE: "navigator" is an existing object, so we can't use that as a name, hence "eventNavigator"
-
-var eventNavigator;
-
-function prepareNavigator() {
-
-    eventNavigator = {
-        start: 0,
-        end: player.duration,
-        length: 0, // length of timeline in pixels
-        zoomFactor: 32, // number of pixels pr. second
-        display: null,
-        container: null,
-        timeline: null,
-        cursor: null,
-        selectedEvent: null,
-        selectedEventOffset: 0,
-        getXpos( clientX ) {
-            return clientX - this.display.offsetLeft + this.container.scrollLeft;
-        },
-        getXfromTime( time ) {
-            return time * this.zoomFactor;
-        },
-        getTimeFromX( xpos ) {
-            return xpos / this.zoomFactor;
-        },
-        addTimeEvent( timeEvent ) {
-            // create element
-            var elm = document.createElement("div");
-            elm.classList.add("event");
-
-            // add class based on type
-            elm.classList.add( timeEvent.type );
-
-            // and add the element, and time as data-points
-            elm.dataset.element = timeEvent.element;
-            elm.dataset.time = timeEvent.time;
-
-            // set position
-            elm.style.left = eventNavigator.getXfromTime( timeEvent.time ) + "px";
-
-            // activate eventlisteners for hovering and selecting (for move)
-            elm.addEventListener("mouseover", navEventHover);
-            elm.addEventListener("mouseout", navEventStopHover);
-            elm.addEventListener("mousedown", navEventSelect);
-            elm.addEventListener("mouseup", navEventDeSelect);
-
-            // add the element to the navigator
-            this.container.appendChild(elm);
-
-            // store the created element with the timeEvent
-            timeEvent.adjusterElement = elm;
-
-            return elm;
-        }
-    };
-
-    eventNavigator.length = eventNavigator.end * eventNavigator.zoomFactor;
-
-    // display: holds the timeline and everything else on the screen
-    // container: handles the scrolling, and contains all the timeevents
-    // timeline: the actual timeline
-    eventNavigator.display = document.querySelector("#timedisplay");
-    eventNavigator.container = document.querySelector("#timeline_container");
-    eventNavigator.timeline = document.querySelector("#timeline");
-    eventNavigator.cursor = document.querySelector("#timecursor");
-
-    // Setup the length of the entire timeline (changes with zoom!)
-    eventNavigator.timeline.style.width = eventNavigator.length + "px";
-
-    // build list of timeEvents
-    timeEvents.forEach( function(timeEvent) {
-        eventNavigator.addTimeEvent( timeEvent );
-    });
-
-    document.querySelector("button.zoomin").addEventListener("click", navZoomIn);
-    document.querySelector("button.zoomout").addEventListener("click", navZoomOut);
-
-    // allow direct click on the timeline to skip time
-    eventNavigator.timeline.addEventListener("click", navTimelineJump, false);
-    // create timelinecursor
-    eventNavigator.timeline.addEventListener("mousemove", navTimeHover);
-    eventNavigator.timeline.addEventListener("mouseover", navTimeHoverShow);
-    eventNavigator.timeline.addEventListener("mouseout", navTimeHoverHide);
-}
-
-
-function navTimeHoverShow( evt ) {
-    document.querySelector("#timehover").style.display = "block";
-}
-
-function navTimeHoverHide( evt ) {
-    document.querySelector("#timehover").style.display = "none";
-}
-
-function navTimeHover( evt ) {
-    var hoverelm = document.querySelector("#timehover");
-
-    var xpos = eventNavigator.getXpos(evt.clientX);
-
-    hoverelm.style.left  = xpos + "px"
-
-        // calculate this to a time
-    var newTime = eventNavigator.getTimeFromX( xpos );
-
-    hoverelm.textContent = newTime;
-
-}
-
-
-
-
-function navEventSelect( evt ) {
-//    console.log("klik på ", evt);
-    eventNavigator.container.addEventListener("mousemove", navEventMove);
-
-    // remember the selected event's offset (to avoid jumping a few pixels)
-    eventNavigator.selectedEventOffset = evt.offsetX;
-
-    eventNavigator.selectedEvent = evt.target;
-    eventNavigator.selectedEvent.removeEventListener("mouseover", navEventHover);
-    eventNavigator.selectedEvent.removeEventListener("mouseout", navEventStopHover);
-    eventNavigator.selectedEvent.addEventListener("mouseout", navEventDeSelect);
-    // mark event as being dragged
-    eventNavigator.selectedEvent.classList.add("dragging");
-}
-
-
-function navEventDeSelect( evt ) {
-//    console.log("klik af ", evt);
-
-    if( eventNavigator.selectedEvent != null ) {
-        eventNavigator.selectedEvent.removeEventListener("mouseout", navEventDeSelect);
-        eventNavigator.selectedEvent.addEventListener("mouseover", navEventHover);
-        eventNavigator.selectedEvent.addEventListener("mouseout", navEventStopHover);
-        eventNavigator.selectedEvent.classList.remove("dragging");
-        eventNavigator.selectedEvent = null;
-    }
-
-    eventNavigator.container.removeEventListener("mousemove", navEventMove);
-}
-
-function navEventMove( evt ) {
-    if( eventNavigator.selectedEvent != null ) {
-//        console.log("move ", evt );
-
-        var xpos = eventNavigator.getXpos(event.clientX) - eventNavigator.selectedEventOffset;
-
-        eventNavigator.selectedEvent.style.left = xpos + "px";
-
-        var newTime = eventNavigator.getTimeFromX( xpos );
-        var tev = timeEvents.find( timeEvent => timeEvent.adjusterElement == eventNavigator.selectedEvent );
-
-        tev.adjusted = newTime;
-        eventNavigator.selectedEvent.classList.add("adjusted");
-
-        navShowEventInfo(tev, eventNavigator.selectedEvent);
-    }
-}
-
-var highlightedEvent = null;
-
-function navUpdateCursor( deltaTime ) {
-    // get time from player
-    var curtime = player.currentTime;
-
-    var cursorpos = eventNavigator.getXfromTime(curtime);
-
-    eventNavigator.cursor.style.left = cursorpos + "px";
-
-    // make sure that the timecursor is in view!
-    if( !player.paused ) {
-        if( cursorpos > eventNavigator.container.clientWidth + eventNavigator.container.scrollLeft-10) {
-//            console.log("Cursor out of view - right");
-            eventNavigator.container.scrollLeft = cursorpos-eventNavigator.container.clientWidth+10;
-        } else if( cursorpos < eventNavigator.container.scrollLeft ) {
-//            console.log("Cursor out of view - left");
-            eventNavigator.container.scrollLeft = cursorpos-10;
-        }
-    }
-
-
-}
-
-function navTimelineJump( event ) {
-    //    console.log( event );
-
-    // only accept clicks directly on the timeline (not on the events);
-    if( event.target == eventNavigator.timeline && eventNavigator.selectedEvent == null ) {
-        // find out where we clicked on the timeline
-        var xpos = eventNavigator.getXpos(event.clientX);
-
-        // calculate this to a time
-        var newTime = eventNavigator.getTimeFromX( xpos );
-        skipTo(newTime);
-
-        navUpdateCursor();
-    }
-}
-
-function navEventHover( evt ) {
-    var element = evt.target;
-    if( element != highlightedEvent ) {
-        // We are hovering above a new element
-
-        // find the matching timeEvent
-        var tev = timeEvents.find(timeEvent=> timeEvent.adjusterElement == element);
-
-        // show eventinfo
-        navShowEventInfo(tev, element);
-
-        // remember the element
-        highlightedEvent = element;
-    }
-}
-
-function navShowEventInfo( tev, element ) {
-    var eventinf = document.querySelector("#eventinfo");
-    eventinf.style.display = "block";
-
-    // fill eventinfo with data
-    eventinf.querySelector(".data_type").textContent = tev.type;
-    eventinf.querySelector(".data_time").textContent = tev.time;
-    eventinf.querySelector(".data_element").textContent = tev.element;
-
-    if( tev.adjusted ) {
-        eventinf.querySelector(".data_adjusted").textContent = tev.adjusted;
-        eventinf.querySelector(".adjusted_time").style.display = "block";
-    } else {
-        eventinf.querySelector(".adjusted_time").style.display = "none";
-    }
-
-    // position the eventinfo correctly
-    // find scroll-position of timeline_container
-    eventinf.style.left = element.offsetLeft - eventNavigator.container.scrollLeft + "px";
-}
-
-
-function navEventStopHover( evt ) {
-
-    console.log("stop hover");
-    var eventinf = document.querySelector("#eventinfo");
-    eventinf.style.display = "none";
-
-    highlightedEvent = null;
-}
-
-
-
-function navZoomIn() {
-    eventNavigator.zoomFactor += 1;
-    eventNavigator.length = eventNavigator.end * eventNavigator.zoomFactor;
-    eventNavigator.timeline.style.width = eventNavigator.length + "px";
-    navAdjustEvents();
-}
-
-function navZoomOut() {
-    eventNavigator.zoomFactor -= 1;
-    eventNavigator.length = eventNavigator.end * eventNavigator.zoomFactor;
-    eventNavigator.timeline.style.width = eventNavigator.length + "px";
-    navAdjustEvents();
-}
-
-function navAdjustEvents() {
-    timeEvents.forEach( function(timeEvent) {
-        // calculate position from zoomFactor (maybe changed)
-        var pos = timeEvent.time * eventNavigator.zoomFactor ;
-        // set the new position on the adjusterElement
-        timeEvent.adjusterElement.style.left = pos + "px";
-    });
 }
