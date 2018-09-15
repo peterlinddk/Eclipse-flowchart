@@ -643,7 +643,7 @@ body {
         opacity: 1;
     }
 
-    100 % {
+    100% {
         opacity: 0;
     }
 }
@@ -1387,6 +1387,7 @@ audio {
 
 }
 
+/* record button symbol */
 .record {
     display: inline-block;
     width: 1em;
@@ -1399,6 +1400,7 @@ audio {
     background-color: #450210;
 }
 
+/* recording for both button and cursor */
 .recording {
     animation-name: rec_pulse;
     animation-duration: 1s;
@@ -1421,152 +1423,3 @@ audio {
     }
 }
 
-/****** NAVIGATOR **********/
-
-#navigator {
-    display: flex;
-}
-
-#navigator #controls {
-    white-space: nowrap;
-}
-
-#timedisplay {
-    flex-grow: 1;
-    width: 90vw; /* NOTE: The exact width isnt' important, any number works */
-    position: relative; /* relative is necessary for the eventinfo popup to work */
-}
-
-
-#timeline_container {
-    position: relative;
-    overflow-y: hidden;
-    overflow-x: scroll;
-    height: 110%;
-    padding-top: 3px;
-    margin-bottom: 24px; /* to make room for mac scrollbar */
-}
-
-#timeline {
-    height: 22px;
-
-    background-color: #94b294;
-}
-
-#timeline_container .event {
-    position: absolute;
-    top: 0px;
-
-    width: 10px;
-    height: 24px;
-    border: 2px outset white;
-    background-color: gainsboro;
-    cursor: pointer;
-}
-
-#timeline_container .event.dragging {
-    background-color: red;
-    z-index: 1000;
-    cursor:ew-resize;
-}
-
-#timeline_container .event.adjusted {
-/*    background-color: pink;*/
-    border-color: hotpink;
-}
-
-#timeline_container .event.flipper {
-    border-radius: 5px;
-    background-color: #c6c6c6;
-}
-
-#timeline_container .event.screen {
-   background-color: #fdd68f;
-}
-
-#timeline_container .event.effect {
-    background-color: #a0e8e8;
-}
-
-#timeline_container .event.modifier {
-    background-color: #a0e8a0
-}
-
-#timeline_container .event.neontext1 {
-    background-color: #ff0080;
-}
-
-#timeline_container .event.neontext2 {
-    background-color: #0080ff;
-}
-
-#timeline_container .event.turner {
-   background-color: #f7931e;
-    border-radius: 0;
-    box-sizing: content-box;
-
-}
-
-
-
-#timeline #timecursor.paused {
-    box-shadow: 0px 0px 0px #000;
-}
-
-#timeline #timecursor.recording {
-    background-color: #ff4ba5;
-    box-shadow: 1px 1px 7px #e00;
-}
-
-#timeline #timecursor {
-    position: absolute;
-    width: 1px;
-    height: 22px;
-
-    background-color: #4bffa5;
-    box-shadow: 1px 1px 4px #0e0;
-
-    pointer-events: none;
-
-/*    left: 30px;*/
-    z-index: 3;
-}
-
-#timeline #timehover {
-    position: absolute;
-    display: none;
-    pointer-events: none;
-    top: 0px;
-    height: 26px;
-    z-index: 1000;
-    font-family: "Arial";
-    font-size: 12px;
-
-    border-left: 1px solid black;
-}
-
-#eventinfo {
-    display: none;
-    position: absolute;
-    z-index: 2;
-
-    bottom: 44px;
-/*    top: 0px;*/
-    left: 230px;
-
-    border: 1px dashed black;
-    padding: 4px;
-    background-color: antiquewhite;
-    font-family: arial;
-    font-size: 10px;
-}
-
-
-
-#eventinfo .adjusted_time {
-    font-style: italic;
-}
-
-#eventinfo .data_adjusted {
-    color: red;
-}
