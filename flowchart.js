@@ -28,12 +28,25 @@ function sidenVises() {
     }
 
     // load SVG
-    $("#svg").load("flowchart.svg", whenSVGisLoaded);
+    fetch("flowchart.svg")
+    .then(response=>response.text())
+    .then(svg => {
+        document.querySelector("#svg").insertAdjacentHTML("afterbegin", svg);
+        whenSVGisLoaded();
+    });
+
     // load SVG defs
-    $("#svgdefs").load("svgdefs.svg");
+    fetch("svgdefs.svg")
+    .then(response=>response.text())
+    .then(svg => {
+        document.querySelector("#svgdefs").insertAdjacentHTML("afterbegin", svg);
+    });
 
     // load JSON
-    $.getJSON("flowchart.json", loadJSON);
+    fetch("flowchart.json")
+    .then(response=>response.json())
+    .then(json=>loadJSON(json ));
+
 }
 
 function whenSVGisLoaded() {
