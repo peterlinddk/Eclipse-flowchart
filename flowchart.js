@@ -1,7 +1,7 @@
 window.addEventListener("load", sidenVises);
 
 var loading;
-var developerMode = false;
+var developerMode = true;
 
 // The array of events (effects)
 var timeEvents = [];
