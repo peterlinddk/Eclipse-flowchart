@@ -205,43 +205,31 @@ function keyPressed( event ) {
 function prepareSVG() {
     // Set sizes for HTML-elements to match the SVG-coordinates
 
-    function matchHTML2SVG( htmlselector, svgselector ) {
-
-        let htmlelement = document.querySelector(htmlselector);
-        let svgelement = document.querySelector(svgselector);
-
-        // and set all the properties on the html from the SVG
-        htmlelement.style.top = svgelement.getAttribute("y") + "px";
-        htmlelement.style.left = svgelement.getAttribute("x") + "px";
-
-        htmlelement.style.width = svgelement.getAttribute("width") + "px";
-        htmlelement.style.height = svgelement.getAttribute("height") + "px";
+    function matchHTML2SVG( element, svgElement ) {
+        // set all the properties on the html from the SVG
+        element.style.top = svgElement.getAttribute("y") + "px";
+        element.style.left = svgElement.getAttribute("x") + "px";
+        element.style.width = svgElement.getAttribute("width") + "px";
+        element.style.height = svgElement.getAttribute("height") + "px";
     }
 
     // first the #flipper
-    matchHTML2SVG("#htmlflipper", "svg #flipper rect" );
+    // look for "matchsvg" in the html-file
+    // look at the id - subtract initial html - the rest should be an in in the svg
+    // if the svg element is a rect, use that, otherwise find the first rect child ...
 
-    // then the #neontext1
-    matchHTML2SVG("#htmlneontext1", "svg #neontext1 rect" );
-
-    // and neontext2
-    matchHTML2SVG("#htmlneontext2", "svg #neontext2 rect" );
-
-    // the two turners
-    matchHTML2SVG("#htmlturner_once", "svg rect#turner_once");
-    matchHTML2SVG("#htmlturner_butnow", "svg rect#turner_butnow");
-
-    // hide the SVG turners
-    document.querySelector("svg rect#turner_once").style.display = "none";
-    document.querySelector("svg rect#turner_butnow").style.display = "none";
-
-    // hide the broken getalittle
-    document.querySelector("svg #broken_getalittle").style.display = "none";
-
-    // hide know-there
-    document.querySelector("svg #knowtheres").style.display = "none";
-
-
+    //data-matchsvg="true"
+    const matchers = document.querySelectorAll("[data-matchsvg]").forEach( element => {
+        const svgid = element.id.substring(4);
+        let svgElement = document.querySelector("#"+svgid);
+ 
+        // TEST: This might fail if rect isn't the direct descendant of the id ...
+        if( svgElement.tagName.toLowerCase() !== "rect" ) {
+            svgElement = svgElement.firstElementChild;
+        }
+ 
+        matchHTML2SVG( element, svgElement );
+    });
 }
 
 

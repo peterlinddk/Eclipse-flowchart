@@ -649,6 +649,13 @@ body {
 }
 
 /******** TURNERS ********/
+
+/* Hide the SVG turners */
+svg rect#turner_once,
+svg rect#turner_butnow {
+    display: none;
+}
+
 #htmlturner_butnow {
     position: absolute;
 
@@ -1423,3 +1430,7 @@ audio {
     }
 }
 
+svg #broken_getalittle,
+svg #knowtheres {
+    display: none;
+}
