@@ -19,6 +19,8 @@ function sidenVises() {
 
     // get an event when the player is ready
     player = document.querySelector("#music");
+    // TODO: Remove!!
+    player.volume = 0.2;
 
     if( player.readyState != 4 ) {
         // Wait for the music to be loaded
@@ -201,12 +203,6 @@ function keyPressed( event ) {
 /**************** SVG fixes ****************/
 
 function prepareSVG() {
-    // create arrow-ids
-    createArrowIDs();
-
-    // mark everything below the belt with class "belowthebelt"
-    markBelowTheBelt();
-
     // Set sizes for HTML-elements to match the SVG-coordinates
 
     function matchHTML2SVG( htmlselector, svgselector ) {
@@ -248,64 +244,6 @@ function prepareSVG() {
 
 }
 
-function createArrowIDs() {
-    // GRRR: The wondrous world of Illustrator export, sometimes creates an ID for arrows,
-    // sometimes it doesn't ... It isn't the same every time I export, so it doesn't seem
-    // like it is a setting I can change - rather an obscure error in Illustrator ...
-
-    // FIX: Find every arrow with an id, and replace the element with it's child.
-    var arrowsWithId = document.querySelectorAll("#arrows>g[id]");
-    arrowsWithId.forEach(elm=>elm.replaceWith(elm.firstElementChild));
-    // Then re-add IDs for everything ...
-
-    // NOTE: This is the order the arrow-layers are expected to be in, in the SVG
-    var arrowIDs = [
-    "turnaround2everynow",
-    "everynow2getalittlebit",
-    "getalittlebit2flipper",
-    "flipper2turnaround",
-    "turnaround2brighteyes",
-    "brighteyes2everynow",
-    "everynow2fallapart",
-    "fallapart2turnaround",
-    "fallapart2andineedyou",
-    "andineedyou2nowtonight",
-    "nowtonight2andineedyou",
-    "andineedyou2morethanever",
-    "morethanever2neontext1",
-    "neontext12neontext2",
-    "neontext22ireallyneedyou",
-    "ireallyneedyou2tonight",
-    "tonight2foreversgonnastart",
-    "foreversgonnastart2tonight",
-    "tonight2onceupon",
-    "onceupon2turner_once",
-    "turner_once2butnow",
-    "butnow2turner_butnow",
-    "turner_butnow2nothingican",
-    "nothingican2do",
-    "nothingican2say",
-    "do2totaleclipse",
-    "say2totaleclipse",
-    "totaleclipse2onceupon",
-    "brighteyes2turnaround",
-    "totaleclipse2totaleclipse"]
-
-    // find all the arrow-elements (g with a path or line)
-    var arrows = document.querySelectorAll("#arrows g path, #arrows g line");
-    arrows.forEach( (arrow,index) => arrow.id = arrowIDs[index]);
-}
-
-function markBelowTheBelt() {
-    var screens = ["andineedyou", "nowtonight", "morethanever", "ireallyneedyou", "tonight", "foreversgonnastart", "neontext1", "neontext2", "htmlneontext1", "htmlneontext2"];
-    var arrows = ["fallapart2andineedyou", "andineedyou2nowtonight", "andineedyou2morethanever", "nowtonight2andineedyou", "morethanever2neontext1", "neontext12neontext2", "neontext22ireallyneedyou", "ireallyneedyou2tonight", "tonight2foreversgonnastart", "foreversgonnastart2tonight", "tonight2onceupon"];
-
-    // concatenate the arrays
-    var list = screens.concat(arrows);
-
-    // add a class to each element
-    list.forEach(elm => document.querySelector("#"+elm).classList.add("belowthebelt"));
-}
 
 /**************** PLAYER ****************/
 
