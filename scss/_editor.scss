@@ -1,0 +1,74 @@
+#controlpanel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+
+}
+
+#buttongroups {
+/*
+    position: absolute;
+    top: 770px;
+*/
+
+    display: flex;
+}
+
+#buttongroups div {
+    margin-left: 1em;
+}
+
+#buttongroups button {
+    display: block;
+    margin-bottom: 2px;
+}
+
+#buttons, audio {
+    display: inline-block;
+}
+
+#buttons {
+    position: relative;
+    top: -11px;
+}
+
+audio {
+
+}
+
+/* record button symbol */
+.record {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 1px solid black;
+    border-radius: 1em;
+    margin-bottom: -2px;
+    margin-left: -2px;
+    margin-right: 2px;
+    background-color: #450210;
+}
+
+/* recording for both button and cursor */
+.recording {
+    animation-name: rec_pulse;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes rec_pulse {
+    0% {
+        background-color: #450210;
+    }
+
+    40% {
+
+        background-color: #a90329;
+    }
+
+    100% {
+        background-color: #db5e60;
+    }
+}

@@ -1,0 +1,424 @@
+@font-face {
+	font-family: 'HelveticaRounded';
+	src: url('fonts/HelveticaRounded-Bold.woff2') format('woff2'),
+		url('fonts/HelveticaRounded-Bold.woff') format('woff');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'HelveticaRounded';
+	src: url('fonts/HelveticaRounded-Black.woff2') format('woff2'),
+		url('fonts/HelveticaRounded-Black.woff') format('woff');
+	font-weight: 900;
+	font-style: normal;
+}
+
+body {
+    margin: 0px;
+    border: 0;
+    padding: 0;
+    background-color: #2c805b;
+    overflow: hidden;
+    /* TODO: Handle scroll when it comes! */
+    min-height: 200vh;
+}
+
+#scaler {
+    transform-origin: top left;
+    /* feels odd to set the width and height like this - but otherwise the scene
+    and highlighter might not fill the screen */
+/*
+    width: 200vw;
+    height: 200vw;
+*/
+}
+
+#scene {
+    position: relative;
+}
+
+#svg.hidebelowthebelt .belowthebelt,
+#svg.hidebelowthebelt .belowthebelt+polygon,
+#svg.hidebelowthebelt ~ .belowthebelt{
+/*    display: none;*/
+    opacity: 0;
+}
+
+#svg.fadeinbelowthebelt .belowthebelt,
+#svg.fadeinbelowthebelt .belowthebelt+polygon,
+#svg.fadeinbelowthebelt ~ .belowthebelt{
+    opacity: 1;
+    animation-name: fadein;
+    animation-duration: 5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in;
+}
+
+
+
+
+
+
+
+
+
+
+/***** MODIFIERS *****/
+
+#know {
+    transform: translateY(-700px);
+    /* NOTE: IE and Edge doesn't support transform on SVG - yet - so hide the element as well */
+    opacity: 0;
+}
+
+#know.dropped {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+#know.drop {
+    transform: translateY(0);
+    animation-name: know_drop;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+
+    transform-origin: bottom center;
+    opacity: 1;
+}
+
+@keyframes know_drop {
+    0% {
+        transform: translateY(-700px) scaleY(1);
+    }
+
+    70% {
+        transform: translateY(10px) scaleY(.8);
+    }
+    80% {
+        transform: translateY(-15px) scaleY(1);
+    }
+    87% {
+        transform: translateY(0px) scaleY(.9);
+    }
+    94% {
+        transform: translateY(-7px) scaleY(1);
+    }
+    98% {
+        transform: translateY(0px) scaleY(.95);
+    }
+    99% {
+        transform: translateY(-3px) scaleY(1);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
+
+
+
+
+
+/****** EFFECTS **********/
+
+#scene.zoomout {
+    animation-name: zoomout;
+    animation-duration: 34s; /* not kidding, very slow zoom! */
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+}
+
+@keyframes zoomout {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(.001);
+    }
+}
+
+.fadein {
+    display: block;
+    opacity: 1;
+    animation-name: fadein;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fadeout {
+    display: block;
+    opacity: 0;
+    animation-name: fadeout;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.burnout path {
+    fill: #444;
+    animation-name: burnout;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+@keyframes burnout {
+    0% {
+        fill: #888;
+        opacity: 1;
+    }
+
+    70% {
+        fill: #fff;
+    }
+
+    80% {
+        fill: #888;
+    }
+
+    85% {
+        fill: #fff;
+    }
+
+    90% {
+        fill: #888;
+    }
+
+    95% {
+        fill: #fff;
+        opacity: 1;
+    }
+
+    100% {
+        fill: #444;
+        opacity: 0;
+    }
+}
+
+.basskick {
+    animation-name: basskick;
+    animation-duration: 1.2s;
+    animation-iteration-count: 1;
+}
+
+@keyframes basskick {
+    0% {
+        transform: scale(1);
+    }
+
+    10% {
+        transform: scale(.85);
+    }
+
+    22% {
+        transform: scale(1.1);
+    }
+
+    32% {
+        transform: scale(0.92);
+    }
+    42% {
+        transform: scale(1.05);
+    }
+
+    51% {
+        transform: scale(.95);
+    }
+
+    61% {
+        transform: scale(1.025);
+    }
+
+    71% {
+        transform: scale(.97);
+    }
+
+    80% {
+        transform: scale(1.012)
+    }
+
+    90% {
+        transform: scale(0.985)
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+
+/* ORGAN: Arrows */
+
+
+
+#arrowsclone path,
+#arrowsclone line,
+#arrowsclone polygon,
+#arrowsblur path,
+#arrowsblur line,
+#arrowsblur polygon {
+    animation-name: glow_arrows;
+    animation-duration: 8s;
+    animation-iteration-count: 1;
+}
+
+#arrowsclone polygon,
+#arrowsblur polygon {
+    animation-name: glow_arrowheads;
+}
+
+@keyframes glow_arrows {
+    0% {
+        stroke: #000
+    }
+
+    25% {
+        stroke: #ffbb33;
+    }
+
+    30% {
+        stroke: #ffeb00;
+    }
+
+    35% {
+        stroke: #ffbb33;
+    }
+
+    45% {
+        stroke: #ffbb33;
+    }
+
+    100% {
+        stroke: #000;
+    }
+}
+
+@keyframes glow_arrowheads {
+   0% {
+        fill: #000
+    }
+
+    25% {
+        fill: #ffbb33;
+    }
+
+    30% {
+        fill: #ffeb00;
+    }
+
+    35% {
+        fill: #ffbb33;
+    }
+
+    45% {
+        fill: #ffbb33;
+    }
+
+    100% {
+        fill: #000;
+    }
+}
+
+
+
+
+
+/* TEXTS */
+#texts {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    pointer-events: none;
+
+    font-family: "HelveticaRounded";
+    font-size: 3vw;
+    color: #78a57e;
+}
+
+#texts .text {
+    display: none;
+    position: absolute;
+    /* TODO: Calculate position exactly below the line */
+    top: 50vh;
+    left: 0;
+
+    width: 100vw;
+    text-align: center;
+}
+
+
+/* USER INTERFACE */
+
+#askforfullscreen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(100, 100, 100, 0.81);
+    z-index: 2000;
+}
+
+#askforfullscreen .inner {
+    position: absolute;
+    width: 50vw;
+    left: 20vw;
+    top: 20vw;
+    height: 20vw;
+
+    background-color: antiquewhite;
+    border: 2px solid black;
+    padding: 1em;
+
+    font-family: "HelveticaRounded";
+    font-size: 3vw;
+}
+
+#askforfullscreen .inner button {
+    font-family: "HelveticaRounded";
+    font-size: 3vw;
+    width: 20vw;
+    height: 6vw;
+    margin-left: 15vw;
+}
+
+/* *************** */
+@import 'screens';
+@import 'effects';
+
+@import 'flipper';
+@import 'neontext';
+@import 'turner';
+@import 'editor';
+@import 'timeline_navigator';
+@import 'svg';

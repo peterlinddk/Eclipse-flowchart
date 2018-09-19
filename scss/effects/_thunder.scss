@@ -1,0 +1,192 @@
+/*
+body.thunder {
+    animation-name: thunder_body_afterglow;
+    animation-duration: 4s;
+    animation-delay: .5s;
+    animation-iteration-count: 1;
+}
+
+@keyframes thunder_body_afterglow {
+    0% {
+         background-color: #36a172;
+    }
+
+    100% {
+         background-color: #246d4d;
+    }
+}
+*/
+
+
+
+#scene.thunder {
+    animation-name: thunder_shake;
+    animation-duration: 1s;
+    animation-delay: .7s;
+    animation-iteration-count: 1;
+    transform-origin: bottom center;
+}
+
+#scene.thunder svg #arrows,
+#scene.thunder svg #screens rect+path {
+    animation-name: thunder_afterglow_fill;
+    animation-duration: 5s;
+    animation-delay: .5s;
+    animation-iteration-count: 1;
+
+}
+
+#scene.thunder svg #screens rect+path {
+    animation-name: thunder_afterglow_fill_screencorner;
+}
+
+
+#scene.thunder svg #arrows path,
+#scene.thunder svg #arrows line,
+#scene.thunder svg rect,
+#scene.thunder .flipbox,
+#scene.thunder .turner {
+/*
+    stroke: #fff;
+    border-color: #fff;
+*/
+
+    animation-name: thunder_afterglow;
+    animation-duration: 5s;
+    animation-delay: .5s;
+    animation-iteration-count: 1;
+}
+
+@keyframes thunder_afterglow {
+    0% {
+        stroke: #fff;
+        border-color: #fff;
+    }
+
+    100% {
+        stroke: #000;
+        border-color: #000;
+    }
+}
+
+@keyframes thunder_afterglow_fill {
+    0% {
+        fill: #fff;
+    }
+
+    100% {
+        fill: #000;
+    }
+}
+
+@keyframes thunder_afterglow_fill_screencorner {
+    0% {
+        fill: #fff;
+    }
+
+    100% {
+        fill: #666666;
+    }
+}
+
+
+
+
+
+
+.thunder #superhighlighter {
+    animation-name: thunder;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+}
+
+@keyframes thunder {
+    0% {
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    60% {
+        opacity: 0;
+
+    }
+    65% {
+        opacity: .9;
+
+    }
+    75% {
+        opacity: .9;
+
+    }
+    100%{
+      opacity: 0;
+
+    }
+}
+
+@keyframes thunder_shake {
+    0% {
+        transform: skewX(0deg);
+    }
+
+    10% {
+        transform: skewX(-2.5deg);
+    }
+
+    20% {
+        transform: skewX(1.65deg);
+    }
+
+    30% {
+        transform: skewX(-1.32deg);
+    }
+    40% {
+        transform: skewX(0.8deg);
+    }
+
+    50% {
+        transform: skewX(-0.8deg);
+    }
+
+    60% {
+        transform: skewX(0.4deg);
+    }
+
+    70% {
+        transform: skewX(-0.4deg);
+    }
+
+    80% {
+        transform: skewX(0.2deg);
+    }
+
+    90% {
+        transform: skewX(-0.2deg);
+    }
+
+    100% {
+        transform: skewX(0deg);
+    }
+}
+
+
+#superhighlighter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%; /* ... hmm - problem with scrolling !! with vh or % - could just make 200vh ... */
+
+    background-color: white;
+    opacity: 0;
+    z-index: 1;
+
+    pointer-events: none;
+}

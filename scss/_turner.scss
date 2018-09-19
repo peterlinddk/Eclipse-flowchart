@@ -1,0 +1,164 @@
+/******** TURNERS ********/
+
+/* test */
+
+#htmlturner_butnow {
+    position: absolute;
+
+    perspective: 800px;
+}
+
+#htmlturner_once {
+    position: absolute;
+
+    perspective: 800px;
+}
+
+.turner {
+    transform-style: preserve-3d;
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+    border: 4px solid black;
+
+
+    color: #808080;
+
+    border-radius: 12px;
+
+    font-family: "HelveticaRounded";
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.turner.flip {
+    animation-name: turn_back;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes turn_back {
+   0% {
+        transform: rotateX(0deg);
+    }
+
+    10% {
+        transform: rotateX(153deg);
+    }
+
+    20% {
+        transform: rotateX(198deg);
+    }
+
+    30% {
+        transform: rotateX(165deg);
+    }
+    40% {
+        transform: rotateX(189deg);
+    }
+
+    50% {
+        transform: rotateX(171deg);
+    }
+
+    60% {
+        transform: rotateX(184.5deg);
+    }
+
+    70% {
+        transform: rotateX(174.6deg);
+    }
+
+    80% {
+        transform: rotateX(182.1deg)
+    }
+
+    90% {
+        transform: rotateX(177.3deg)
+    }
+
+    100% {
+        transform: rotateX(180deg);
+    }
+}
+
+.turner.unflip {
+    animation-name: turn_front;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes turn_front {
+   0% {
+        transform: rotateX(180deg);
+    }
+
+    10% {
+        transform: rotateX(333deg);
+    }
+
+    20% {
+        transform: rotateX(378deg);
+    }
+
+    30% {
+        transform: rotateX(345deg);
+    }
+    40% {
+        transform: rotateX(369deg);
+    }
+
+    50% {
+        transform: rotateX(351deg);
+    }
+
+    60% {
+        transform: rotateX(364.5deg);
+    }
+
+    70% {
+        transform: rotateX(354.6deg);
+    }
+
+    80% {
+        transform: rotateX(362.1deg);
+    }
+
+    90% {
+        transform: rotateX(357.3deg);
+    }
+
+    100% {
+        transform: rotateX(360deg);
+    }
+}
+
+
+
+.turner div {
+    display: block;
+    position: absolute;
+    width: calc(100% - 1em);
+    height: calc(100% - 1em);
+    /* NOTE: -webkit- still necessary for Safari */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    background-color: #4d4d4d;
+
+    padding: .5em;
+}
+
+.turner .front {
+
+    border-radius: 10px;
+}
+
+.turner .back {
+
+    border-radius: 10px;
+    transform: rotateX(180deg);
+}

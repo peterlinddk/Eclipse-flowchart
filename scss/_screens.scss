@@ -1,0 +1,173 @@
+/* SCREEN */
+
+#screens .on rect {
+    /*    stroke: #710000;*/
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    /*    fill: #cc2d00;*/
+    /*    fill: url('svgdefs.svg#redfade');*/
+    /*    fill: url(#redfade);*/
+    
+        /*
+        animation-name: turnon;
+        animation-duration: 1s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-in;
+    
+    
+        animation-name: flicker;
+        animation-duration: .2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+        animation-delay: 1s;
+    */
+        animation: turnon .6s 1 ease-in forwards, flicker .2s .6s infinite ease-in-out;
+    }
+    
+    @keyframes turnon {
+        0% {
+            fill: #4d4d4d;
+            stroke: #000000;
+        }
+    
+        80% {
+            fill: #d02d00;
+        }
+    
+        100% {
+            fill: #cc2d00;
+            stroke: #710000;
+        }
+    }
+    
+    @keyframes flicker {
+        0% {
+            fill: #cc2d00;
+        }
+    
+        25% {
+            fill: #ce2d00;
+        }
+    
+        50% {
+            fill: #cc2d00;
+        }
+    
+        75% {
+            fill: #ca2d01;
+        }
+    
+        100% {
+            fill: #cc2d00;
+        }
+    }
+    
+    #screens .turnoff rect {
+        fill: url(#redfade);
+    }
+    
+    #screens .off rect {
+        fill: #4d4d4d;
+        stroke: #000;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+    
+        animation: turnoff .4s 1 ease-in forwards;
+    }
+    
+    @keyframes turnoff {
+        0% {
+            fill: #cc2d00;
+            stroke: #710000;
+        }
+    
+        100% {
+            fill: #4d4d4d;
+            stroke: #000000;
+        }
+    
+    
+    
+    }
+    
+    
+    #screens .on>path:first-of-type {
+        fill: #f7ad8d; /* TODO: fade-in */
+        animation: turnon_topcorner .6s 1 ease-in forwards;
+    }
+    
+    @keyframes turnon_topcorner {
+        0% {
+            fill: #666666;
+        }
+    
+        80% {
+            fill: #fab99e;
+        }
+    
+    
+        100% {
+            fill: #f7ad8d;
+        }
+    }
+    
+    #screens .off>path:first-of-type {
+        fill: #666666;
+        animation: turnoff_topcorner .4s 1 ease-in forwards;
+    }
+    
+    @keyframes turnoff_topcorner {
+        0% {
+            fill: #f7ad8d;
+        }
+    
+        100% {
+            fill: #666666;
+        }
+    }
+    
+    #screens .on>path:last-of-type {
+        fill: #700; /* TODO: fade-in */
+    }
+    
+    #screens .off>path:last-of-type {
+        fill: #333;
+    }
+    
+    #screens .on g * {
+        fill: #f7931e;
+        animation: turnon_text .6s 1 ease-in forwards;
+    }
+    
+    @keyframes turnon_text {
+        0% {
+            fill: #808080;
+        }
+    
+        80% {
+            fill: #fca846;
+        }
+    
+        100% {
+            fill: #f7931e;
+        }
+    }
+    
+    
+    
+    
+    #screens .off g * {
+        fill: #808080;
+        animation: turnoff_text .4s 1 ease-in forwards;
+    }
+    
+    @keyframes turnoff_text {
+        0% {
+            fill: #f7931e;
+        }
+    
+        100% {
+            fill: #808080;
+        }
+    }
