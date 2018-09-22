@@ -1,6 +1,13 @@
+/**
+ * Player
+ * ------
+ * The Player runs on requestAnimationFrame, and looks for TimeEvents to run, and arrows (lines) to connect them.
+ * 
+ */
 class Player {
     constructor() {
         this.playing = false;
+        this.arrows = []; // NOTE: Replaces lineAnimations
     }
 
     get isPlaying() {
@@ -27,8 +34,8 @@ class Player {
         this.lastEvent = null;       // what the heck are the differences?
         this.lastEventObject = null; // between these two?
 
-        // TODO: Move into class
-        prepareAnimations();
+        // Start animating
+        window.requestAnimationFrame( runAnimations ); // TODO: Make this object runAnimations
     }
 
     pause() {
@@ -71,6 +78,17 @@ class Player {
     }
 
     animate( deltaTime ) {
+
+        // do arrow animations
+        this.arrows.forEach( arrow => arrow.animate(deltaTime) );
+
+        // remove non-active arrows
+        this.arrows = this.arrows.filter( arrow => arrow.active );
+
+        // find next event
+
+        // do effect animations
+
         let curTime = this.audio.currentTime;
     //    console.log("time: " + (nextEvent.time-curTime) );
     
@@ -104,7 +122,11 @@ class Player {
                         arrowEvent = timeEvents[index];
                     }
                     if( arrowEvent != null ) {
-                        highlightArrow( thisEvent, arrowEvent);
+                        // create an Arrow, and add it to the array of arrows, if it isn't of type null (type null are dummy-arrows, but only the arrow-object itself understands the difference)
+                        const arrow = new Arrow(thisEvent, arrowEvent);
+                        if(arrow.type != null) {
+                            this.arrows.push( arrow );
+                        }
                     }
                 }
             }

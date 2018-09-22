@@ -246,7 +246,6 @@ function prepareSVG() {
 
 function playback() {
     player.playback();
-    prepareAnimations();
 }
 
 function pause() {
@@ -783,202 +782,6 @@ function runEffectAnimations( deltaTime ) {
 var musicPlayer;
 
 
-function highlightArrow( fromEvent, toEvent ) {
-    var fromId = fromEvent.element;
-    var toId = toEvent.element;
-
-    console.log("Arrow from: ", fromEvent, "to:", toEvent);
-
-    // if either event was of type flipper, then arrow directly to the flipper!
-    if( fromEvent.type == "flipper" ) {
-        fromId = "flipper";
-    }
-    if( toEvent.type == "flipper") {
-        toId = "flipper";
-    }
-
-    // if either event was of type neontext, then arrow directly to the neontext
-    if( fromEvent.type.startsWith("neontext") ) {
-        fromId = fromEvent.type;
-    }
-
-    if( toEvent.type.startsWith("neontext") ) {
-        toId = toEvent.type;
-    }
-
-
-    // if both events are the same neontext, then don't bother with an arrow!
-    if( fromEvent.type == toEvent.type && (fromEvent.type == "neontext1" || fromEvent.type == "neontext2") ) {
-        console.log("NO ARROW! - don't bother");
-    } else {
-
-        // find the arrow
-        var arrowId = fromId + "2" + toId;
-
-        // Figure how long the animation should run!
-        var time = toEvent.time - fromEvent.time;
-
-        var arrow = document.querySelector("#arrows #" + arrowId);
-        if( arrow == null ) {
-            console.warn("No arrow with id: " + arrowId);
-            console.warn("Used from " , fromEvent, " to ", toEvent);
-        } else {
-            animateLine( arrow, time );
-        }
-
-
-
-    }
-}
-
-
-
-
-
-function animateLine( arrow, time ) {
-    var g = arrow.parentNode;
-
-    var line = arrow.cloneNode(true);
-    var blurline = arrow.cloneNode(true);
-
-    // create an animation-object
-    var lineAnimation = {
-        index: lineAnimations.length,
-        active: true,
-        line: line,
-        blurline: blurline,
-        arrowhead: g.querySelector("polygon").cloneNode(true),
-        blurarrowhead: g.querySelector("polygon").cloneNode(true),
-        totalLength: arrow.getTotalLength(),
-        highlightLength: 50,
-        drawLength: 0,
-        speed: 100, // in pixels pr. second - recalculated to match distance
-
-        performAnimation(deltaTime) {
-            this.drawLength += this.speed * deltaTime;
-
-            // strokeDashArray = "a, b, c, d"
-            // a: start, altid 0
-            // b: start af highlight, 0 indtil c er større end highlight length
-            // c: slut på highlight lengt, indtil c = d
-            // d: længden på linjen, altid totalLength
-
-            let a = 0;
-            let b = 0;
-            let c = 0;
-            let d = this.totalLength;
-
-            // c starter med at være 0, og stiger til d.
-            // b starter også med at være 0, og stiger i takt med c, men først når c er større end highlightlength
-            // b fortsætter med at blive større, ind til b = d
-            // så stopper animationen
-
-            if( this.drawLength < this.highlightLength ) {
-                c = this.drawLength;
-                b = 0;
-            } else {
-                b = this.drawLength-this.highlightLength;
-                c = this.highlightLength;
-            }
-
-            if( b+c > d ) {
-                this.arrowhead.style.fill = "#fb3";
-                this.arrowhead.style.stroke = "#fb3";
-
-                // display the blur-arrowhead
-                this.blurarrowhead.style.opacity = 1;
-
-            }
-
-            this.line.style.strokeDasharray = [a,b,c,d].join(' ');
-            this.blurline.style.strokeDasharray = [a,b,c,d].join(' ');
-
-            if( b >= this.totalLength ) {
-                console.log("End animating line " + line.id);
-                // mark it as inactive - it will be removed somewhere else
-                this.active = false;
-
-                // remove line, blur, arrowhead and blur
-                this.line.parentNode.removeChild(this.line);
-                this.blurline.parentNode.removeChild(this.blurline);
-                this.arrowhead.parentNode.removeChild(this.arrowhead);
-                this.blurarrowhead.parentNode.removeChild(this.blurarrowhead);
-            }
-        }
-    }
-
-
-
-    // modify speed, to make it fit the next event
-    // speed = pixels pr. second
-    // speed = length pr time
-    lineAnimation.speed = lineAnimation.totalLength / (time-.4);
-
-    // if speed is very high (5000 is seen, then extend the drawlength)
-    if( lineAnimation.speed > 500 ) {
-        lineAnimation.highlightLength = 50 * (lineAnimation.speed / 500);
-        if( lineAnimation.highlightLength > lineAnimation.totalLength) {
-            lineAnimation.highlightLength = lineAnimation.totalLength
-        }
-    }
-
-    console.log("arrowspeed: " + lineAnimation.speed);
-
-    // make it orange ...
-    line.style.stroke = "#fb3";
-    blurline.style.stroke = "#fb3";
-    // set strokewidth one larger, to avoid thin black line
-    line.style.strokeWidth="4";
-    // set strokedash to avoid flash of full line
-    line.style.strokeDasharray = "0 0 0 "+lineAnimation.totalLength;
-    blurline.style.strokeDasharray = "0 0 0 "+lineAnimation.totalLength;
-
-
-    // and blur the blurline
-    blurline.style.filter = "url(#blur4)";
-    // make the blurred arrow invisible, and add a stroke to avoid black outline
-    lineAnimation.blurarrowhead.style.opacity = 0;
-    lineAnimation.blurarrowhead.style.stroke = "#fb3";
-    lineAnimation.blurarrowhead.style.fill = "#fb3";
-    lineAnimation.blurarrowhead.style.filter = "url(#blur4)";
-
-    lineAnimations.push( lineAnimation );
-
-    // add the clones to g - blurred first, so it gets below
-    g.appendChild(lineAnimation.blurline);
-    g.appendChild(lineAnimation.line);
-
-    g.appendChild(lineAnimation.blurarrowhead);
-    g.appendChild(lineAnimation.arrowhead);
-
-    // status message
-    console.log("Start animating line " + arrow.id);
-}
-
-function prepareLineAnimations() {
-    lineAnimations = [];
-//    window.requestAnimationFrame( runLineAnimations );
-}
-
-var lineAnimations = [];
-var lasttime;
-
-function runLineAnimations( deltaTime ) {
-
-    lineAnimations.forEach( lineAnimation => {if(lineAnimation.active) {
-        lineAnimation.performAnimation(deltaTime)
-    }});
-
-
-    if( lineAnimations.length > 0 ) {
-        for( let i=lineAnimations.length-1; i >= 0; i-- ) {
-            if( !lineAnimations[i].active ) {
-                lineAnimations.splice(i,1);
-            }
-        }
-    }
-
-}
 
 var lastText;
 
@@ -999,11 +802,8 @@ function performTextEvent( timeEvent ) {
 
 /******************** ANIMATIONS ********************/
 
-function prepareAnimations() {
-    prepareLineAnimations();
 
-    window.requestAnimationFrame( runAnimations );
-}
+var lasttime;
 
 function runAnimations() {
     if( player.isPlaying ) {
@@ -1013,8 +813,6 @@ function runAnimations() {
         var now = Date.now();
         var deltaTime = (now - (lasttime || now))/1000;
         lasttime = now;
-
-        runLineAnimations( deltaTime );
 
         player.animate( deltaTime );
 
