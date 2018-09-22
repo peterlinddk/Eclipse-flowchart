@@ -10,7 +10,7 @@ class TimelineNavigator {
 
         // TODO: Cleanup
 
-        this.end = player.duration;
+        this.end = musicPlayer.duration;
         this.zoomFactor = 32;
         this.length = this.end * this.zoomFactor;
 
@@ -99,14 +99,14 @@ class TimelineNavigator {
 
     updateCursor( ) {
         // get time from player
-        var curtime = player.currentTime;
+        var curtime = musicPlayer.currentTime;
     
         var cursorpos = this.getXfromTime(curtime);
     
         this.cursor_play.style.left = cursorpos + "px";
     
         // make sure that the timecursor is in view!
-        if( !player.paused ) {
+        if( !musicPlayer.paused ) {
             if( cursorpos > this.container.clientWidth + this.container.scrollLeft-30) {
     //            console.log("Cursor out of view - right");
                 this.container.scrollLeft = cursorpos-this.container.clientWidth+30;

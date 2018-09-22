@@ -1,12 +1,13 @@
 window.addEventListener("load", sidenVises);
 
 var loading;
-var developerMode = false;
+var developerMode = true;
 
 // The array of events (effects)
-var timeEvents = [];
+let timeEvents = [];
 
-var timelineNavigator;
+let timelineNavigator;
+let player;
 
 /**************** LOADER ****************/
 
@@ -17,16 +18,21 @@ function sidenVises() {
         music: false
     };
 
-    // get an event when the player is ready
-    player = document.querySelector("#music");
-    // TODO: Remove!!
-    player.volume = 0.2;
 
-    if( player.readyState != 4 ) {
+    player = new Player();
+    player.setAudio( document.querySelector("#music") );
+
+    // get an event when the player is ready
+    musicPlayer = document.querySelector("#music");
+    // TODO: Remove!!
+    musicPlayer.volume = 0.2;
+
+    // TODO This probably doesn't work anyway - so remove soon ...
+    if( musicPlayer.readyState != 4 ) {
         // Wait for the music to be loaded
-        player.addEventListener("canplay", musicIsLoaded);
+        musicPlayer.addEventListener("canplay", musicIsLoaded);
         // NOTE: Sometimes the "canplaythrough" event gets fired first, when loading from cache.
-        player.addEventListener("canplaythrough", musicIsLoaded);
+        musicPlayer.addEventListener("canplaythrough", musicIsLoaded);
     } else {
         musicIsLoaded();
     }
@@ -75,8 +81,9 @@ function loadJSON( data ) {
 function musicIsLoaded() {
     console.log("Music loaded");
     loading.music = true;
-    player.removeEventListener("canplay", musicIsLoaded);
-    player.removeEventListener("canplaythrough", musicIsLoaded);
+    // TODO: These events are probably not working ...
+    musicPlayer.removeEventListener("canplay", musicIsLoaded);
+    musicPlayer.removeEventListener("canplaythrough", musicIsLoaded);
 
     loadingComplete();
 }
@@ -193,7 +200,7 @@ function goneFullscreen( event ) {
 function keyPressed( event ) {
 //    console.log("Key: " , event.key);
     if( event.key == " " ) {
-        if( isPlaying ) {
+        if( player.isPlaying ) {
             pause();
             event.preventDefault();
         }
@@ -235,77 +242,23 @@ function prepareSVG() {
 
 /**************** PLAYER ****************/
 
-var isPlaying = false;
+//var isPlaying = false;
 
 function playback() {
-
-    // TODO: Reset effects ...
-    scrollToTopline( true );
-
-    // start playing music (from beginning)
-/*    if( developerMode ) {
-        // NOTE: Skip first 15 seconds when debugging
-        player.currentTime = 15;
-    } else {
-        player.currentTime = 0;
-    }*/
-
-    player.currentTime = 0;
-    player.volume = 0.2;
-
-    player.play();
-
-    // TODO: Block play-button!
-    isPlaying = true;
-
-    // reset event-counter
-    eventIndex = 0;
-    nextEvent = timeEvents[0];
-
-    lastEventObject = null;
-    lastEvent = null;
-
+    player.playback();
     prepareAnimations();
 }
 
 function pause() {
-    console.log("Pause?");
-    if( player.paused ) {
-        player.play();
-        timelineNavigator.play();
-    } else {
         player.pause();
-        timelineNavigator.pause();
-    }
 }
 
 function skipTo( newTime ) {
-    console.log("Skip to time: " + newTime);
-
-    player.currentTime = newTime;
-
-    // remove lastevent
-    if( lastEventObject != null ) {
-        lastEventObject.classList.remove("on");
-    }
-    lastEvent = null;
-    lastEventObject = null;
-
-    // find suitable eventindex
-    for( let i=0; i < timeEvents.length; i++ ) {
-        if( timeEvents[i].time > newTime ) {
-            eventIndex = i;
-            nextEvent = timeEvents[i];
-            break;
-        }
-    }
+    player.skipTo( newTime );
 }
 
 function stop() {
-    // NOTE: Not sure why this function would be needed - why not just start playing always, and pause??
-    player.pause();
-    player.currentTime = 0;
-    isPlaying = false;
+    player.stop();
 }
 
 /**************** RECORDER ****************/
@@ -321,7 +274,7 @@ function startRecording() {
     timelineNavigator.startRecording();
 
     // start music
-    player.play();
+    musicPlayer.play();
 
     // No, don't clear array - make the recording add to the array of timeevents!
 //    timeEvents = [];
@@ -406,7 +359,7 @@ function endRecording() {
     timelineNavigator.endRecording();
 
     // stop the music
-    player.pause();
+    musicPlayer.pause();
 
     // replace time with adjusted
     timeEvents.forEach( timeEvent => timeEvent.time = timeEvent.adjusted?timeEvent.adjusted:timeEvent.time );
@@ -827,137 +780,8 @@ function runEffectAnimations( deltaTime ) {
 
 
 
-var player;
-var eventIndex = 0;
-var nextEvent = null;
-var lastEvent = null;
-var lastEventObject = null;
+var musicPlayer;
 
-
-
-
-
-
-function playing( deltaTime ) {
-    var curTime = player.currentTime;
-//    console.log("time: " + (nextEvent.time-curTime) );
-
-    if( eventIndex < timeEvents.length && nextEvent != null ) {
-        var nextTime = nextEvent.time;
-        if( nextEvent.adjusted ) {
-            nextTime = nextEvent.adjusted;
-        }
-
-        // if curtime is within 16ms of nextEvent, perform the next event!
-        if( nextTime-curTime < deltaTime || curTime > nextTime ) {
-            var thisEvent = nextEvent;
-
-            console.log("@" + curTime + " : Perform event ", thisEvent);
-            performEvent( thisEvent );
-
-            // find nextEvent
-            eventIndex++;
-            if( eventIndex < timeEvents.length ) {
-                nextEvent = timeEvents[eventIndex];
-            } else {
-                nextEvent = null;
-            }
-
-            // if this event wasn't an effect, then find the next event that isn't an effect, and draw an arrow to it
-            if( thisEvent.type != "effect" && thisEvent.type != "modifier" && thisEvent.type != "text" && nextEvent != null ) {
-                var index = eventIndex;
-                var arrowEvent = nextEvent;
-                while( arrowEvent != null && ( arrowEvent.type == "effect" || arrowEvent.type == "modifier" || arrowEvent.type == "text") ) {
-                    index++;
-                    arrowEvent = timeEvents[index];
-                }
-                if( arrowEvent != null ) {
-                    highlightArrow( thisEvent, arrowEvent);
-                }
-            }
-        }
-    }
-}
-
-var lastlastElement = null;
-
-function performEvent( timeEvent ) {
-
-    if( timeEvent.type == "screen" || timeEvent.type == "flipper"
-     || timeEvent.type == "turner" || timeEvent.type.startsWith("neontext")) {
-        var element = document.querySelector("#"+timeEvent.element);
-
-        if( timeEvent.type == "turner" ) {
-            element = document.querySelector("#html"+timeEvent.element);
-        }
-
-        element.classList.remove("off");
-        element.offsetHeight; // force reflow
-        element.classList.add("on");
-
-        if( lastEvent != null ) {
-            if(lastEvent.type == "screen" || lastEvent.type=="flipper"
-            || lastEvent.type == "turner" || lastEvent.type=="neontext1") {
-                lastEventObject.classList.remove("on");
-                lastEventObject.offsetLeft;
-                lastEventObject.classList.add("off");
-
-            } else if( lastEvent.type == "neontext2" ) {
-              // NOTE: Handled by the neonhighlighter effect
-            }
-
-            if( lastEvent.type == "flipper" ) {
-                // wait for off-animation to finish
-                lastEventObject.addEventListener("animationend", scrollFlipper);
-            }
-
-            if( lastEvent.type == "turner" ) {
-                // the actual turner is inside the event-object with the id
-                var turner = lastEventObject.querySelector(".turner");
-                // flip - or unflip - turner in question
-                if( turner.classList.contains("flip") ) {
-                    turner.classList.remove("flip");
-                    turner.offsetLeft;
-                    turner.classList.add("unflip");
-                } else {
-                    turner.classList.remove("unflip");
-                    turner.offsetLeft;
-                    turner.classList.add("flip");
-                }
-            }
-        }
-
-        // if this event has a hold - then don't let the next event turn it off
-        if( timeEvent.hold ) {
-            setTimeout( function() {
-                console.log("delayed off on ", timeEvent);
-                element.classList.remove("on");
-                element.offsetHeight; // force reflow
-                element.classList.add("off");
-
-            }, timeEvent.hold * 1000);
-
-            lastEvent = null;
-            lastEventObject = null;
-        } else {
-            lastEvent = timeEvent;
-            lastEventObject = element;
-        }
-
-
-
-
-    } else if( timeEvent.type == "effect") {
-        performEffect( timeEvent );
-    } else if( timeEvent.type == "modifier") {
-        performModifier( timeEvent );
-    } else if( timeEvent.type == "text") {
-        performTextEvent( timeEvent );
-    }
-
-
-
-}
 
 function highlightArrow( fromEvent, toEvent ) {
     var fromId = fromEvent.element;
@@ -1182,7 +1006,7 @@ function prepareAnimations() {
 }
 
 function runAnimations() {
-    if( isPlaying ) {
+    if( player.isPlaying ) {
         window.requestAnimationFrame( runAnimations );
 
         // calculate deltaTime ...
@@ -1192,7 +1016,7 @@ function runAnimations() {
 
         runLineAnimations( deltaTime );
 
-        runSoundAnimations( deltaTime );
+        player.animate( deltaTime );
 
         runEffectAnimations( deltaTime );
 
@@ -1203,9 +1027,6 @@ function runAnimations() {
     }
 }
 
-function runSoundAnimations( deltaTime ) {
-    playing( deltaTime );
-}
 
 
 
