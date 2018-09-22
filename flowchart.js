@@ -1,7 +1,7 @@
 window.addEventListener("load", sidenVises);
 
 var loading;
-var developerMode = true;
+var developerMode = false;
 
 // The array of events (effects)
 var timeEvents = [];
@@ -251,6 +251,7 @@ function playback() {
     }*/
 
     player.currentTime = 0;
+    player.volume = 0.2;
 
     player.play();
 
@@ -1196,7 +1197,7 @@ function runAnimations() {
         runEffectAnimations( deltaTime );
 
         if( developerMode ) {
-            navUpdateCursor( deltaTime );
+            timelineNavigator.updateCursor();
         }
 
     }
