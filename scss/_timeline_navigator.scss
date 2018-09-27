@@ -2,24 +2,23 @@
 
 #timeline_navigator {
     display: flex;
-}
 
-#timeline_navigator #timeline_buttons {
-    white-space: nowrap;
-}
+    #timeline_buttons {
+        display: flex;
+        align-items: flex-start;
+    }
 
-
-#timeline_container {
-    position: relative;
-    /* overflow-y: hidden; */
-    overflow-x: scroll;
-    padding: 3px 0px;
-    margin-bottom: 24px; /* to make room for mac scrollbar - would be nice to remove on windows*/ 
+    #timeline_container {
+        flex-grow: 1;
+        position: relative;
+        overflow-x: scroll;
+        margin-top: 3px;
+        // margin-bottom: 24px; /* to make room for mac scrollbar - would be nice to remove on windows*/ 
+    }
 }
 
 #timeline {
     height: 22px;
-
     background-color: #94b294;
 }
 

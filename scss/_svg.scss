@@ -1,10 +1,32 @@
 /* Hide the SVG turners */
 svg rect#turner_once,
 svg rect#turner_butnow {
-    display: none;
+    //display: none;
+    /* cannot use display: none, because we need to read their sizes */
+    opacity: 0;
 }
 
 svg #broken_getalittle,
 svg #knowtheres {
     display: none;
+}
+
+
+#svg.hidebelowthebelt .belowthebelt,
+#svg.hidebelowthebelt .belowthebelt+polygon,
+#svg.hidebelowthebelt ~ .belowthebelt{
+/*    display: none;*/
+   /* cannot use display: none, because we need to fade them in */
+    opacity: 0;
+}
+
+#svg.fadeinbelowthebelt .belowthebelt,
+#svg.fadeinbelowthebelt .belowthebelt+polygon,
+#svg.fadeinbelowthebelt ~ .belowthebelt{
+    opacity: 1;
+    animation-name: fadein;
+    animation-duration: 5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in;
 }

@@ -1,9 +1,19 @@
-#controlpanel {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
+#editor {
+    // position: fixed;
+    // bottom: 0;
+    // left: 0;
+    // width: 100vw;
+    padding: 2px;
+    background-color: gainsboro;
 
+    #controls {
+        display: flex;
+        margin-bottom: 2px;
+
+        button {
+            margin-right: 2px;
+        }
+    }
 }
 
 #buttongroups {
@@ -12,7 +22,7 @@
     top: 770px;
 */
 
-    display: flex;
+    // display: flex;
 }
 
 #buttongroups div {
@@ -24,14 +34,14 @@
     margin-bottom: 2px;
 }
 
-#buttons, audio {
-    display: inline-block;
-}
+// #buttons, audio {
+//     display: inline-block;
+// }
 
-#buttons {
-    position: relative;
-    top: -11px;
-}
+// #editor  {
+//     position: relative;
+//     top: -11px;
+// }
 
 audio {
 

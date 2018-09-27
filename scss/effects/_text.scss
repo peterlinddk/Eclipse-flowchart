@@ -1,0 +1,22 @@
+/* TEXTS */
+#texts {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    pointer-events: none;
+
+    font-size: 3vw;
+    color: #78a57e;
+}
+
+#texts .text {
+    display: none;
+    position: absolute;
+    /* TODO: Calculate position exactly below the line */
+    top: 50vh;
+    left: 0;
+
+    width: 100vw;
+    text-align: center;
+}

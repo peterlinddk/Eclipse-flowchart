@@ -8,7 +8,8 @@
     width: 581.73px;
     height: 212.68px;
     */
-  padding: 5px 6px;
+  // padding: 5px 6px;
+  padding: 0.4rem 0.5rem;
   perspective: 800px; }
 
 #htmlflipper .verse.visible {
@@ -19,28 +20,26 @@
   display: none; }
 
 #htmlflipper .flipbox {
-  margin-bottom: 2px;
-  margin-top: 2px;
+  margin-bottom: .16rem;
+  margin-top: .16rem;
   transform-style: preserve-3d;
   transform-origin: bottom center;
   transform: rotateX(0deg);
-  height: 47px;
-  width: 634px;
-  border: 3px solid black;
+  height: 4rem;
+  width: 52rem;
+  border: .3rem solid black;
   box-sizing: border-box;
   background-color: #4d4d4d;
   color: gray;
-  border-radius: 12px;
-  font-family: "HelveticaRounded";
+  border-radius: 1rem;
   font-weight: bold;
-  font-size: 24px;
-  padding-left: 7px;
-  line-height: 45px; }
+  font-size: 2rem;
+  padding-left: .5rem;
+  line-height: 3.4rem; }
 
 #htmlflipper .third_verse .flipbox {
-  font-size: 21.6px;
-  font-weight: normal;
-  padding-left: 4px; }
+  font-size: 1.78rem;
+  padding-left: .3rem; }
 
 #htmlflipper .flipbox.off, .off .turner div {
   background-color: #4d4d4d;
@@ -96,9 +95,9 @@
 
 @keyframes move_up {
   0% {
-    transform: translateY(0px); }
+    transform: translateY(0); }
   100% {
-    transform: translateY(-47px); } }
+    transform: translateY(-4rem); } }
 
 #htmlflipper .flipbox.first.move {
   /*    background-color: red;*/
@@ -109,6 +108,6 @@
 
 @keyframes move_flip {
   0% {
-    transform: translateY(0px) rotateX(0deg); }
+    transform: translateY(0) rotateX(0deg); }
   100% {
-    transform: translateY(-47px) rotateX(90deg); } }
+    transform: translateY(-4rem) rotateX(90deg); } }

@@ -28,12 +28,13 @@ class ScrollTo extends Effect {
         
         if( this.speed === 0 ) {
             // jump immediately - don't animate
-            document.body.scrollTop = this.destination;
-            document.documentElement.scrollTop = this.destination;
+//            document.body.scrollTop = this.destination;
+//            document.documentElement.scrollTop = this.destination;
+            document.querySelector("main").scrollTop = this.destination;
             this.active = false;
         } else {
             // start animation
-            this.current = document.documentElement.scrollTop || document.body.scrollTop || 0;
+            this.current = document.querySelector("main").scrollTop || 0;
             this.active = true;
         }
 
@@ -60,8 +61,9 @@ class ScrollTo extends Effect {
             }
     
             // NOTE: Why both?
-            document.body.scrollTop = this.current;
-            document.documentElement.scrollTop = this.current;
+            document.querySelector("main").scrollTop = this.current;
+//            document.body.scrollTop = this.current;
+            //document.documentElement.scrollTop = this.current;
         }
     }
 }

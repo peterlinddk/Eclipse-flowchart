@@ -10,42 +10,33 @@
   font-weight: 900;
   font-style: normal; }
 
+html {
+  /* calculates the base font-size to 12px on a 1920 wide screen, and adjusts responsively */
+  font-size: calc( 100vw / 1920 * 12); }
+
 body {
-  margin: 0px;
+  margin: 0;
   border: 0;
   padding: 0;
   background-color: #2c805b;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   /* TODO: Handle scroll when it comes! */
-  min-height: 200vh; }
+  font-family: "HelveticaRounded"; }
 
-#scaler {
-  transform-origin: top left;
-  /* feels odd to set the width and height like this - but otherwise the scene
-    and highlighter might not fill the screen */
-  /*
-    width: 200vw;
-    height: 200vw;
-*/ }
+main {
+  flex-grow: 1;
+  overflow: scroll;
+  height: 200vh; }
 
 #scene {
-  position: relative; }
+  position: relative;
+  min-height: 200vh;
+  /* so we can scroll up and down */ }
 
-#svg.hidebelowthebelt .belowthebelt,
-#svg.hidebelowthebelt .belowthebelt + polygon,
-#svg.hidebelowthebelt ~ .belowthebelt {
-  /*    display: none;*/
-  opacity: 0; }
-
-#svg.fadeinbelowthebelt .belowthebelt,
-#svg.fadeinbelowthebelt .belowthebelt + polygon,
-#svg.fadeinbelowthebelt ~ .belowthebelt {
-  opacity: 1;
-  animation-name: fadein;
-  animation-duration: 5s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-in; }
+#svg svg {
+  width: 100%; }
 
 /***** MODIFIERS *****/
 #know {
@@ -183,68 +174,6 @@ body {
   100% {
     transform: scale(1); } }
 
-/* ORGAN: Arrows */
-#arrowsclone path,
-#arrowsclone line,
-#arrowsclone polygon,
-#arrowsblur path,
-#arrowsblur line,
-#arrowsblur polygon {
-  animation-name: glow_arrows;
-  animation-duration: 8s;
-  animation-iteration-count: 1; }
-
-#arrowsclone polygon,
-#arrowsblur polygon {
-  animation-name: glow_arrowheads; }
-
-@keyframes glow_arrows {
-  0% {
-    stroke: #000; }
-  25% {
-    stroke: #ffbb33; }
-  30% {
-    stroke: #ffeb00; }
-  35% {
-    stroke: #ffbb33; }
-  45% {
-    stroke: #ffbb33; }
-  100% {
-    stroke: #000; } }
-
-@keyframes glow_arrowheads {
-  0% {
-    fill: #000; }
-  25% {
-    fill: #ffbb33; }
-  30% {
-    fill: #ffeb00; }
-  35% {
-    fill: #ffbb33; }
-  45% {
-    fill: #ffbb33; }
-  100% {
-    fill: #000; } }
-
-/* TEXTS */
-#texts {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  font-family: "HelveticaRounded";
-  font-size: 3vw;
-  color: #78a57e; }
-
-#texts .text {
-  display: none;
-  position: absolute;
-  /* TODO: Calculate position exactly below the line */
-  top: 50vh;
-  left: 0;
-  width: 100vw;
-  text-align: center; }
-
 /* USER INTERFACE */
 #askforfullscreen {
   display: none;
@@ -265,11 +194,9 @@ body {
   background-color: antiquewhite;
   border: 2px solid black;
   padding: 1em;
-  font-family: "HelveticaRounded";
   font-size: 3vw; }
 
 #askforfullscreen .inner button {
-  font-family: "HelveticaRounded";
   font-size: 3vw;
   width: 20vw;
   height: 6vw;
@@ -391,6 +318,49 @@ body {
     fill: #f7931e; }
   100% {
     fill: #808080; } }
+
+/* ORGAN: Arrows */
+#arrowsclone path,
+#arrowsclone line,
+#arrowsclone polygon,
+#arrowsblur path,
+#arrowsblur line,
+#arrowsblur polygon {
+  animation-name: glow_arrows;
+  animation-duration: 8s;
+  animation-iteration-count: 1; }
+
+#arrowsclone polygon,
+#arrowsblur polygon {
+  animation-name: glow_arrowheads; }
+
+@keyframes glow_arrows {
+  0% {
+    stroke: #000; }
+  25% {
+    stroke: #ffbb33; }
+  30% {
+    stroke: #ffeb00; }
+  35% {
+    stroke: #ffbb33; }
+  45% {
+    stroke: #ffbb33; }
+  100% {
+    stroke: #000; } }
+
+@keyframes glow_arrowheads {
+  0% {
+    fill: #000; }
+  25% {
+    fill: #ffbb33; }
+  30% {
+    fill: #ffeb00; }
+  35% {
+    fill: #ffbb33; }
+  45% {
+    fill: #ffbb33; }
+  100% {
+    fill: #000; } }
 
 /*
 body.thunder {
@@ -518,6 +488,24 @@ body.thunder {
   z-index: 1;
   pointer-events: none; }
 
+/* TEXTS */
+#texts {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  font-size: 3vw;
+  color: #78a57e; }
+
+#texts .text {
+  display: none;
+  position: absolute;
+  /* TODO: Calculate position exactly below the line */
+  top: 50vh;
+  left: 0;
+  width: 100vw;
+  text-align: center; }
+
 /* FLIPPER */
 #htmlflipper {
   position: absolute;
@@ -528,7 +516,7 @@ body.thunder {
     width: 581.73px;
     height: 212.68px;
     */
-  padding: 5px 6px;
+  padding: 0.4rem 0.5rem;
   perspective: 800px; }
 
 #htmlflipper .verse.visible {
@@ -539,28 +527,26 @@ body.thunder {
   display: none; }
 
 #htmlflipper .flipbox {
-  margin-bottom: 2px;
-  margin-top: 2px;
+  margin-bottom: .16rem;
+  margin-top: .16rem;
   transform-style: preserve-3d;
   transform-origin: bottom center;
   transform: rotateX(0deg);
-  height: 47px;
-  width: 634px;
-  border: 3px solid black;
+  height: 4rem;
+  width: 52rem;
+  border: .3rem solid black;
   box-sizing: border-box;
   background-color: #4d4d4d;
   color: gray;
-  border-radius: 12px;
-  font-family: "HelveticaRounded";
+  border-radius: 1rem;
   font-weight: bold;
-  font-size: 24px;
-  padding-left: 7px;
-  line-height: 45px; }
+  font-size: 2rem;
+  padding-left: .5rem;
+  line-height: 3.4rem; }
 
 #htmlflipper .third_verse .flipbox {
-  font-size: 21.6px;
-  font-weight: normal;
-  padding-left: 4px; }
+  font-size: 1.78rem;
+  padding-left: .3rem; }
 
 #htmlflipper .flipbox.off, .off .turner div {
   background-color: #4d4d4d;
@@ -616,9 +602,9 @@ body.thunder {
 
 @keyframes move_up {
   0% {
-    transform: translateY(0px); }
+    transform: translateY(0); }
   100% {
-    transform: translateY(-47px); } }
+    transform: translateY(-4rem); } }
 
 #htmlflipper .flipbox.first.move {
   /*    background-color: red;*/
@@ -629,43 +615,35 @@ body.thunder {
 
 @keyframes move_flip {
   0% {
-    transform: translateY(0px) rotateX(0deg); }
+    transform: translateY(0) rotateX(0deg); }
   100% {
-    transform: translateY(-47px) rotateX(90deg); } }
+    transform: translateY(-4rem) rotateX(90deg); } }
 
 /**** NEONTEXT ****/
 #htmlneontext1 {
   position: absolute;
   box-sizing: border-box;
-  padding: 8px 14px;
-  font-size: 28px;
-  line-height: 33.6px; }
+  padding: 0.6rem 1.1rem;
+  font-size: 2.3rem; }
 
 .neontext {
-  font-family: "HelveticaRounded";
   color: #333;
-  text-shadow: 0 0 30px rgba(203, 203, 203, 0.55);
-  margin-bottom: 12px; }
+  text-shadow: 0 0 3rem rgba(203, 203, 203, 0.55);
+  margin-bottom: 1rem; }
 
 #htmlneontext2 {
   position: absolute;
-  padding: 8px 13px;
+  padding: .6rem .7rem;
   box-sizing: border-box;
-  font-size: 21px;
-  line-height: 25.2px;
-  /* necessary for Mac Chrome */ }
+  font-size: 1.75rem; }
 
 #htmlneontext2 div {
-  margin-top: 12px; }
+  margin-top: 1rem; }
 
 #htmlneontext2 #neonhighlighter {
   margin-top: 0; }
 
 #htmlneontext1 .neontext.on {
-  /*
-
-    text-shadow: 0 0 20px #ff0080;
-*/
   animation-name: neon_turn_on;
   animation-duration: 1s;
   animation-iteration-count: 1;
@@ -674,38 +652,38 @@ body.thunder {
 @keyframes neon_turn_on {
   0% {
     color: #55002b;
-    text-shadow: 0 0 5px #444, 0 0 15px #333; }
+    text-shadow: 0 0 .5rem #444, 0 0 1rem #333; }
   10% { }
   20% {
     color: #ff0080;
-    text-shadow: 0 0 5px #ff0080; }
+    text-shadow: 0 0 .5rem #ff0080; }
   30% {
-    text-shadow: 0 0 10px #ff0080; }
+    text-shadow: 0 0 1rem #ff0080; }
   40% {
     color: #fff;
-    text-shadow: 0 0 20px #ff0080; }
+    text-shadow: 0 0 2rem #ff0080; }
   50% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 20px #ff0080; }
+    text-shadow: 0 0 .5rem #fff, 0 0 2rem #ff0080; }
   60% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080; }
+    text-shadow: 0 0 .5rem #fff, 0 0 2rem #ff0080, 0 0 3rem #ff0080; }
   70% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080; }
+    text-shadow: 0 0 .5rem #fff, 0 0 1rem #fff, 0 0 2rem #ff0080, 0 0 3rem #ff0080; }
   80% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080; }
+    text-shadow: 0 0 .5rem #fff, 0 0 1rem #fff, 0 0 2rem #ff0080, 0 0 3rem #ff0080, 0 0 4rem #ff0080; }
   90% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080; }
+    text-shadow: 0 0 .5rem #fff, 0 0 1rem #fff, 0 0 2rem #ff0080, 0 0 3rem #ff0080, 0 0 4rem #ff0080, 0 0 5rem #ff0080; }
   100% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080; } }
+    text-shadow: 0 0 .5rem #fff, 0 0 1rem #fff, 0 0 2rem #ff0080, 0 0 3rem #ff0080, 0 0 4rem #ff0080, 0 0 5rem #ff0080, 0 0 7rem #ff0080; } }
 
 #htmlneontext1 .neontext.off {
   color: #55002b;
-  text-shadow: 0 0 5px #444, 0 0 15px #333;
+  text-shadow: 0 0 .5rem #444, 0 0 1rem #333;
   animation-name: neon_turn_on;
   animation-duration: .7s;
   animation-iteration-count: 1;
@@ -728,14 +706,14 @@ body.thunder {
 @keyframes neon2_on {
   0% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff; }
+    text-shadow: 0 0 .5rem #fff, 0 0 1rem #fff, 0 0 2rem #0080ff, 0 0 3rem #0080ff; }
   100% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff, 0 0 40px #0080ff; } }
+    text-shadow: 0 0 .5rem #fff, 0 0 1rem #fff, 0 0 2rem #0080ff, 0 0 3rem #0080ff, 0 0 4rem #0080ff; } }
 
 #htmlneontext2 .neontext.off {
   color: #002b55;
-  text-shadow: 0 0 5px #444, 0 0 15px #333;
+  text-shadow: 0 0 .5rem #444, 0 0 1rem #333;
   animation-name: neon2_turn_on;
   animation-duration: .7s;
   animation-iteration-count: 1;
@@ -744,45 +722,44 @@ body.thunder {
 @keyframes neon2_turn_on {
   0% {
     color: #002b55;
-    text-shadow: 0 0 5px #444, 0 0 15px #333; }
+    text-shadow: 0 0 .5rem #444, 0 0 1rem #333; }
   10% { }
   20% {
     color: #0080ff;
-    text-shadow: 0 0 5px #0080ff; }
+    text-shadow: 0 0 .5rem #0080ff; }
   30% {
-    text-shadow: 0 0 10px #0080ff; }
+    text-shadow: 0 0 1rem #0080ff; }
   40% {
     color: #fff;
-    text-shadow: 0 0 20px #0080ff; }
+    text-shadow: 0 0 2rem #0080ff; }
   50% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 20px #0080ff; }
+    text-shadow: 0 0 .5rem #fff, 0 0 2rem #0080ff; }
   60% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff; }
+    text-shadow: 0 0 .5rem #fff, 0 0 2rem #0080ff, 0 0 3rem #0080ff; }
   70% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff; }
+    text-shadow: 0 0 .5rem #fff, 0 0 1rem #fff, 0 0 2rem #0080ff, 0 0 3rem #0080ff; }
   80% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff, 0 0 40px #0080ff; }
+    text-shadow: 0 0 .5rem #fff, 0 0 1rem #fff, 0 0 2rem #0080ff, 0 0 3rem #0080ff, 0 0 4rem #0080ff; }
   90% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff, 0 0 40px #0080ff, 0 0 55px #0080ff; }
+    text-shadow: 0 0 .5rem #fff, 0 0 1rem #fff, 0 0 2rem #0080ff, 0 0 3rem #0080ff, 0 0 4rem #0080ff, 0 0 5.5rem #0080ff; }
   100% {
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0080ff, 0 0 30px #0080ff, 0 0 40px #0080ff, 0 0 55px #0080ff, 0 0 75px #0080ff; } }
+    text-shadow: 0 0 .5rem #fff, 0 0 1rem #fff, 0 0 2rem #0080ff, 0 0 3rem #0080ff, 0 0 4rem #0080ff, 0 0 5.5rem #0080ff, 0 0 7.5rem #0080ff; } }
 
 #neonhighlighter {
   position: absolute;
-  top: 0px;
-  left: 0px;
-  /* TODO: Get size from SVG */
-  width: 543px;
-  height: 185px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(255, 255, 255, 0.8);
   opacity: 0;
-  border-radius: 12px; }
+  border-radius: 1rem; }
 
 #neonhighlighter.on {
   animation-name: highlight;
@@ -812,12 +789,11 @@ body.thunder {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  border: 4px solid black;
+  border: .3rem solid black;
   color: #808080;
-  border-radius: 12px;
-  font-family: "HelveticaRounded";
+  border-radius: 1rem;
   font-weight: bold;
-  font-size: 36px; }
+  font-size: 3rem; }
 
 .turner.flip {
   animation-name: turn_back;
@@ -891,24 +867,26 @@ body.thunder {
   padding: .5em; }
 
 .turner .front {
-  border-radius: 10px; }
+  border-radius: .8rem; }
 
 .turner .back {
-  border-radius: 10px;
+  border-radius: .8rem;
   transform: rotateX(180deg); }
 
-#controlpanel {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw; }
+#editor {
+  padding: 2px;
+  background-color: gainsboro; }
+  #editor #controls {
+    display: flex;
+    margin-bottom: 2px; }
+    #editor #controls button {
+      margin-right: 2px; }
 
 #buttongroups {
   /*
     position: absolute;
     top: 770px;
-*/
-  display: flex; }
+*/ }
 
 #buttongroups div {
   margin-left: 1em; }
@@ -916,13 +894,6 @@ body.thunder {
 #buttongroups button {
   display: block;
   margin-bottom: 2px; }
-
-#buttons, audio {
-  display: inline-block; }
-
-#buttons {
-  position: relative;
-  top: -11px; }
 
 /* record button symbol */
 .record {
@@ -954,17 +925,14 @@ body.thunder {
 /****** NAVIGATOR **********/
 #timeline_navigator {
   display: flex; }
-
-#timeline_navigator #timeline_buttons {
-  white-space: nowrap; }
-
-#timeline_container {
-  position: relative;
-  /* overflow-y: hidden; */
-  overflow-x: scroll;
-  padding: 3px 0px;
-  margin-bottom: 24px;
-  /* to make room for mac scrollbar - would be nice to remove on windows*/ }
+  #timeline_navigator #timeline_buttons {
+    display: flex;
+    align-items: flex-start; }
+  #timeline_navigator #timeline_container {
+    flex-grow: 1;
+    position: relative;
+    overflow-x: scroll;
+    margin-top: 3px; }
 
 #timeline {
   height: 22px;
@@ -1063,8 +1031,26 @@ body.thunder {
 /* Hide the SVG turners */
 svg rect#turner_once,
 svg rect#turner_butnow {
-  display: none; }
+  /* cannot use display: none, because we need to read their sizes */
+  opacity: 0; }
 
 svg #broken_getalittle,
 svg #knowtheres {
   display: none; }
+
+#svg.hidebelowthebelt .belowthebelt,
+#svg.hidebelowthebelt .belowthebelt + polygon,
+#svg.hidebelowthebelt ~ .belowthebelt {
+  /*    display: none;*/
+  /* cannot use display: none, because we need to fade them in */
+  opacity: 0; }
+
+#svg.fadeinbelowthebelt .belowthebelt,
+#svg.fadeinbelowthebelt .belowthebelt + polygon,
+#svg.fadeinbelowthebelt ~ .belowthebelt {
+  opacity: 1;
+  animation-name: fadein;
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in; }

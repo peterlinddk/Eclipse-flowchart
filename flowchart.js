@@ -136,13 +136,8 @@ function loadingComplete() {
 /**************** FULLSCREEN and SIZING ****************/
 
 function calculateSize() {
-    // get width of body
-    var bo = document.querySelector("body");
-    var w = bo.clientWidth;
-
-    var scaling = w / 1920;
-
-    document.querySelector("#scaler").style.transform = "scale("+scaling+")";
+    // redo sizes from SVG to HTML
+    prepareSVG();
 }
 
 function requestFullscreen() {
@@ -213,13 +208,13 @@ function prepareSVG() {
 
     function matchHTML2SVG( element, svgElement ) {
         // set all the properties on the html from the SVG
-        element.style.top = svgElement.getAttribute("y") + "px";
-        element.style.left = svgElement.getAttribute("x") + "px";
-        element.style.width = svgElement.getAttribute("width") + "px";
-        element.style.height = svgElement.getAttribute("height") + "px";
+        const rect = svgElement.getBoundingClientRect();
+        element.style.top = rect.y + "px";
+        element.style.left = rect.x + "px";
+        element.style.width = rect.width + "px";
+        element.style.height = rect.height + "px";
     }
 
-    // first the #flipper
     // look for "matchsvg" in the html-file
     // look at the id - subtract initial html - the rest should be an in in the svg
     // if the svg element is a rect, use that, otherwise find the first rect child ...

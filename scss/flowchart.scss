@@ -14,46 +14,39 @@
 	font-style: normal;
 }
 
+html {
+    /* calculates the base font-size to 12px on a 1920 wide screen, and adjusts responsively */
+    font-size: calc( 100vw / 1920 * 12);
+}
+
 body {
-    margin: 0px;
+    margin: 0;
     border: 0;
     padding: 0;
     background-color: #2c805b;
-    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    // overflow: hidden;
     /* TODO: Handle scroll when it comes! */
-    min-height: 200vh;
+    // min-height: 200vh;
+    font-family: "HelveticaRounded"
 }
 
-#scaler {
-    transform-origin: top left;
-    /* feels odd to set the width and height like this - but otherwise the scene
-    and highlighter might not fill the screen */
-/*
-    width: 200vw;
-    height: 200vw;
-*/
+main {
+    flex-grow: 1;
+    overflow: scroll;
+    height: 200vh;
 }
 
 #scene {
     position: relative;
+    min-height: 200vh; /* so we can scroll up and down */
 }
 
-#svg.hidebelowthebelt .belowthebelt,
-#svg.hidebelowthebelt .belowthebelt+polygon,
-#svg.hidebelowthebelt ~ .belowthebelt{
-/*    display: none;*/
-    opacity: 0;
-}
-
-#svg.fadeinbelowthebelt .belowthebelt,
-#svg.fadeinbelowthebelt .belowthebelt+polygon,
-#svg.fadeinbelowthebelt ~ .belowthebelt{
-    opacity: 1;
-    animation-name: fadein;
-    animation-duration: 5s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-    animation-timing-function: ease-in;
+#svg svg {
+    width: 100%;
 }
 
 
@@ -275,30 +268,6 @@ body {
 
 
 
-/* TEXTS */
-#texts {
-    position: fixed;
-    top: 0;
-    left: 0;
-
-    pointer-events: none;
-
-    font-family: "HelveticaRounded";
-    font-size: 3vw;
-    color: #78a57e;
-}
-
-#texts .text {
-    display: none;
-    position: absolute;
-    /* TODO: Calculate position exactly below the line */
-    top: 50vh;
-    left: 0;
-
-    width: 100vw;
-    text-align: center;
-}
-
 
 /* USER INTERFACE */
 
@@ -324,12 +293,12 @@ body {
     border: 2px solid black;
     padding: 1em;
 
-    font-family: "HelveticaRounded";
+    // font-family: "HelveticaRounded";
     font-size: 3vw;
 }
 
 #askforfullscreen .inner button {
-    font-family: "HelveticaRounded";
+    // font-family: "HelveticaRounded";
     font-size: 3vw;
     width: 20vw;
     height: 6vw;
