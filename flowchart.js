@@ -129,8 +129,7 @@ function loadingComplete() {
 
         prepareModifiers();
 
-        // jump to topline-position
-        scrollToTopline( true );
+        
     }
 }
 
@@ -185,12 +184,12 @@ function goneFullscreen( event ) {
     // hide request for fullscreen
     document.querySelector("#askforfullscreen").style.display = "none";
 
-    scrollToTopline( true );
+   // scrollToTopline( true );
 
     // try again in half a second
-    setTimeout( function() {
-        scrollToTopline(true);
-    }, 500);
+    // setTimeout( function() {
+    //     scrollToTopline(true);
+    // }, 500);
 
     playback();
 }
@@ -245,6 +244,8 @@ function prepareSVG() {
 //var isPlaying = false;
 
 function playback() {
+    // jump to topline-position
+//    scrollToTopline( true );
     player.playback();
 }
 
@@ -388,192 +389,16 @@ function endRecording() {
 
 /**************** EFFECTS ****************/
 
-var organInfo = {
-    animate: false,
-    bgAlpha: 0,
-    bgAlphaGrowth: 1/3
-}
 
-var scroller = {
-    current: 0,
-    destination: 0,
-    speed: 100
-}
+
+
 
 function prepareEffects() {
+    // NOTE: Doesn't work with new effect-system - should also be part of the recorder!
     document.querySelectorAll("#effects button").forEach(button=>button.addEventListener("click", function(event) { runEffect(event.target.id);}));
 }
 
-function performEffect( timeEvent ) {
-    runEffect( timeEvent.element );
-}
 
-function runEffect( effectId ) {
-    console.log("Run effect: " + effectId);
-    switch( effectId )
-    {
-        case "reseteffects": resetEffects();
-                        break;
-        case "basskick": basskick();
-                        break;
-        case "neonhighlight": neonhighlight();
-                        break;
-        case "thunder": thunder();
-                        break;
-        case "organ": organStart();
-                        break;
-        case "zoomout": zoomout();
-                        break;
-        case "scrolltotopline": scrollToTopline();
-                        break;
-        case "scrolltotop": scrollToTop();
-                        break;
-        case "movetocenter": moveToCenter();
-                        break;
-    }
-}
-
-function resetEffects() {
-    // remove all classes from the scene
-    document.querySelector("#scene").className="";
-
-    // remove on or off from everything
-    document.querySelectorAll("#scene .off").forEach(elm=>elm.classList.remove("off"));
-    document.querySelectorAll("#scene .on").forEach(elm=>elm.classList.remove("on"));
-}
-
-function basskick() {
-    var scene = document.querySelector("#scene");
-    scene.classList.remove("basskick");
-    scene.offsetHeight; // force reflow
-    scene.classList.add("basskick");
-
-    // NOTE: Can't use animationend, since it is triggered by every child-animation in the #scene
-    setTimeout(function() {
-        scene.classList.remove("basskick");
-    },1300);
-}
-
-function zoomout() {
-    var scene = document.querySelector("#scene");
-
-    scene.classList.add("zoomout");
-    scene.offsetHeight; // force reflow
-}
-
-function scrollToTopline( jump ) {
-    var topline_y = parseFloat( document.querySelector("#topline").getAttribute("y1") );
-    var body_elm = document.querySelector("body");
-    var scrollto =  body_elm.clientWidth / 1920 * topline_y;
-
-    console.log("scroll to: " + topline_y);
-    console.log("which is: " + scrollto );
-
-    if( jump ) {
-        console.log("do it!");
-        //body_elm.scrollTop = scrollto;
-        document.body.scrollTop = scrollto;
-        document.documentElement.scrollTop = scrollto;
-    }  else {
-        scroller.destination = scrollto;
-        scroller.current = body_elm.scrollTop;
-
-        scroller.animate = true;
-    }
-
-}
-
-function scrollToTop( time ) {
-    var body_elm = document.querySelector("body");
-    if( time ) {
-        // calculate speed
-    } else {
-        scroller.speed = 100;
-    }
-    scroller.destination = 0;
-    scroller.current = document.documentElement.scrollTop || document.body.scrollTop || 0;
-
-    scroller.animate = true;
-}
-
-function moveToCenter() {
-//
-//    var svg = document.querySelector("#svg");
-//    var scale = window.innerWidth / 1920;
-//    var curH = svg.offsetHeight * scale;
-//    var availH = window.innerHeight;
-//
-//    if( availH < curH ) {
-//
-//    }
-
-    var scene = document.querySelector("#scene");
-    scene.style.transformOrigin = "" + window.innerWidth / 2 + "px " + window.innerHeight/2 + "px";
-
-
-
-}
-
-function neonhighlight() {
-    var neontext2 = document.querySelector("#htmlneontext2");
-
-    var highlight = document.querySelector("#neonhighlighter");
-    highlight.classList.remove("on");
-    highlight.classList.remove("off");
-    highlight.offsetHeight;
-    highlight.classList.add("on");
-
-    // if neontext2 has two on-elements, turn them both off
-    var neontexts = document.querySelectorAll("#htmlneontext2 span.on");
-    if( neontexts.length > 1 ) {
-        neontexts.forEach( nt=>{nt.classList.remove("on"); nt.offsetHeight; nt.classList.add("off");});
-    }
-
-}
-
-function thunder(){
-    document.querySelector("#scene").classList.remove("thunder");
-    document.querySelector("#scene").offsetHeight; // force reflow
-    document.querySelector("#scene").classList.add("thunder");
-//    document.querySelector("body").classList.add("thunder");
-
-    // remove every single .off to avoid flash of turn_off animation
-    document.querySelectorAll("#scene .off").forEach(elm=>elm.classList.remove("off"));
-    // and remove flips and unflips as well
-    document.querySelectorAll("#scene .unflip").forEach(elm=>elm.classList.remove("unflip"));
-    document.querySelectorAll("#scene .flip").forEach(elm=>elm.classList.remove("flip"));
-
-
-    // wait five seconds
-    setTimeout(function() {
-        document.querySelector("#scene").classList.remove("thunder");
-  //      document.querySelector("body").classList.remove("thunder");
-    }, 5100);
-
-}
-
-function organStart() {
-    // highlight all the arrows - make them glow orange
-
-    // create clone of arrows
-    var arrows_orig = document.querySelector("#arrows");
-    var arrows_clone = arrows_orig.cloneNode(true);
-    arrows_clone.id = "arrowsclone";
-    var arrows_blur = arrows_orig.cloneNode(true);
-    arrows_blur.id = "arrowsblur";
-
-    arrows_orig.parentElement.insertBefore(arrows_clone, arrows_orig.nextElementSibling);
-    arrows_orig.parentElement.insertBefore(arrows_blur, arrows_orig.nextElementSibling);
-
-    // make the background glow
-    organInfo.bgAlpha = 0;
-    organInfo.bgAlphaGrowth = 1/3;
-    organInfo.blurring = 0;
-    organInfo.blurArrows = arrows_blur;
-    organInfo.animate = true;
-
-
-}
 
 /**************** MODIFIERS ****************/
 
@@ -684,98 +509,8 @@ function breakGetALittle() {
     }, 1400);
 }
 
-/**************** TEXTS ****************/
-
-/****************************************************************
-
-                        EFFECTS
-
- ****************************************************************/
-
-
-
-
-
-function runEffectAnimations( deltaTime ) {
-
-    if( organInfo.animate ) {
-
-        organInfo.bgAlpha += organInfo.bgAlphaGrowth * deltaTime;
-        if( organInfo.bgAlpha > 1 && organInfo.bgAlphaGrowth > 0 ) {
-//            console.log("alpha is 1");
-
-            organInfo.bgAlpha = 1;
-            organInfo.bgAlphaGrowth*=-1;
-
-
-
-
-        } else if( organInfo.bgAlpha < 0 ) {
-//            console.log("Alpha is 0");
-            organInfo.bgAlphaGrowth*=-1;
-            document.querySelector("#scene").style.background = undefined;
-
-            // remove arrowsclone and blur
-            var arrows_clone = document.querySelector("#arrowsclone");
-            var arrows_blur = document.querySelector("#arrowsblur");
-
-            arrows_clone.parentNode.removeChild(arrows_clone);
-            arrows_blur.parentNode.removeChild(arrows_blur);
-
-            organInfo.animate = false;
-        }
-
-        if( organInfo.animate ) {
-            var background = "radial-gradient(ellipse at center, rgba(255,187,51,"+ organInfo.bgAlpha+") 0%,rgba(44,128,91,1) 100%)";
-
-            document.querySelector("#scene").style.background = background;
-
-            var blur = Math.ceil(organInfo.bgAlpha * 7);
-            if( organInfo.blurring != blur ) {
-                organInfo.blurring = blur;
-                organInfo.blurArrows.style.filter = "url(#blur" + organInfo.blurring + ")";
-            }
-//            console.log("blurring: " + Math.ceil(blur) );
-        }
-    }
-
-    if( scroller.animate ) {
-        if( scroller.current > scroller.destination ) {
-            scroller.current -= scroller.speed * deltaTime;
-            if( scroller.current <= scroller.destination ) {
-                scroller.current = scroller.destination;
-                scroller.animate = false;
-            }
-        } else {
-            scroller.current += scroller.speed * deltaTime;
-            if( scroller.current >= scroller.destination ) {
-                scroller.current = scroller.destination;
-                scroller.animate = false;
-            }
-        }
-
-        var body_elm = document.querySelector("body");
-
-       // body_elm.scrollTop = scroller.current;
-        document.body.scrollTop = scroller.current;
-        document.documentElement.scrollTop = scroller.current;
-    }
-}
-
-
-
-
-
-
-
-
-
 
 /*************** RECORDER *****************/
-
-
-
-/************* playback ****************/
 
 
 
@@ -816,71 +551,9 @@ function runAnimations() {
 
         player.animate( deltaTime );
 
-        runEffectAnimations( deltaTime );
-
         if( developerMode ) {
             timelineNavigator.updateCursor();
         }
 
     }
-}
-
-
-
-
-/************************** FLIPPER *************************/
-
-
-
-
-
-
-function scrollFlipper( event ) {
-    if( event ) {
-        console.log("scroll on "+ event.target.id);
-        event.target.removeEventListener("animationend", scrollFlipper);
-    }
-
-    // find the first element in the flipper
-
-    var flipboxes = document.querySelectorAll("#htmlflipper .verse.visible .flipbox");
-
-    var first = document.querySelector("#htmlflipper .verse.visible .flipbox.first");
-    var second = first.nextElementSibling;
-
-    var height = first.offsetHeight;
-
-    flipboxes.forEach( flipbox => {flipbox.classList.add("move");flipbox.classList.remove("off");});
-
-    // NOTE: Needs to be a named function, so we can remove it as an event-listener
-    function whenDoneScrolling() {
-        console.log("done scrolling!!");
-        first.removeEventListener("animationend", whenDoneScrolling);
-
-        // make first hidden, and make second, first
-        first.classList.remove("visible");
-        first.classList.add("hidden");
-
-        first.classList.remove("first");
-        if( second != null ) {
-            second.classList.add("first");
-        }
-
-        // and reset all the animations
-        document.querySelectorAll("#htmlflipper .flipbox").forEach( flipbox => flipbox.classList.remove("move") );
-    }
-
-    // when done scrolling - remove the first element, and the move-class
-    first.addEventListener("animationend", whenDoneScrolling);
-}
-
-
-function resetFlipper() {
-    // resets the current flipper
-    var flipboxes = document.querySelectorAll("#htmlflipper .verse.visible .flipbox");
-    flipboxes.forEach(flp=>flp.className="flipbox");
-    flipboxes[0].classList.add("first");
-    flipboxes[flipboxes.length-1].classList.add("hidden");
-
-
 }

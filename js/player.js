@@ -7,7 +7,8 @@
 class Player {
     constructor() {
         this.playing = false;
-        this.arrows = []; // NOTE: Replaces lineAnimations
+        this.arrows = []; // NOTE: Replaces 
+        this.effects = [];
     }
 
     get isPlaying() {
@@ -20,6 +21,16 @@ class Player {
 
     // TODO: Rename method
     playback() {
+
+        // resetEffects
+            // remove all classes from the scene
+            document.querySelector("#scene").className="";
+        
+            // remove on or off from everything
+            document.querySelectorAll("#scene .off").forEach(elm=>elm.classList.remove("off"));
+            document.querySelectorAll("#scene .on").forEach(elm=>elm.classList.remove("on"));
+        
+
         // reset music
         this.audio.currentTime = 0;
         this.audio.play();
@@ -88,6 +99,11 @@ class Player {
         // find next event
 
         // do effect animations
+        this.effects.forEach( effect => effect.animate(deltaTime) );
+
+        // remove non-active effects
+        this.effects = this.effects.filter( effect => effect.active );
+       
 
         let curTime = this.audio.currentTime;
     //    console.log("time: " + (nextEvent.time-curTime) );
@@ -136,9 +152,10 @@ class Player {
     // perform event
     performEvent( timeEvent ) {
 
+        // TODO: All timeEvent types should be effects - flipper, turner and neontext all alike ...
         if( timeEvent.type == "screen" || timeEvent.type == "flipper"
          || timeEvent.type == "turner" || timeEvent.type.startsWith("neontext")) {
-            var element = document.querySelector("#"+timeEvent.element);
+            let element = document.querySelector("#"+timeEvent.element);
     
             if( timeEvent.type == "turner" ) {
                 element = document.querySelector("#html"+timeEvent.element);
@@ -166,7 +183,7 @@ class Player {
     
                 if( this.lastEvent.type == "turner" ) {
                     // the actual turner is inside the event-object with the id
-                    var turner = this.lastEventObject.querySelector(".turner");
+                    const turner = this.lastEventObject.querySelector(".turner");
                     // flip - or unflip - turner in question
                     if( turner.classList.contains("flip") ) {
                         turner.classList.remove("flip");
@@ -201,7 +218,17 @@ class Player {
     
     
         } else if( timeEvent.type == "effect") {
-            performEffect( timeEvent );
+
+            // create effect from timeEvent
+            const effect = createEffect( timeEvent );
+            if( effect != null ) { // some effects might not exist in the current configuration - just ignore them
+                effect.start(); 
+                // only push active effects - that needs animating and other stuff later ...
+                if( effect.active ) {
+                    this.effects.push( effect );
+                }
+            }
+            
         } else if( timeEvent.type == "modifier") {
             performModifier( timeEvent );
         } else if( timeEvent.type == "text") {
