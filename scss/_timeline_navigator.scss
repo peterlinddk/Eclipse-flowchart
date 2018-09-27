@@ -13,11 +13,13 @@
         position: relative;
         overflow-x: scroll;
         margin-top: 3px;
-        // margin-bottom: 24px; /* to make room for mac scrollbar - would be nice to remove on windows*/ 
+        height: 28px;
+        padding-bottom: 8px; /* to make room for mac scrollbar - would be nice to remove on windows*/ 
     }
 }
 
 #timeline {
+    margin-top: 3px;
     height: 22px;
     background-color: #94b294;
 }

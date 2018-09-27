@@ -624,24 +624,28 @@ body.thunder {
   position: absolute;
   box-sizing: border-box;
   padding: 0.6rem 1.1rem;
-  font-size: 2.3rem; }
+  font-size: 2.3rem;
+  line-height: 2.3rem;
+  /* necessary for Mac Chrome */ }
 
 .neontext {
   color: #333;
   text-shadow: 0 0 3rem rgba(203, 203, 203, 0.55);
-  margin-bottom: 1rem; }
+  margin: 1rem 0; }
 
 #htmlneontext2 {
   position: absolute;
   padding: .6rem .7rem;
   box-sizing: border-box;
-  font-size: 1.75rem; }
+  font-size: 1.75rem;
+  line-height: 2.3rem;
+  /* necessary for Mac Chrome */ }
 
 #htmlneontext2 div {
-  margin-top: 1rem; }
+  margin: 1rem 0; }
 
 #htmlneontext2 #neonhighlighter {
-  margin-top: 0; }
+  margin: 0; }
 
 #htmlneontext1 .neontext.on {
   animation-name: neon_turn_on;
@@ -932,9 +936,13 @@ body.thunder {
     flex-grow: 1;
     position: relative;
     overflow-x: scroll;
-    margin-top: 3px; }
+    margin-top: 3px;
+    height: 28px;
+    padding-bottom: 8px;
+    /* to make room for mac scrollbar - would be nice to remove on windows*/ }
 
 #timeline {
+  margin-top: 3px;
   height: 22px;
   background-color: #94b294; }
 

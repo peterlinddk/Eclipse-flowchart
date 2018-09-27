@@ -7,13 +7,13 @@
     padding: 0.6rem 1.1rem;
 
     font-size: 2.3rem;
-    // line-height: 2.7rem; /* necessary for Mac Chrome */
+    line-height: 2.3rem; /* necessary for Mac Chrome */
 }
 
 .neontext {
     color: #333;
     text-shadow: 0 0 3rem rgba(203, 203, 203, 0.55);
-    margin-bottom: 1rem;
+    margin: 1rem 0;
 }
 
 #htmlneontext2 {
@@ -23,16 +23,16 @@
     box-sizing: border-box;
 
     font-size: 1.75rem;
-    // line-height: 25.2px; /* necessary for Mac Chrome */
+    line-height: 2.3rem; /* necessary for Mac Chrome */
 }
 
 
 #htmlneontext2 div {
-    margin-top: 1rem;
+    margin: 1rem 0;
 }
 
 #htmlneontext2 #neonhighlighter {
-    margin-top: 0;
+    margin: 0;
 }
 
 
